@@ -746,11 +746,11 @@ async function register() {
     });
 
     if (res.ok) {
-      // Send welcome WhatsApp message via Z-API
-      fetch('https://api.z-api.io/instances/3EFEBBD525E2B2A086780A6168796A02/token/A8DE08592C24EF3C69F6262C/send-text', {
+      // Send welcome WhatsApp message
+      fetch('https://jarvis-welcome-api.vercel.app/api/welcome', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Client-Token': 'Fd4ec948ab29c46e9899a0ebd559f671fS' },
-        body: JSON.stringify({ phone, message: 'Olá, ' + name.split(' ')[0] + '! Que bom ter você aqui.\n\nSou o Jarvis — e a partir de agora, trabalho para você.\n\nMeu trabalho é simples: tudo que passar pelo seu WhatsApp e você não quiser perder, me encaminha. Áudio, foto, print, texto. Eu entendo, organizo e te lembro na hora certa.\n\nNada de app novo. Nada de cadastro. Só esse número.\n\n---\n\nAntes de você começar, deixa eu te mostrar como isso funciona na prática:\n\n1️⃣ Você me encaminha qualquer coisa — áudio, foto, print, texto\n2️⃣ Eu leio, entendo e classifico automaticamente\n3️⃣ Se tiver prazo ou compromisso, já programo o lembrete\n4️⃣ Você consulta quando quiser: _"o que tenho essa semana?"_ ou _"achei aquele convite da festa"_\n\nIsso é tudo. Sem complicação.\n\nVocê está pronto para começar?\n\nResponda *SIM* para ativar o Jarvis agora. 👇' })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, name })
       }).catch(() => {}); // fire and forget
       document.getElementById('reg-form').innerHTML =
         '<div style="padding:24px 0;text-align:center;">' +
