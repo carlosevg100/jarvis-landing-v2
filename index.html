@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jarvis — Seu WhatsApp agora tem memória</title>
+  <meta name="description" content="Encaminhe qualquer mensagem pro Jarvis — áudio, print, PDF, texto. Ele organiza tudo e te lembra na hora certa.">
+  <meta property="og:title" content="Jarvis — Seu WhatsApp agora tem memória">
+  <meta property="og:description" content="Encaminhe qualquer mensagem pro Jarvis — áudio, print, PDF, texto. Ele organiza tudo e te lembra na hora certa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-subtle: #111111;
+      --bg-card: #141414;
+      --border: rgba(255,255,255,0.08);
+      --border-light: rgba(255,255,255,0.06);
+      --text: #ffffff;
+      --text-2: rgba(255,255,255,0.5);
+      --text-3: rgba(255,255,255,0.25);
+      --btn-bg: #ffffff;
+      --btn-text: #0a0a0a;
+      --font: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 12px 28px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover { opacity: 0.88; }
+
+    .btn-small {
+      padding: 9px 20px;
+      font-size: 14px;
+    }
+
+    .link-subtle {
+      color: var(--text-2);
+      font-size: 14px;
+      font-weight: 400;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .link-subtle:hover { color: var(--text); }
+
+    /* ── Sections ────────────────────────────────────────────────────── */
+    section { width: 100%; }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+    }
+
+    /* ── HERO ────────────────────────────────────────────────────────── */
+    #hero {
+      background: var(--bg);
+      padding: 160px 0 100px;
+      text-align: center;
+    }
+
+    .hero-inner { max-width: 720px; margin: 0 auto; }
+
+    .hero-headline {
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 1.8vw, 20px);
+      font-weight: 300;
+      color: var(--text-2);
+      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Demo ────────────────────────────────────────────────────────── */
+    .demo-wrap {
+      max-width: 400px;
+      margin: 60px auto 0;
+    }
+
+    .demo-inner {
+      background: #111111;
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 24px 20px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bubble {
+      max-width: 88%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      opacity: 0;
+    }
+
+    .bubble-user {
+      background: #1e2a24;
+      color: rgba(255,255,255,0.85);
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+    }
+
+    .bubble-jarvis {
+      background: #1f1f1f;
+      color: rgba(255,255,255,0.9);
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+    }
+
+    .bubble-typing {
+      background: #1f1f1f;
+      color: var(--text-3);
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+      font-style: normal;
+    }
+
+    .demo-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* animation classes added by JS */
+    .bubble.show {
+      animation: bubbleIn 0.3s ease forwards;
+    }
+    .bubble.hide {
+      animation: bubbleFade 0.4s ease forwards;
+    }
+
+    @keyframes bubbleIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bubbleFade {
+      from { opacity: 1; }
+      to   { opacity: 0; }
+    }
+
+    /* ── THE PROBLEM ─────────────────────────────────────────────────── */
+    #problem {
+      background: var(--bg-subtle);
+      padding: 100px 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    @media (max-width: 640px) {
+      .problem-grid { grid-template-columns: 1fr; }
+    }
+
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 28px 32px;
+    }
+
+    .problem-card p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    .problem-card .card-highlight {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .problem-transition {
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 300;
+      color: var(--text-2);
+      text-align: center;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .problem-transition strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    /* ── HOW IT WORKS ────────────────────────────────────────────────── */
+    #how {
+      background: #ffffff;
+      padding: 100px 0;
+    }
+
+    #how .section-label { color: #aaaaaa; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    @media (max-width: 760px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    .step { opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .step.visible { opacity: 1; transform: translateY(0); }
+
+    .step-num {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: #999999;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #0a0a0a;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: #666666;
+      line-height: 1.65;
+    }
+
+    /* ── USE CASES ───────────────────────────────────────────────────── */
+    #cases {
+      background: var(--bg);
+      padding: 100px 0;
+    }
+
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    @media (max-width: 640px) {
+      .cases-grid { grid-template-columns: 1fr; }
+      .case-item { border-bottom: 1px solid var(--border); }
+    }
+
+    .case-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      padding: 32px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .case-item:hover { background: #181818; }
+
+    .case-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .case-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .case-teaser {
+      font-size: 14px;
+      color: var(--text-2);
+      font-weight: 300;
+    }
+
+    .case-chevron {
+      font-size: 18px;
+      color: var(--text-3);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+      margin-left: 16px;
+      font-style: normal;
+    }
+
+    .case-item.open .case-chevron { transform: rotate(45deg); }
+
+    .case-body {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .case-item.open .case-body { display: block; }
+
+    .case-before {
+      font-size: 14px;
+      color: var(--text-2);
+      font-weight: 300;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .case-after {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    /* ── TESTIMONIALS ────────────────────────────────────────────────── */
+    #testimonials {
+      background: var(--bg-subtle);
+      padding: 100px 0;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 760px) {
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 28px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .testimonial-text {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-2);
+      line-height: 1.7;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-initials {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #222222;
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .author-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .author-role {
+      font-size: 12px;
+      color: var(--text-3);
+      font-weight: 300;
+    }
+
+    /* ── PRICING ─────────────────────────────────────────────────────── */
+    #pricing {
+      background: var(--bg);
+      padding: 100px 0;
+      text-align: center;
+    }
+
+    .pricing-tagline {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-2);
+      margin-bottom: 32px;
+    }
+
+    .pricing-amount {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .pricing-currency {
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--text);
+      margin-top: 10px;
+    }
+
+    .pricing-number {
+      font-size: 72px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .pricing-cents {
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-top: 10px;
+    }
+
+    .pricing-period {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text-2);
+      margin-bottom: 12px;
+    }
+
+    .pricing-trial {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-3);
+      margin-bottom: 36px;
+    }
+
+    /* ── CTA FINAL ───────────────────────────────────────────────────── */
+    #cta-final {
+      background: var(--bg);
+      padding: 120px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-headline {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .cta-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-3);
+      margin-top: 16px;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-3);
+      font-weight: 300;
+    }
+
+    @media (max-width: 600px) {
+      footer { flex-direction: column; align-items: flex-start; padding: 32px 20px; }
+    }
+
+    /* ── MODAL ───────────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-3);
+      font-size: 22px;
+      cursor: pointer;
+      font-family: var(--font);
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--text); }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .modal-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-2);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 7px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 300;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input::placeholder { color: var(--text-3); }
+    .form-input:focus { border-color: rgba(255,255,255,0.28); }
+
+    .form-submit {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .form-note {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-3);
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    .form-msg {
+      font-size: 14px;
+      font-weight: 400;
+      text-align: center;
+      margin-top: 16px;
+      min-height: 20px;
+      line-height: 1.5;
+    }
+
+    .form-msg.success { color: rgba(255,255,255,0.85); }
+    .form-msg.error { color: rgba(255,100,80,0.9); }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">Jarvis</span>
+    <button class="btn btn-small" onclick="openModal()">Comecar gratis</button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <h1 class="hero-headline">Seu WhatsApp<br>agora tem memoria.</h1>
+        <p class="hero-sub">Encaminhe qualquer mensagem pro Jarvis &mdash; audio, print, PDF, texto baguncado. Ele organiza tudo e te lembra na hora certa. Sem app novo. So o WhatsApp.</p>
+        <div class="hero-cta">
+          <button class="btn" onclick="openModal()">Comecar gratis por 3 dias</button>
+          <a href="#how" class="link-subtle">Ver como funciona &rarr;</a>
+        </div>
+      </div>
+
+      <!-- DEMO -->
+      <div class="demo-wrap">
+        <p class="demo-label">demonstracao</p>
+        <div class="demo-inner" id="demo">
+          <div class="bubble bubble-user" id="b1"></div>
+          <div class="bubble bubble-typing" id="b2"></div>
+          <div class="bubble bubble-jarvis" id="b3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section id="problem">
+    <div class="container">
+      <p class="section-label">o problema</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <p class="card-highlight">Grupo da escola da Olivia.</p>
+          <p>47 mensagens sobre a festa junina. Data? Perdida em algum lugar la no meio.</p>
+        </div>
+        <div class="problem-card">
+          <p class="card-highlight">Audio no grupo do trabalho.</p>
+          <p>3 minutos de instrucoes. Voce nao conseguiu ouvir agora. Quando lembrar, vai ser tarde.</p>
+        </div>
+        <div class="problem-card">
+          <p class="card-highlight">Print do horario do dentista.</p>
+          <p>Guardado em algum album. Com 847 outras fotos. Boa sorte achando.</p>
+        </div>
+        <div class="problem-card">
+          <p class="card-highlight">Mensagem da Helena amanha cedo.</p>
+          <p>Buscar Filippo as 17h. Simples. Mas e 23h agora e voce vai esquecer ate amanha.</p>
+        </div>
+      </div>
+      <p class="problem-transition">
+        Nao e falta de atencao. E excesso de mensagem.<br>
+        O WhatsApp nao foi feito pra lembrar por voce.<br>
+        <strong>O Jarvis foi.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="container">
+      <p class="section-label" style="color:#aaa">como funciona</p>
+      <div class="steps-grid">
+        <div class="step" data-delay="0">
+          <p class="step-num">01</p>
+          <h3 class="step-title">Encaminhe qualquer coisa</h3>
+          <p class="step-desc">Audio, print de conversa, PDF, texto bagunçado. Qualquer coisa que chegou no seu WhatsApp e tem informacao util. Encaminhe pro Jarvis.</p>
+        </div>
+        <div class="step" data-delay="100">
+          <p class="step-num">02</p>
+          <h3 class="step-title">Jarvis extrai e organiza</h3>
+          <p class="step-desc">Em segundos, o Jarvis le, transcreve e extrai todos os compromissos, tarefas, pagamentos e lembretes. Sem voce fazer nada.</p>
+        </div>
+        <div class="step" data-delay="200">
+          <p class="step-num">03</p>
+          <h3 class="step-title">Voce recebe lembretes</h3>
+          <p class="step-desc">Na hora certa, o Jarvis te manda uma mensagem. Reuniao amanha as 10h. Pagar conta sexta. Buscar filho as 17h. Tudo sem app extra.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section id="cases">
+    <div class="container">
+      <p class="section-label">situacoes reais</p>
+      <div class="cases-grid">
+        <div class="case-item" onclick="toggleCase(this)">
+          <div class="case-trigger">
+            <div>
+              <p class="case-title">Escola dos filhos</p>
+              <p class="case-teaser">Grupos, reunioes, eventos, datas importantes</p>
+            </div>
+            <i class="case-chevron">+</i>
+          </div>
+          <div class="case-body">
+            <p class="case-before">Grupo da escola tem 200 mensagens por dia. Avisos de evento, datas de prova, uniforme diferente, reuniao de pais. Voce le no momento errado e esquece.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+            <p class="case-after">Encaminha o aviso pro Jarvis. Em 5 segundos: "Reuniao de pais &mdash; quinta 19h. Festa junina &mdash; 21 de junho, trajar caipira, levar R$15." Lembrete programado.</p>
+          </div>
+        </div>
+
+        <div class="case-item" onclick="toggleCase(this)">
+          <div class="case-trigger">
+            <div>
+              <p class="case-title">Trabalho e clientes</p>
+              <p class="case-teaser">Reunioes, deadlines, follow-ups</p>
+            </div>
+            <i class="case-chevron">+</i>
+          </div>
+          <div class="case-body">
+            <p class="case-before">Reuniao marcada por audio num grupo de 50 pessoas. Deadline combinado no zap do cliente. Voce viu, mas quando precisar lembrar, nao vai encontrar.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+            <p class="case-after">Encaminha o audio. Jarvis transcreve e extrai: "Reuniao com Alberto &mdash; amanha 15h. Proposta para Marcio &mdash; ate sexta." Agenda feita.</p>
+          </div>
+        </div>
+
+        <div class="case-item" onclick="toggleCase(this)">
+          <div class="case-trigger">
+            <div>
+              <p class="case-title">Saude e consultas</p>
+              <p class="case-teaser">Medicos, exames, remedios</p>
+            </div>
+            <i class="case-chevron">+</i>
+          </div>
+          <div class="case-body">
+            <p class="case-before">Confirmacao de consulta por WhatsApp. Resultado de exame em PDF. Horario de remedio no grupo da familia. Tudo misturado, tudo perdido.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+            <p class="case-after">Encaminha o print ou PDF. Jarvis salva: "Consulta neurologista &mdash; 15 de abril, 14h30. Exame de sangue em jejum &mdash; quinta 7h." Lembrete no dia anterior.</p>
+          </div>
+        </div>
+
+        <div class="case-item" onclick="toggleCase(this)">
+          <div class="case-trigger">
+            <div>
+              <p class="case-title">Financeiro e contas</p>
+              <p class="case-teaser">Boletos, pagamentos, transferencias</p>
+            </div>
+            <i class="case-chevron">+</i>
+          </div>
+          <div class="case-body">
+            <p class="case-before">Boleto encaminhado no grupo da familia. Conta de agua vencendo. Mensalidade da academia no zap da academia. Cada uma num lugar diferente.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+            <p class="case-after">Encaminha o print do boleto. Jarvis extrai: "Conta de luz &mdash; vence dia 15, R$187. Mensalidade academia &mdash; dia 1, R$99." Lembrete 2 dias antes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <p class="section-label">quem usa</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Minha esposa manda audio sobre compromisso dos filhos e eu simplesmente encaminho pro Jarvis. Nao perco mais nada da agenda deles."</p>
+          <div class="testimonial-author">
+            <div class="author-initials">RC</div>
+            <div class="author-info">
+              <span class="author-name">Ricardo C.</span>
+              <span class="author-role">Consultor, sao Paulo</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Uso pra agenda do meu negocio. Clientes marcam pelo zap, eu encaminho pro Jarvis e ele me lembra com antecedencia. Simples assim."</p>
+          <div class="testimonial-author">
+            <div class="author-initials">MF</div>
+            <div class="author-info">
+              <span class="author-name">Mariana F.</span>
+              <span class="author-role">Microempreendedora, BH</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Comecei a usar pela escola da minha filha. Agora boto tudo ali &mdash; reuniao, dentista, conta, tudo. Minha cabeca ficou muito mais leve."</p>
+          <div class="testimonial-author">
+            <div class="author-initials">AT</div>
+            <div class="author-info">
+              <span class="author-name">Ana T.</span>
+              <span class="author-role">Gerente, Rio de Janeiro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <p class="pricing-tagline">Organize sua vida por menos do que um cafe por semana.</p>
+      <div class="pricing-amount">
+        <span class="pricing-currency">R$</span>
+        <span class="pricing-number">19</span>
+        <span class="pricing-cents">,90</span>
+      </div>
+      <p class="pricing-period">/mes</p>
+      <p class="pricing-trial">3 dias gratis &mdash; cancela quando quiser, sem burocracia</p>
+      <button class="btn" onclick="openModal()">Quero testar gratis &rarr;</button>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section id="cta-final">
+    <div class="container">
+      <h2 class="cta-headline">Voce ja encaminha mensagens todo dia.<br>Agora elas trabalham por voce.</h2>
+      <button class="btn" onclick="openModal()">Comecar gratis agora &rarr;</button>
+      <p class="cta-sub">Sem cadastro complicado. So o WhatsApp que voce ja tem.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">Jarvis</span>
+    <span class="footer-copy">&copy; 2026 Jarvis. Todos os direitos reservados.</span>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal()" aria-label="Fechar">&times;</button>
+      <h2 class="modal-title">Comecar gratis</h2>
+      <p class="modal-sub">3 dias gratis. Sem cartao de credito. Voce recebe uma mensagem no WhatsApp em segundos.</p>
+      <form id="register-form" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label class="form-label" for="f-name">Nome</label>
+          <input class="form-input" id="f-name" type="text" placeholder="Como voce se chama?" autocomplete="name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-phone">WhatsApp</label>
+          <input class="form-input" id="f-phone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" required>
+        </div>
+        <button class="btn form-submit" type="submit" id="submit-btn">Criar minha conta</button>
+        <p class="form-note">Voce recebera uma mensagem do Jarvis em instantes.</p>
+        <p class="form-msg" id="form-msg"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ── Demo animation ──────────────────────────────────────────────────
+    const DEMO_SEQUENCES = [
+      {
+        user: 'Festa junina da Olivia — dia 21 de junho, trajar caipira, levar R$15',
+        typing: 'Processando...',
+        reply: 'Salvo.\n\nFesta junina — 21 de junho\nTraje caipira\nR$15 para levar\nLembrete: 3 dias antes'
+      },
+      {
+        user: '[audio do grupo do trabalho, 1:42]',
+        typing: 'Processando...',
+        reply: 'Salvo.\n\nReuniao com Alberto — amanha, 15h\nProposta para Marcio — ate sexta\nLembrete: 2h antes de cada um'
+      },
+      {
+        user: 'Dentista da Helena — 14 de abril, 14h30. Pode chegar 15 min antes.',
+        typing: 'Processando...',
+        reply: 'Salvo.\n\nDentista Helena — 14 de abril, 14h30\nChegar: 14h15\nLembrete: dia anterior'
+      }
+    ];
+
+    let demoIdx = 0;
+    let demoTimers = [];
+
+    function clearDemoTimers() {
+      demoTimers.forEach(clearTimeout);
+      demoTimers = [];
+    }
+
+    function setBubble(id, text, show) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (show) {
+        el.textContent = text;
+        el.classList.remove('hide');
+        el.classList.add('show');
+      } else {
+        el.classList.remove('show');
+        el.classList.add('hide');
+        setTimeout(() => { el.textContent = ''; el.classList.remove('hide'); }, 400);
+      }
+    }
+
+    function runDemo(idx) {
+      clearDemoTimers();
+      const seq = DEMO_SEQUENCES[idx % DEMO_SEQUENCES.length];
+
+      // Reset
+      ['b1','b2','b3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('show','hide'); el.textContent = ''; }
+      });
+
+      demoTimers.push(setTimeout(() => setBubble('b1', seq.user, true), 400));
+      demoTimers.push(setTimeout(() => setBubble('b2', seq.typing, true), 1400));
+      demoTimers.push(setTimeout(() => {
+        setBubble('b2', seq.typing, false);
+        setTimeout(() => setBubble('b3', seq.reply, true), 200);
+      }, 2800));
+
+      // Fade out all then next sequence
+      demoTimers.push(setTimeout(() => {
+        ['b1','b2','b3'].forEach(id => setBubble(id, '', false));
+        demoTimers.push(setTimeout(() => {
+          demoIdx = (idx + 1) % DEMO_SEQUENCES.length;
+          runDemo(demoIdx);
+        }, 600));
+      }, 8000));
+    }
+
+    runDemo(0);
+
+    // ── Scroll reveal ───────────────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const delay = parseInt(e.target.dataset.delay || '0', 10);
+          setTimeout(() => e.target.classList.add('visible'), delay);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.step').forEach(el => observer.observe(el));
+
+    // ── Use case accordion ──────────────────────────────────────────────
+    function toggleCase(el) {
+      const isOpen = el.classList.contains('open');
+      document.querySelectorAll('.case-item').forEach(c => c.classList.remove('open'));
+      if (!isOpen) el.classList.add('open');
+    }
+
+    // ── Modal ───────────────────────────────────────────────────────────
+    function openModal() {
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('f-name').focus(), 100);
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modal')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ── Form submit ─────────────────────────────────────────────────────
+    async function submitForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('f-name').value.trim();
+      const raw = document.getElementById('f-phone').value.replace(/\D/g, '');
+      const phone = raw.startsWith('55') ? raw : '55' + raw;
+      const btn = document.getElementById('submit-btn');
+      const msg = document.getElementById('form-msg');
+
+      if (phone.length < 12 || phone.length > 13) {
+        msg.className = 'form-msg error';
+        msg.textContent = 'Numero invalido. Use formato: 11 99999-9999';
+        return;
+      }
+
+      btn.textContent = 'Criando conta...';
+      btn.disabled = true;
+      msg.textContent = '';
+
+      try {
+        const res = await fetch('https://backend-production-f3cb.up.railway.app/api/users/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('register-form').innerHTML =
+            '<p style="color:var(--text);font-size:18px;font-weight:500;text-align:center;padding:20px 0">Pronto. Verifique o WhatsApp.</p>' +
+            '<p style="color:var(--text-2);font-size:14px;font-weight:300;text-align:center">O Jarvis vai te mandar uma mensagem em instantes.</p>';
+        } else if (res.status === 409) {
+          msg.className = 'form-msg error';
+          msg.textContent = 'Esse numero ja tem uma conta.';
+          btn.textContent = 'Criar minha conta';
+          btn.disabled = false;
+        } else {
+          msg.className = 'form-msg error';
+          msg.textContent = data.error || 'Algo deu errado. Tente novamente.';
+          btn.textContent = 'Criar minha conta';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        msg.className = 'form-msg error';
+        msg.textContent = 'Erro de conexao. Tente novamente.';
+        btn.textContent = 'Criar minha conta';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
