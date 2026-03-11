@@ -601,11 +601,11 @@ function buildMsgEl(m) {
         + '</div></div>';
     } else if (m.audio) {
       var bars = WAVE_H.map(function(h){
-        return '<div class="msg-audio-bar" style="height:'+h+'px"></div>';
+        return '<div class="msg-audio-bar" style="width:3px;height:'+h+'px;background:rgba(0,0,0,0.22);border-radius:2px;flex-shrink:0"></div>';
       }).join('');
-      inner += '<div class="msg-audio-block">'
+      inner += '<div class="msg-audio-block" style="display:flex;flex-direction:row;align-items:center;gap:8px;padding:4px 0">'
         + '<div class="msg-audio-icon">&#9654;</div>'
-        + '<div class="msg-audio-wave">'+bars+'</div>'
+        + '<div class="msg-audio-wave" style="flex:1;display:flex;flex-direction:row;align-items:center;gap:2px;overflow:hidden;height:20px">'+bars+'</div>'
         + '<span class="msg-audio-dur">'+m.audio+'</span></div>';
     } else {
       inner += m.body;
