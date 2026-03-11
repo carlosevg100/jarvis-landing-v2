@@ -239,6 +239,12 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .reveal { opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease; }
 .reveal.anim { opacity:0; transform:translateY(16px); }
 .reveal.anim.vis { opacity:1; transform:translateY(0); }
+
+/* Message animations */
+.msg-anim { opacity:0; transform:translateY(8px); transition:opacity .35s ease, transform .35s cubic-bezier(.16,1,.3,1); }
+.msg-anim.msg-visible { opacity:1; transform:translateY(0); }
+.msg-highlight { border-left:2px solid #A8522A; padding-left:8px; }
+.msg-sub { font-size:10.5px; color:rgba(0,0,0,0.45); margin-top:4px; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -547,27 +553,44 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 <script>
 // ── Chat animation ──────────────────────────────────────
 var MSGS = [
-  {t:'user', fwd:true, body:'Reunião com professor da Olivia<br><span style="font-size:10.5px;color:rgba(0,0,0,0.45)">10/04 às 10h — Sala 3</span>', time:'09:41', at:0},
-  {t:'typing', at:900},
-  {t:'jarvis', body:'<b>Salvo.</b> Reunião prof. Olivia — 10/04, 10h.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.45)">Quer ser lembrada antes?</span>', time:'09:41', at:2300},
-  {t:'user', body:'Sim, 1 dia antes', time:'09:42', at:3500},
-  {t:'jarvis', body:'\u2713 Lembrete: <b>9 de abril</b>, manhã.', time:'09:42', at:4500},
-  {t:'user', img:{icon:'\uD83C\uDF82',title:'Convite — Festa da Luisa',sub:'22/03 · 16h · Tema Princesas'}, time:'09:43', at:6000},
-  {t:'typing', at:6900},
-  {t:'jarvis', body:'\uD83C\uDF89 Li o convite: <b>Festa da Luisa</b>, 22/03, 16h, tema princesas. Salvo. Lembro na véspera.', time:'09:43', at:8300},
-  {t:'user', audio:'0:18', time:'09:45', at:9800},
-  {t:'typing', at:10600},
-  {t:'jarvis', body:'\uD83D\uDD14 Entendido: <b>ligar pro marido</b> em 10 min.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.45)">Lembrete: 09:55.</span>', time:'09:45', at:12000}
+  {t:'user', fwd:true,
+   body:'Reunião com professor da Olivia<br><small style="color:rgba(0,0,0,0.42);font-size:10px">10/04 às 10h — Sala 3</small>',
+   time:'09:41', at:400},
+  {t:'typing', at:1600, dur:2200},
+  {t:'jarvis', highlight:true,
+   body:'<b>Salvo.</b> Reunião com o prof. Olivia — 10/04, 10h, Sala 3.',
+   sub:'Quer ser lembrada antes?',
+   time:'09:41', at:3800},
+  {t:'user', body:'Sim, 1 dia antes por favor', time:'09:42', at:5800},
+  {t:'typing', at:6600, dur:1400},
+  {t:'jarvis',
+   body:'✓ Lembrete agendado: <b>9 de abril</b>, manhã.',
+   time:'09:42', at:8000},
+  {t:'user', img:{icon:'🎂',title:'Convite — Festa da Luisa',sub:'22/03 · 16h · Tema Princesas'},
+   time:'09:43', at:11000},
+  {t:'typing', at:12200, dur:2600},
+  {t:'jarvis', highlight:true,
+   body:'🎉 Li o convite: <b>Festa da Luisa</b>, 22/03, 16h, tema princesas. Salvo.',
+   sub:'Lembrete na véspera programado.',
+   time:'09:43', at:14800},
+  {t:'user', audio:'0:18', time:'09:45', at:18000},
+  {t:'typing', at:19400, dur:2200},
+  {t:'jarvis', highlight:true,
+   body:'🔔 Entendido: <b>ligar pro marido</b> em 10 minutos.',
+   sub:'⏰ Lembrete: 09:55.',
+   time:'09:45', at:21600}
 ];
 
-var WAVE_H = [4,7,12,9,15,8,5,13,10,6,11,7,9,14,5,8,12,6,10,7];
+var WAVE_H = [4,7,12,9,15,8,5,14,10,6,11,8,9,13,5,7,12,6,10,7];
 
 function buildMsgEl(m) {
   var d = document.createElement('div');
   var inner = '';
   if (m.t === 'user') {
-    d.className = 'msg user';
-    if (m.fwd) inner += '<div class="msg-fwd-label">&#8627; Encaminhada</div>';
+    d.className = 'msg user msg-anim';
+    if (m.fwd) {
+      inner += '<div class="msg-fwd-label">&#8627; Encaminhada</div>';
+    }
     if (m.img) {
       inner += '<div class="msg-img-block">'
         + '<div class="msg-img-icon">'+m.img.icon+'</div>'
@@ -576,7 +599,9 @@ function buildMsgEl(m) {
         + '<div class="msg-img-sub">'+m.img.sub+'</div>'
         + '</div></div>';
     } else if (m.audio) {
-      var bars = WAVE_H.map(function(h){ return '<div class="msg-audio-bar" style="height:'+h+'px"></div>'; }).join('');
+      var bars = WAVE_H.map(function(h){
+        return '<div class="msg-audio-bar" style="height:'+h+'px"></div>';
+      }).join('');
       inner += '<div class="msg-audio-block">'
         + '<div class="msg-audio-icon">&#9654;</div>'
         + '<div class="msg-audio-wave">'+bars+'</div>'
@@ -586,8 +611,10 @@ function buildMsgEl(m) {
     }
     inner += '<div class="msg-time">'+m.time+' &#10003;&#10003;</div>';
   } else {
-    d.className = 'msg jarvis';
-    inner = m.body + '<div class="msg-time">'+m.time+'</div>';
+    d.className = 'msg jarvis msg-anim' + (m.highlight ? ' msg-highlight' : '');
+    inner = m.body;
+    if (m.sub) inner += '<div class="msg-sub">'+m.sub+'</div>';
+    inner += '<div class="msg-time">'+m.time+'</div>';
   }
   d.innerHTML = inner;
   return d;
@@ -598,37 +625,51 @@ function startChat(id) {
   if (!box) return;
   var typing = null;
   var timers = [];
+
   function run() {
     timers.forEach(function(t){ clearTimeout(t); });
     timers = [];
     box.innerHTML = '';
     typing = null;
     var lastAt = 0;
+
     MSGS.forEach(function(m) {
       if (m.t === 'typing') {
-        timers.push(setTimeout(function(){
-          if (typing) typing.remove();
-          typing = document.createElement('div');
-          typing.className = 'typing';
-          typing.innerHTML = '<div class="typing-dot" style="animation:typingBounce .8s 0ms infinite"></div>'
-            + '<div class="typing-dot" style="animation:typingBounce .8s 150ms infinite"></div>'
-            + '<div class="typing-dot" style="animation:typingBounce .8s 300ms infinite"></div>';
-          box.appendChild(typing);
-          box.scrollTop = box.scrollHeight;
-        }, m.at));
+        timers.push(setTimeout(function(dur){
+          return function() {
+            if (typing) typing.remove();
+            typing = document.createElement('div');
+            typing.className = 'typing';
+            typing.innerHTML =
+              '<div class="typing-dot" style="animation:typingBounce .9s 0ms infinite ease-in-out"></div>'
+              +'<div class="typing-dot" style="animation:typingBounce .9s 180ms infinite ease-in-out"></div>'
+              +'<div class="typing-dot" style="animation:typingBounce .9s 360ms infinite ease-in-out"></div>';
+            box.appendChild(typing);
+            box.scrollTop = box.scrollHeight;
+          };
+        }(m.dur), m.at));
         return;
       }
       if (m.at > lastAt) lastAt = m.at;
       timers.push(setTimeout(function(msg){
-        return function(){
+        return function() {
           if (typing) { typing.remove(); typing = null; }
-          box.appendChild(buildMsgEl(msg));
+          var el = buildMsgEl(msg);
+          box.appendChild(el);
+          // trigger animation
+          requestAnimationFrame(function(){
+            requestAnimationFrame(function(){
+              el.classList.add('msg-visible');
+            });
+          });
           box.scrollTop = box.scrollHeight;
         };
       }(m), m.at));
     });
-    timers.push(setTimeout(run, lastAt + 4000));
+
+    timers.push(setTimeout(run, lastAt + 5000));
   }
+
   run();
 }
 
