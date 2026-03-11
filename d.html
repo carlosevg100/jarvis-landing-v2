@@ -176,7 +176,8 @@ const CAT_LABELS = { familia:'Família',escola:'Escola',trabalho:'Trabalho',saud
 const CAT_COLORS = { familia:'#A8522A',escola:'#5B7FA6',trabalho:'#4A7C5F',saude:'#7B5EA7',financeiro:'#B8860B',social:'#C4763A',compras:'#7A6652',viagem:'#4682B4',outros:'#8A7F78' };
 const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
-const token = location.pathname.split('/d/')[1] || location.pathname.split('/').pop();
+const params = new URLSearchParams(location.search);
+const token = params.get('t') || location.pathname.split('/d/').pop()?.split('/')[0] || location.pathname.split('/').pop();
 let allItems = [], user = null;
 let filterDate = 'all', filterCat = 'all', searchVal = '';
 let calMonth = new Date(); calMonth.setDate(1);
