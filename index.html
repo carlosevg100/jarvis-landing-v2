@@ -189,9 +189,13 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   display: flex;
   gap: 20px;
   align-items: flex-start;
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.step-item.animate-start {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .step-item.visible {
   opacity: 1;
@@ -686,11 +690,15 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 .modal-msg.success { color: var(--accent); }
 .modal-msg.error { color: rgba(255,80,70,0.9); }
 
-/* Scroll reveal helper */
+/* Scroll reveal helper — visible by default, JS adds animation */
 .reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.animate-start {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .reveal.visible {
   opacity: 1;
@@ -1012,14 +1020,17 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     });
   }, { threshold: 0.12 });
 
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.add('animate-start');
+    revealObs.observe(el);
+  });
 
-  // Fallback: se IntersectionObserver não disparar em 2s, mostra tudo
+  // Fallback: se IntersectionObserver não disparar em 1.5s, mostra tudo
   setTimeout(() => {
-    document.querySelectorAll('.reveal:not(.visible), .step-item:not(.visible)').forEach(el => {
+    document.querySelectorAll('.animate-start:not(.visible), .step-item.animate-start:not(.visible)').forEach(el => {
       el.classList.add('visible');
     });
-  }, 2000);
+  }, 1500);
 
   // ── Step items reveal (staggered) ──────────────────────────
   const stepObs = new IntersectionObserver((entries) => {
@@ -1027,6 +1038,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       if (e.isIntersecting) {
         const steps = e.target.querySelectorAll('.step-item');
         steps.forEach((s, i) => {
+          s.classList.add('animate-start');
           setTimeout(() => s.classList.add('visible'), i * 120);
         });
         stepObs.unobserve(e.target);
