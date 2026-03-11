@@ -46,15 +46,15 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .wa-status { color:rgba(255,255,255,.7); font-size:10px; display:flex; align-items:center; gap:4px; }
 .wa-status-dot { width:5px;height:5px;background:#6EE97B;border-radius:50%; }
 .wa-more { color:rgba(255,255,255,.8); font-size:18px; line-height:1; }
-.wa-messages { flex:1; padding:14px 10px; display:flex; flex-direction:column; gap:8px; background:#ECE5DD; overflow:hidden; }
+.wa-messages { flex:1; padding:14px 10px; display:flex; flex-direction:column; gap:8px; background:#ECE5DD; overflow-y:scroll; scrollbar-width:none; }
 
-.msg { max-width:82%; padding:8px 11px; border-radius:8px; font-size:12px; line-height:1.5; position:relative; opacity:0; }
+.msg { max-width:82%; padding:8px 11px; border-radius:8px; font-size:12px; line-height:1.5; position:relative; }
 .msg-time { font-size:9px; color:rgba(0,0,0,0.38); text-align:right; margin-top:3px; }
 .msg.user { background:#DCF8C6; align-self:flex-end; border-radius:8px 8px 2px 8px; color:#111; }
 .msg.jarvis { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; color:#111; box-shadow:0 1px 2px rgba(0,0,0,0.08); }
 .msg.jarvis strong { color:var(--accent); font-weight:500; }
 .wa-messages::-webkit-scrollbar{display:none;}
-.typing { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; padding:10px 14px; box-shadow:0 1px 2px rgba(0,0,0,0.08); display:flex; gap:4px; align-items:center; opacity:0; }
+.typing { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; padding:10px 14px; box-shadow:0 1px 2px rgba(0,0,0,0.08); display:flex; gap:4px; align-items:center; }
 .typing-dot { width:6px; height:6px; background:rgba(0,0,0,0.25); border-radius:50%; }
 .wa-input { background:#F0F0F0; padding:8px 10px; display:flex; align-items:center; gap:8px; }
 .wa-input-field { flex:1; background:white; border-radius:20px; padding:8px 12px; font-size:11px; color:rgba(0,0,0,0.4); }
