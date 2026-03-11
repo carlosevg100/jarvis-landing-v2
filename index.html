@@ -34,7 +34,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .wa-badge { display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--ink2); border:1px solid var(--border); padding:9px 14px; border-radius:6px; font-size:12px; font-weight:400; letter-spacing:0.3px; margin-bottom:32px; opacity:0; animation:fadeUp .6s 1.6s forwards; width:fit-content; }
 .wa-icon { width:16px; height:16px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; color:#fff; font-weight:600; }
 .phone-wrap { width:100%; display:flex; justify-content:center; margin-bottom:36px; opacity:0; animation:fadeUp .9s 1.8s cubic-bezier(.16,1,.3,1) forwards; }
-.phone { width:min(280px,80vw); background:#1A1714; border-radius:36px; padding:12px; box-shadow:0 40px 80px rgba(26,23,20,0.22),0 0 0 1px rgba(26,23,20,0.15),inset 0 0 0 1px rgba(255,255,255,0.05); }
+.phone { width:min(300px,85vw); background:#1A1714; border-radius:36px; padding:12px; box-shadow:0 40px 80px rgba(26,23,20,0.22),0 0 0 1px rgba(26,23,20,0.15),inset 0 0 0 1px rgba(255,255,255,0.05); }
 .phone-notch { width:80px; height:22px; background:#1A1714; border-radius:0 0 14px 14px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; gap:6px; }
 .notch-cam { width:8px;height:8px;background:#2a2724;border-radius:50%; }
 .notch-speaker { width:36px;height:4px;background:#2a2724;border-radius:2px; }
@@ -48,13 +48,13 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .wa-more { color:rgba(255,255,255,.8); font-size:18px; line-height:1; }
 .wa-messages { flex:1; padding:14px 10px; display:flex; flex-direction:column; gap:8px; background:#ECE5DD; overflow-y:scroll; scrollbar-width:none; }
 
-.msg { max-width:82%; padding:8px 11px; border-radius:8px; font-size:12px; line-height:1.5; position:relative; }
+.msg { max-width:82%; padding:8px 11px; border-radius:8px; font-size:12px; line-height:1.5; position:relative;}
 .msg-time { font-size:9px; color:rgba(0,0,0,0.38); text-align:right; margin-top:3px; }
 .msg.user { background:#DCF8C6; align-self:flex-end; border-radius:8px 8px 2px 8px; color:#111; }
 .msg.jarvis { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; color:#111; box-shadow:0 1px 2px rgba(0,0,0,0.08); }
 .msg.jarvis strong { color:var(--accent); font-weight:500; }
 .wa-messages::-webkit-scrollbar{display:none;}
-.typing { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; padding:10px 14px; box-shadow:0 1px 2px rgba(0,0,0,0.08); display:flex; gap:4px; align-items:center; }
+.typing { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; padding:10px 14px; box-shadow:0 1px 2px rgba(0,0,0,0.08); display:flex; gap:4px; align-items:center;}
 .typing-dot { width:6px; height:6px; background:rgba(0,0,0,0.25); border-radius:50%; }
 .wa-input { background:#F0F0F0; padding:8px 10px; display:flex; align-items:center; gap:8px; }
 .wa-input-field { flex:1; background:white; border-radius:20px; padding:8px 12px; font-size:11px; color:rgba(0,0,0,0.4); }
@@ -100,7 +100,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   .web-stat-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--ink);display:block;line-height:1;margin-bottom:4px;}
   .web-stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
   .web-phone-wrap{opacity:0;animation:fadeUp 1s 1.2s cubic-bezier(.16,1,.3,1) forwards;}
-  .web-phone{width:290px;background:#1A1714;border-radius:44px;padding:14px;box-shadow:0 60px 120px rgba(26,23,20,.28),0 0 0 1px rgba(26,23,20,.18),inset 0 0 0 1px rgba(255,255,255,.06);}
+  .web-phone{width:260px;background:#1A1714;border-radius:40px;padding:12px;box-shadow:0 60px 120px rgba(26,23,20,.28),0 0 0 1px rgba(26,23,20,.15),inset 0 0 0 1px rgba(255,255,255,.05);}
 }
 
 /* ─── SECTIONS ─────────────────────────────────────────── */
@@ -248,7 +248,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <div class="nav-logo">Jarvis</div>
     <div class="nav-sub">by Olpi Technologies</div>
   </div>
-  <div class="nav-pill"><span class="live-dot"></span> Acesso liberado — por tempo limitado</div>
+  <div class="nav-pill"><span class="live-dot"></span> Free Trial</div>
 </nav>
 
 <!-- MOBILE HERO -->
@@ -274,11 +274,10 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
   <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
   <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
-  <div class="stats" style="grid-template-columns:1fr 1fr 1fr;">
+  <div class="stats">
     <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
     <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
     <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memória<br>e contexto</span></div>
-    <div class="stat"><span class="stat-num">&#128274;</span><span class="stat-label">Sigilo<br>total</span></div>
     <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
   </div>
   <div class="proof">
@@ -308,7 +307,6 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
       <div class="web-stat"><span class="web-stat-num">Zero</span><span class="web-stat-label">Instalação</span></div>
       <div class="web-stat"><span class="web-stat-num">24/7</span><span class="web-stat-label">Disponível</span></div>
       <div class="web-stat"><span class="web-stat-num">&#8734;</span><span class="web-stat-label">Memória</span></div>
-      <div class="web-stat"><span class="web-stat-num">&#128274;</span><span class="web-stat-label">Sigilo total</span></div>
       <div class="web-stat"><span class="web-stat-num">1 min</span><span class="web-stat-label">Para começar</span></div>
     </div>
   </div>
@@ -549,41 +547,49 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 <script>
 // ── Chat animation ──────────────────────────────────────
 var MSGS = [
-  {t:'user',  fwd:true,  body:'Reunião com professor da Olivia<br><small style="color:rgba(0,0,0,0.5)">10/04 às 10h — Sala 3</small>', time:'09:41', at:0},
+  {t:'user', fwd:true, body:'Reunião com professor da Olivia<br><span style="font-size:10.5px;color:rgba(0,0,0,0.45)">10/04 às 10h — Sala 3</span>', time:'09:41', at:0},
   {t:'typing', at:900},
-  {t:'jarvis', body:'<b>Salvo.</b> Reunião prof. Olivia — 10/04, 10h.<br><small style="color:rgba(0,0,0,0.5)">Quer ser lembrada antes?</small>', time:'09:41', at:2300},
-  {t:'user',  body:'Sim, 1 dia antes', time:'09:42', at:3500},
-  {t:'jarvis', body:'✓ Lembrete: <b>9 de abril</b>, manhã.', time:'09:42', at:4500},
-  {t:'user',  img:{icon:'🎂',title:'Convite — Festa da Luisa',sub:'22/03 · 16h · Tema Princesas'}, time:'09:43', at:6000},
+  {t:'jarvis', body:'<b>Salvo.</b> Reunião prof. Olivia — 10/04, 10h.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.45)">Quer ser lembrada antes?</span>', time:'09:41', at:2300},
+  {t:'user', body:'Sim, 1 dia antes', time:'09:42', at:3500},
+  {t:'jarvis', body:'\u2713 Lembrete: <b>9 de abril</b>, manhã.', time:'09:42', at:4500},
+  {t:'user', img:{icon:'\uD83C\uDF82',title:'Convite — Festa da Luisa',sub:'22/03 · 16h · Tema Princesas'}, time:'09:43', at:6000},
   {t:'typing', at:6900},
-  {t:'jarvis', body:'🎉 Li o convite: <b>Festa da Luisa</b>, 22/03, 16h, tema princesas. Salvo. Lembro na véspera.', time:'09:43', at:8300},
-  {t:'user',  audio:'0:18', time:'09:45', at:9800},
+  {t:'jarvis', body:'\uD83C\uDF89 Li o convite: <b>Festa da Luisa</b>, 22/03, 16h, tema princesas. Salvo. Lembro na véspera.', time:'09:43', at:8300},
+  {t:'user', audio:'0:18', time:'09:45', at:9800},
   {t:'typing', at:10600},
-  {t:'jarvis', body:'🔔 Entendido: <b>ligar pro marido</b> em 10 min.<br><small style="color:rgba(0,0,0,0.5)">⏰ Lembrete: 09:55.</small>', time:'09:45', at:12000}
+  {t:'jarvis', body:'\uD83D\uDD14 Entendido: <b>ligar pro marido</b> em 10 min.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.45)">Lembrete: 09:55.</span>', time:'09:45', at:12000}
 ];
 
-var WAVE = [4,7,12,9,15,8,5,13,10,6,11,7,9,14,5,8,12,6,10,7];
+var WAVE_H = [4,7,12,9,15,8,5,13,10,6,11,7,9,14,5,8,12,6,10,7];
 
 function buildMsgEl(m) {
   var d = document.createElement('div');
+  var inner = '';
   if (m.t === 'user') {
     d.className = 'msg user';
-    var inner = '';
-    if (m.fwd) inner += '<div class="msg-fwd-label"><span style="font-size:10px;margin-right:3px;">&#8627;</span> Encaminhada</div>';
+    if (m.fwd) inner += '<div class="msg-fwd-label">&#8627; Encaminhada</div>';
     if (m.img) {
-      inner += '<div class="msg-img-block"><div class="msg-img-icon">'+m.img.icon+'</div><div class="msg-img-meta"><div class="msg-img-title">'+m.img.title+'</div><div class="msg-img-sub">'+m.img.sub+'</div></div></div>';
+      inner += '<div class="msg-img-block">'
+        + '<div class="msg-img-icon">'+m.img.icon+'</div>'
+        + '<div class="msg-img-meta">'
+        + '<div class="msg-img-title">'+m.img.title+'</div>'
+        + '<div class="msg-img-sub">'+m.img.sub+'</div>'
+        + '</div></div>';
     } else if (m.audio) {
-      var bars = WAVE.map(function(h){return '<div class="msg-audio-bar" style="height:'+h+'px"></div>';}).join('');
-      inner += '<div class="msg-audio-block"><div class="msg-audio-icon">&#9654;</div><div class="msg-audio-wave">'+bars+'</div><span class="msg-audio-dur">'+m.audio+'</span></div>';
+      var bars = WAVE_H.map(function(h){ return '<div class="msg-audio-bar" style="height:'+h+'px"></div>'; }).join('');
+      inner += '<div class="msg-audio-block">'
+        + '<div class="msg-audio-icon">&#9654;</div>'
+        + '<div class="msg-audio-wave">'+bars+'</div>'
+        + '<span class="msg-audio-dur">'+m.audio+'</span></div>';
     } else {
       inner += m.body;
     }
     inner += '<div class="msg-time">'+m.time+' &#10003;&#10003;</div>';
-    d.innerHTML = inner;
   } else {
     d.className = 'msg jarvis';
-    d.innerHTML = m.body + '<div class="msg-time">'+m.time+'</div>';
+    inner = m.body + '<div class="msg-time">'+m.time+'</div>';
   }
+  d.innerHTML = inner;
   return d;
 }
 
@@ -592,16 +598,11 @@ function startChat(id) {
   if (!box) return;
   var typing = null;
   var timers = [];
-
-  function clear() {
-    timers.forEach(function(t){clearTimeout(t);});
+  function run() {
+    timers.forEach(function(t){ clearTimeout(t); });
     timers = [];
     box.innerHTML = '';
-    if (typing) { typing = null; }
-  }
-
-  function run() {
-    clear();
+    typing = null;
     var lastAt = 0;
     MSGS.forEach(function(m) {
       if (m.t === 'typing') {
@@ -609,29 +610,125 @@ function startChat(id) {
           if (typing) typing.remove();
           typing = document.createElement('div');
           typing.className = 'typing';
-          typing.style.cssText = 'opacity:1';
-          typing.innerHTML = '<div class="typing-dot" style="animation:typingBounce .8s 0ms infinite"></div><div class="typing-dot" style="animation:typingBounce .8s 150ms infinite"></div><div class="typing-dot" style="animation:typingBounce .8s 300ms infinite"></div>';
+          typing.innerHTML = '<div class="typing-dot" style="animation:typingBounce .8s 0ms infinite"></div>'
+            + '<div class="typing-dot" style="animation:typingBounce .8s 150ms infinite"></div>'
+            + '<div class="typing-dot" style="animation:typingBounce .8s 300ms infinite"></div>';
           box.appendChild(typing);
           box.scrollTop = box.scrollHeight;
         }, m.at));
         return;
       }
       if (m.at > lastAt) lastAt = m.at;
-      timers.push(setTimeout(function(){
-        if (typing) { typing.remove(); typing = null; }
-        var el = buildMsgEl(m);
-        el.style.cssText = 'opacity:1';
-        box.appendChild(el);
-        box.scrollTop = box.scrollHeight;
-      }, m.at));
+      timers.push(setTimeout(function(msg){
+        return function(){
+          if (typing) { typing.remove(); typing = null; }
+          box.appendChild(buildMsgEl(msg));
+          box.scrollTop = box.scrollHeight;
+        };
+      }(m), m.at));
     });
-    timers.push(setTimeout(run, lastAt + 3500));
+    timers.push(setTimeout(run, lastAt + 4000));
   }
-
   run();
 }
 
 startChat('msgs-mobile');
 startChat('msgs-web');
 
+// ── Accordion ───────────────────────────────────────────
+function toggleAcc(btn) {
+  if (window.innerWidth >= 768) return;
+  const item = btn.closest('.acc-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ── Scroll reveal ────────────────────────────────────────
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => { el.classList.add('anim'); obs.observe(el); });
+setTimeout(() => { document.querySelectorAll('.anim:not(.vis)').forEach(el => el.classList.add('vis')); }, 1500);
+
+// ── Phone mask ───────────────────────────────────────────
+document.getElementById('reg-phone').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+  else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+  else if (v.length > 0) v = '(' + v;
+  this.value = v;
+});
+
+// ── Modal ────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('reg-name').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── Register ─────────────────────────────────────────────
+async function register() {
+  const name = document.getElementById('reg-name').value.trim();
+  const phoneRaw = document.getElementById('reg-phone').value.replace(/\D/g, '');
+  const phone = phoneRaw.startsWith('55') ? phoneRaw : '55' + phoneRaw;
+  const msgEl = document.getElementById('reg-msg');
+  const btn = document.getElementById('modal-submit');
+
+  if (!name || phoneRaw.length < 10) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Preencha nome e WhatsApp.'; return; }
+  if (phone.length < 12 || phone.length > 13) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Número inválido. Use: (11) 99999-9999'; return; }
+
+  btn.disabled = true;
+  btn.childNodes[0].textContent = 'Aguarde...';
+  msgEl.textContent = '';
+
+  try {
+    const res = await fetch('https://jarvis-backend-six.vercel.app/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
+    });
+
+    if (res.ok) {
+      document.getElementById('reg-form').innerHTML =
+        '<div style="padding:24px 0;text-align:center;">' +
+        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
+        '<p style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.6;">Verifique o WhatsApp em instantes.</p>' +
+        '</div>';
+      setTimeout(closeModal, 2500);
+    } else if (res.status === 409) {
+      msgEl.className = 'modal-msg error';
+      msgEl.textContent = 'Esse número já tem uma conta.';
+      btn.disabled = false;
+      btn.childNodes[0].textContent = 'Criar minha conta';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      msgEl.className = 'modal-msg error';
+      msgEl.textContent = data.error || 'Erro ao criar conta. Tente novamente.';
+      btn.disabled = false;
+      btn.childNodes[0].textContent = 'Criar minha conta';
+    }
+  } catch {
+    msgEl.className = 'modal-msg error';
+    msgEl.textContent = 'Erro de conexão. Tente novamente.';
+    btn.disabled = false;
+    btn.childNodes[0].textContent = 'Criar minha conta';
+  }
+}
+</script>
+<style>@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}</style>
+</body>
+</html>
 
