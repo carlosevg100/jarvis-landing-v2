@@ -98,6 +98,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .cal-day-num{font-size:11px;font-weight:500;color:var(--ink2);margin-bottom:3px}
 .cal-cell.today .cal-day-num{color:var(--accent);font-weight:700}
 .cal-item-dot{font-size:9px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;line-height:1.3}
+.pill-count{font-size:9px;opacity:.7;margin-left:3px}
+.cat-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;transition:all .2s}
+.cat-card:hover{background:var(--bg-subtle);transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,23,20,.06)}
+.cat-card-dot{width:8px;height:8px;border-radius:50%}
+.cat-card-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink2)}
+.cat-card-count{font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1;font-weight:400}
+@media(max-width:480px){.cat-summary-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -145,6 +153,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <button class="pill active" data-cat="all">Tudo</button>
     </div>
     <input class="search" id="search" placeholder="Buscar...">
+  </div>
+
+  <!-- Category summary grid (always visible) -->
+  <div id="cat-summary-wrap" style="padding:0 24px 20px">
+    <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Categorias</div>
+    <div id="cat-summary" class="cat-summary-grid"></div>
   </div>
 
   <div id="list-view">
@@ -208,22 +222,47 @@ function show(id) {
 }
 
 function buildCatFilters() {
-  const cats = [...new Set(allItems.map(i => i.auto_category).filter(Boolean))];
+  const counts = {};
+  allItems.forEach(i => { const c = i.auto_category || 'outros'; counts[c] = (counts[c]||0)+1; });
   const row = document.getElementById('cat-filters');
-  row.innerHTML = '<button class="pill active" data-cat="all">Tudo</button>';
-  cats.forEach(c => {
+  const total = allItems.length;
+  row.innerHTML = `<button class="pill active" data-cat="all">Tudo <span class="pill-count">${total}</span></button>`;
+  Object.entries(CAT_LABELS).forEach(([k, v]) => {
+    const n = counts[k] || 0;
     const b = document.createElement('button');
     b.className = 'pill';
-    b.dataset.cat = c;
-    b.textContent = CAT_LABELS[c] || c;
+    b.dataset.cat = k;
+    b.innerHTML = `${v} <span class="pill-count">${n}</span>`;
     row.appendChild(b);
   });
   row.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => {
     filterCat = b.dataset.cat;
-    row.querySelectorAll('[data-cat]').forEach(x => { x.className = 'pill'; x.style.background = ''; x.style.color = ''; });
-    b.className = 'pill active-cat';
-    if (filterCat !== 'all') { b.style.background = CAT_COLORS[filterCat] || '#A8522A'; b.style.color = '#fff'; }
-    else { b.className = 'pill active'; }
+    row.querySelectorAll('[data-cat]').forEach(x => { x.className = 'pill'; x.style.background = ''; x.style.color = ''; x.style.borderColor = ''; });
+    if (filterCat === 'all') { b.className = 'pill active'; }
+    else { b.style.background = CAT_COLORS[filterCat] || '#A8522A'; b.style.color = '#fff'; b.style.borderColor = 'transparent'; }
+    render();
+  }));
+  renderCatSummary(counts);
+}
+
+function renderCatSummary(counts) {
+  const el = document.getElementById('cat-summary');
+  if (!el) return;
+  el.innerHTML = Object.entries(CAT_LABELS).map(([k, v]) => {
+    const n = counts[k] || 0;
+    const color = CAT_COLORS[k] || '#8A7F78';
+    return `<div class="cat-card" data-cat="${k}" style="cursor:pointer">
+      <div class="cat-card-dot" style="background:${color}"></div>
+      <div class="cat-card-label">${v}</div>
+      <div class="cat-card-count" style="color:${n>0?color:'var(--muted)'}">${n}</div>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('[data-cat]').forEach(c => c.addEventListener('click', () => {
+    filterCat = c.dataset.cat;
+    document.getElementById('btn-list').click();
+    document.querySelectorAll('#cat-filters [data-cat]').forEach(x => { x.className='pill'; x.style.background=''; x.style.color=''; x.style.borderColor=''; });
+    const pill = document.querySelector(`#cat-filters [data-cat="${filterCat}"]`);
+    if (pill) { pill.style.background = CAT_COLORS[filterCat]; pill.style.color='#fff'; pill.style.borderColor='transparent'; }
     render();
   }));
 }
