@@ -117,7 +117,66 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:.8}}
 /* scrollbar */
 .content::-webkit-scrollbar{width:4px;}.content::-webkit-scrollbar-track{background:transparent;}.content::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px;}
-@media(max-width:768px){.sidebar{display:none;}.stats-bar{grid-template-columns:repeat(2,1fr);}.stat-cell:nth-child(2){border-right:none;}.content{padding:20px 16px;}.topbar{padding:0 16px;}}
+
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav{display:none;}
+
+@media(max-width:768px){
+ html,body{overflow:hidden;}
+ .app{flex-direction:column;}
+ .sidebar{display:none;}
+ .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding-bottom:64px;}
+ .topbar{padding:0 16px;height:52px;flex-shrink:0;}
+ .topbar-title{font-size:17px;}
+ .topbar-date{display:none;}
+ .topbar-right{gap:10px;}
+ .live-badge span:last-child{display:none;}
+ .stats-bar{grid-template-columns:repeat(2,1fr);flex-shrink:0;}
+ .stat-cell{padding:12px 14px;}
+ .stat-cell:nth-child(2){border-right:none;}
+ .stat-num{font-size:26px;}
+ .content{padding:16px 14px;overflow-y:auto;flex:1;}
+ .filters{gap:6px;margin-bottom:16px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+ .filter-chip{white-space:nowrap;flex-shrink:0;padding:5px 12px;font-size:10px;}
+ .event-card{padding:13px 14px;grid-template-columns:1fr auto;gap:6px;}
+ .event-title{font-size:17px;}
+ .event-date-primary{font-size:13px;}
+ .event-meta{font-size:11px;flex-wrap:wrap;gap:6px;}
+ .list-group-label{font-size:8px;}
+ .stat-cell:nth-child(3){border-right:1px solid var(--border);}
+ /* calendar mobile */
+ .cal-grid{gap:0px;}
+ .cal-day{min-height:52px;padding:4px;}
+ .cal-day-num{width:18px;height:18px;font-size:10px;}
+ .cal-event-pill{font-size:8px;padding:1px 4px;}
+ .cal-title{font-size:20px;}
+ /* bottom nav */
+ .bottom-nav{
+  display:flex;position:fixed;bottom:0;left:0;right:0;height:64px;
+  background:var(--ink);border-top:1px solid rgba(255,255,255,.08);
+  z-index:50;align-items:stretch;
+ }
+ .bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;cursor:pointer;color:rgba(255,255,255,.4);transition:color .2s;
+  border:none;background:transparent;padding:0;
+ }
+ .bnav-item.active{color:var(--accent2);}
+ .bnav-icon{font-size:18px;line-height:1;}
+ .bnav-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;}
+ /* cat sheet */
+ #cat-sheet{
+  position:fixed;bottom:64px;left:0;right:0;background:var(--ink);
+  border-top:1px solid rgba(255,255,255,.1);z-index:40;
+  padding:16px 0 8px;transform:translateY(100%);transition:transform .3s ease;
+ }
+ #cat-sheet.open{transform:translateY(0);}
+ .cat-sheet-item{
+  display:flex;align-items:center;gap:14px;padding:12px 24px;
+  color:rgba(255,255,255,.6);font-size:14px;font-weight:300;cursor:pointer;
+ }
+ .cat-sheet-item:active{background:rgba(255,255,255,.06);}
+}
 </style>
 </head>
 <body>
@@ -191,6 +250,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   </div>
  </div>
 </div>
+</div>
+
+<!-- Bottom nav (mobile only) -->
+<nav class="bottom-nav">
+ <button class="bnav-item active" id="bnav-list" onclick="setView('list');closeCatSheet()">
+  <span class="bnav-icon">≡</span><span class="bnav-label">Lista</span>
+ </button>
+ <button class="bnav-item" id="bnav-cal" onclick="setView('calendar');closeCatSheet()">
+  <span class="bnav-icon">⊞</span><span class="bnav-label">Calendário</span>
+ </button>
+ <button class="bnav-item" id="bnav-cat" onclick="toggleCatSheet()">
+  <span class="bnav-icon">◈</span><span class="bnav-label">Categorias</span>
+ </button>
+</nav>
+
+<!-- Category sheet (mobile) -->
+<div id="cat-sheet">
+ <div class="cat-sheet-item" onclick="filterCatNav(null);closeCatSheet()"><span class="cat-dot" style="background:var(--muted2);width:8px;height:8px"></span> Todos</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('familia');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-familia);width:8px;height:8px"></span> Família</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('escola');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-escola);width:8px;height:8px"></span> Escola</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('trabalho');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-trabalho);width:8px;height:8px"></span> Trabalho</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('saude');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-saude);width:8px;height:8px"></span> Saúde</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('financeiro');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-financeiro);width:8px;height:8px"></span> Financeiro</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('social');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-social);width:8px;height:8px"></span> Social</div>
+ <div class="cat-sheet-item" onclick="filterCatNav('viagem');closeCatSheet()"><span class="cat-dot" style="background:var(--cat-viagem);width:8px;height:8px"></span> Viagem</div>
 </div>
 
 <script>
@@ -442,6 +526,26 @@ function filterCatNav(cat) {
 // Topbar date
 document.getElementById('topbar-date').textContent =
   today.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: TZ });
+
+// Mobile bottom nav sync
+const _setView = setView;
+setView = function(v) {
+  _setView(v);
+  document.getElementById('bnav-list')?.classList.toggle('active', v === 'list');
+  document.getElementById('bnav-cal')?.classList.toggle('active', v === 'calendar');
+  document.getElementById('bnav-cat')?.classList.remove('active');
+};
+
+function toggleCatSheet() {
+  const sheet = document.getElementById('cat-sheet');
+  const btn = document.getElementById('bnav-cat');
+  const isOpen = sheet.classList.toggle('open');
+  btn.classList.toggle('active', isOpen);
+}
+function closeCatSheet() {
+  document.getElementById('cat-sheet')?.classList.remove('open');
+  document.getElementById('bnav-cat')?.classList.remove('active');
+}
 
 init();
 </script>
