@@ -281,10 +281,11 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
   <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
   <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
-  <div class="stats">
+  <div class="stats" style="grid-template-columns:repeat(5,1fr)">
     <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
     <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
     <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memória<br>e contexto</span></div>
+    <div class="stat"><span class="stat-num">&#128274;</span><span class="stat-label">Sigilo<br>total</span></div>
     <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
   </div>
   <div class="proof">
@@ -314,6 +315,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
       <div class="web-stat"><span class="web-stat-num">Zero</span><span class="web-stat-label">Instalação</span></div>
       <div class="web-stat"><span class="web-stat-num">24/7</span><span class="web-stat-label">Disponível</span></div>
       <div class="web-stat"><span class="web-stat-num">&#8734;</span><span class="web-stat-label">Memória</span></div>
+      <div class="web-stat"><span class="web-stat-num">&#128274;</span><span class="web-stat-label">Sigilo total</span></div>
       <div class="web-stat"><span class="web-stat-num">1 min</span><span class="web-stat-label">Para começar</span></div>
     </div>
   </div>
@@ -744,6 +746,12 @@ async function register() {
     });
 
     if (res.ok) {
+      // Send welcome WhatsApp message
+      fetch('https://jarvis-app-flax.vercel.app/api/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, name })
+      }).catch(() => {}); // fire and forget
       document.getElementById('reg-form').innerHTML =
         '<div style="padding:24px 0;text-align:center;">' +
         '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
