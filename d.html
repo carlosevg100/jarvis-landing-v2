@@ -1,412 +1,449 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jarvis — Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#F5F0E8;--ink:#1A1714;--ink2:#3A3430;
-  --muted:rgba(26,23,20,0.42);--accent:#A8522A;
-  --border:rgba(26,23,20,0.12);--white:#FDFAF5;
-  --bg-subtle:#EDE8DF;--bg-card:#E5DFD4;--green:#25D366;
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+ --bg: #F4EFE6; --bg2: #EDE8DF; --surface: #FDFAF5;
+ --ink: #1A1714; --ink2: #3A3530;
+ --muted: rgba(26,23,20,0.4); --muted2: rgba(26,23,20,0.18);
+ --accent: #A8522A; --accent2: #C47040;
+ --border: rgba(26,23,20,0.09); --sidebar: 240px;
+ --cat-familia:#C07A4A; --cat-escola:#4A7FA8; --cat-trabalho:#3A7A5A;
+ --cat-saude:#8A4A9A; --cat-financeiro:#A89A4A; --cat-social:#C04A6A;
+ --cat-compras:#4A6AC0; --cat-viagem:#4AAAC0; --cat-outros:#7A7A7A;
 }
-html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;mix-blend-mode:multiply}
-
-/* States */
-#loading,#not-found{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px}
-#loading{display:flex}
-#not-found{display:none}
-#app{display:none}
-
-.spinner{width:32px;height:32px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-txt{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
-.not-found-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;color:var(--ink)}
-.not-found-sub{font-size:13px;color:var(--muted)}
-
-/* Nav */
-.nav{position:sticky;top:0;z-index:100;background:linear-gradient(to bottom,var(--bg) 70%,transparent);padding:20px 24px 12px;display:flex;justify-content:space-between;align-items:flex-start}
-.logo{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:7px;text-transform:uppercase;color:var(--ink)}
-.logo-sub{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:3px}
-.nav-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.live-badge{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.live-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.trial-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink2)}
-
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:0 24px 20px;background:var(--border);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-.stat{background:var(--bg-card);padding:16px 12px;text-align:center}
-.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--ink);line-height:1}
-.stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
-
-/* Filters */
-.filters{padding:0 24px 16px;display:flex;flex-direction:column;gap:10px}
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.pill{background:transparent;border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--ink2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;line-height:1.4}
-.pill:hover{background:var(--bg-subtle)}
-.pill.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.pill.active-cat{color:var(--white);border-color:transparent}
-.view-toggle{display:flex;gap:4px;margin-left:auto}
-.view-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.view-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.search{width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:100px;padding:8px 16px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none}
-.search:focus{border-color:var(--accent)}
-
-/* List */
-#list-view,#cal-view{display:block}
-.list{padding:0 24px 64px;display:flex;flex-direction:column;gap:10px}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all .25s}
-.card:hover{background:var(--bg-subtle);box-shadow:0 4px 20px rgba(26,23,20,.07);transform:translateY(-1px)}
-.card.done{opacity:.4}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
-.cat-pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:100px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;white-space:nowrap}
-.card-date{font-size:11px;color:var(--muted);white-space:nowrap}
-.card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--ink);line-height:1.3;margin-bottom:10px}
-.card.done .card-title{text-decoration:line-through}
-.card-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.card-participants{font-size:11px;color:var(--muted)}
-.card-amount{font-size:12px;font-weight:500;color:var(--accent)}
-.check-btn{margin-left:auto;background:transparent;border:1.5px solid var(--border);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0;font-size:12px;color:transparent}
-.check-btn:hover{border-color:var(--accent);background:var(--accent);color:#fff}
-.check-btn.checked{background:var(--accent);border-color:var(--accent);color:#fff}
-
-/* Empty */
-.empty{text-align:center;padding:80px 24px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.empty-rule{width:32px;height:2px;background:var(--accent);border-radius:2px}
-.empty-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--ink)}
-.empty-sub{font-size:13px;color:var(--muted);line-height:1.7;max-width:280px}
-.empty-hint{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-
-/* Calendar */
-.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px 16px}
-.cal-month-label{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink)}
-.cal-arrow{background:transparent;border:1px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:var(--ink2);display:flex;align-items:center;justify-content:center}
-.cal-arrow:hover{background:var(--bg-card)}
-.cal-grid-wrap{padding:0 24px 64px}
-.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
-.cal-wd{text-align:center;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:4px 0}
-.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-cell{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:6px;min-height:60px}
-.cal-cell.today{border-color:var(--accent);border-width:2px}
-.cal-cell.empty-cell{background:transparent;border-color:transparent;min-height:0}
-.cal-day-num{font-size:11px;font-weight:500;color:var(--ink2);margin-bottom:3px}
-.cal-cell.today .cal-day-num{color:var(--accent);font-weight:700}
-.cal-item-dot{font-size:9px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;line-height:1.3}
-.pill-count{font-size:9px;opacity:.7;margin-left:3px}
-.cat-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.cat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;transition:all .2s}
-.cat-card:hover{background:var(--bg-subtle);transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,23,20,.06)}
-.cat-card-dot{width:8px;height:8px;border-radius:50%}
-.cat-card-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink2)}
-.cat-card-count{font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1;font-weight:400}
-@media(max-width:480px){.cat-summary-grid{grid-template-columns:repeat(3,1fr)}}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+ background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");mix-blend-mode:multiply;}
+.app{display:flex;height:100vh;}
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--ink);color:var(--surface);display:flex;flex-direction:column;padding:0;overflow:hidden;position:relative;}
+.sidebar-glow{position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(168,82,42,.18) 0%,transparent 70%);pointer-events:none;}
+.sidebar-top{padding:28px 24px 24px;border-bottom:1px solid rgba(255,255,255,.06);}
+.sidebar-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;letter-spacing:6px;text-transform:uppercase;color:var(--surface);margin-bottom:3px;}
+.sidebar-sub{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);}
+.sidebar-user{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:white;letter-spacing:.5px;}
+.user-name{font-size:13px;font-weight:400;color:var(--surface);line-height:1.2;}
+.user-plan{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto;}
+.nav-section-label{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.22);padding:16px 24px 8px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:13px;font-weight:300;color:rgba(255,255,255,.5);cursor:pointer;transition:color .2s,background .2s;border-left:2px solid transparent;}
+.nav-item:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.nav-item.active{color:var(--surface);border-left-color:var(--accent2);background:rgba(255,255,255,.06);}
+.nav-icon{width:16px;text-align:center;font-size:13px;opacity:.7;}
+.cat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sidebar-bottom{padding:20px 24px;border-top:1px solid rgba(255,255,255,.06);}
+.wa-status{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.35);}
+.wa-dot{width:6px;height:6px;border-radius:50%;background:#25D366;animation:blink 2s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--ink);}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+.view-btn{padding:6px 14px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;color:var(--muted);background:transparent;cursor:pointer;border:none;transition:background .2s,color .2s;}
+.view-btn.active{background:var(--ink);color:var(--surface);}
+.topbar-date{font-size:12px;color:var(--muted);font-weight:300;letter-spacing:.5px;}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
+.live-dot2{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 1.8s infinite;}
+/* STATS */
+.stats-bar{background:var(--surface);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);flex-shrink:0;}
+.stat-cell{padding:16px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;}
+.stat-cell:last-child{border-right:none;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--ink);line-height:1;}
+.stat-num.accent{color:var(--accent);}
+.stat-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);}
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:28px 32px;}
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.filter-chip{padding:6px 14px;border-radius:2px;font-size:11px;font-weight:400;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;}
+.filter-chip:hover{border-color:rgba(26,23,20,.2);color:var(--ink2);}
+.filter-chip.active{background:var(--ink);color:var(--surface);border-color:var(--ink);}
+/* LIST */
+.list-view{display:none;flex-direction:column;gap:0;}
+.list-view.active{display:flex;}
+.list-group{margin-bottom:28px;}
+.list-group-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.list-group-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.event-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--border);padding:16px 20px;margin-bottom:1px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;cursor:pointer;transition:border-color .2s,box-shadow .2s;position:relative;}
+.event-card:hover{box-shadow:0 2px 12px rgba(26,23,20,.07);border-color:rgba(26,23,20,.15);}
+.event-card.done{opacity:.45;}
+.event-card.done .event-title{text-decoration:line-through;}
+.event-left{display:flex;flex-direction:column;gap:6px;}
+.event-cat-tag{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);width:fit-content;}
+.event-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--ink);line-height:1.2;}
+.event-meta{font-size:12px;font-weight:300;color:var(--muted);display:flex;align-items:center;gap:12px;}
+.event-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.event-date-primary{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;color:var(--ink);}
+.event-urgency{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:1px;}
+.urgency-today{background:rgba(168,82,42,.1);color:var(--accent);}
+.urgency-soon{background:rgba(74,122,168,.1);color:#4A7AA8;}
+.event-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;cursor:pointer;transition:all .2s;}
+.event-check:hover{border-color:var(--accent);}
+.event-check.checked{background:var(--accent);border-color:var(--accent);color:white;}
+/* CALENDAR */
+.calendar-view{display:none;}
+.calendar-view.active{display:block;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.cal-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);}
+.cal-nav{display:flex;gap:4px;}
+.cal-nav-btn{width:32px;height:32px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);cursor:pointer;transition:all .2s;}
+.cal-nav-btn:hover{color:var(--ink);border-color:rgba(26,23,20,.2);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);}
+.cal-day-label{background:var(--bg2);padding:8px;text-align:center;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.cal-day{background:var(--surface);min-height:90px;padding:8px;cursor:pointer;transition:background .15s;position:relative;}
+.cal-day:hover{background:var(--bg);}
+.cal-day.other-month{background:var(--bg2);opacity:.5;}
+.cal-day.today .cal-day-num{background:var(--ink);color:var(--surface);}
+.cal-day-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:400;color:var(--ink2);margin-bottom:4px;}
+.cal-event-pill{font-size:9px;padding:2px 6px;border-radius:1px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
+.cal-more{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+/* EMPTY */
+.empty-state{text-align:center;padding:80px 32px;color:var(--muted);}
+.empty-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;font-weight:300;color:var(--ink2);margin-bottom:12px;}
+.empty-sub{font-size:13px;font-weight:300;line-height:1.7;max-width:320px;margin:0 auto 20px;}
+.empty-hint{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted2);}
+/* LOADING */
+#loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100;}
+.loading-logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:8px;text-transform:uppercase;color:var(--ink);opacity:.4;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.8}}
+/* scrollbar */
+.content::-webkit-scrollbar{width:4px;}.content::-webkit-scrollbar-track{background:transparent;}.content::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px;}
+@media(max-width:768px){.sidebar{display:none;}.stats-bar{grid-template-columns:repeat(2,1fr);}.stat-cell:nth-child(2){border-right:none;}.content{padding:20px 16px;}.topbar{padding:0 16px;}}
 </style>
 </head>
 <body>
-
-<div id="loading">
-  <div class="spinner"></div>
-  <div class="loading-txt">carregando</div>
-</div>
-
-<div id="not-found">
-  <div class="not-found-title">Link inválido.</div>
-  <div class="not-found-sub">Verifique o link enviado pelo Jarvis no WhatsApp.</div>
-</div>
-
-<div id="app">
-  <nav class="nav">
-    <div>
-      <div class="logo">Jarvis</div>
-      <div class="logo-sub">dashboard</div>
-    </div>
-    <div class="nav-right">
-      <div class="live-badge"><span class="live-dot"></span> ao vivo</div>
-      <div class="trial-pill" id="user-pill">...</div>
-    </div>
-  </nav>
-
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="stat-open">0</div><div class="stat-label">em aberto</div></div>
-    <div class="stat"><div class="stat-num" id="stat-timed">0</div><div class="stat-label">com prazo</div></div>
-    <div class="stat"><div class="stat-num" id="stat-done">0</div><div class="stat-label">concluídos</div></div>
+<div id="loading-overlay"><div class="loading-logo">Jarvis</div></div>
+<div class="app">
+<aside class="sidebar">
+ <div class="sidebar-glow"></div>
+ <div class="sidebar-top">
+  <div class="sidebar-logo">Jarvis</div>
+  <div class="sidebar-sub">Dashboard pessoal</div>
+ </div>
+ <div class="sidebar-user">
+  <div class="user-avatar" id="user-initials">--</div>
+  <div>
+   <div class="user-name" id="user-name-sb">—</div>
+   <div class="user-plan" id="user-plan-sb">—</div>
   </div>
-
+ </div>
+ <nav class="sidebar-nav">
+  <div class="nav-section-label">Visão geral</div>
+  <div class="nav-item active" id="nav-list" onclick="setView('list')"><span class="nav-icon">≡</span> Todos os eventos</div>
+  <div class="nav-item" id="nav-cal" onclick="setView('calendar')"><span class="nav-icon">⊞</span> Calendário</div>
+  <div class="nav-section-label">Categorias</div>
+  <div class="nav-item" onclick="filterCatNav('familia')"><span class="cat-dot" style="background:var(--cat-familia)"></span> Família</div>
+  <div class="nav-item" onclick="filterCatNav('escola')"><span class="cat-dot" style="background:var(--cat-escola)"></span> Escola</div>
+  <div class="nav-item" onclick="filterCatNav('trabalho')"><span class="cat-dot" style="background:var(--cat-trabalho)"></span> Trabalho</div>
+  <div class="nav-item" onclick="filterCatNav('saude')"><span class="cat-dot" style="background:var(--cat-saude)"></span> Saúde</div>
+  <div class="nav-item" onclick="filterCatNav('financeiro')"><span class="cat-dot" style="background:var(--cat-financeiro)"></span> Financeiro</div>
+  <div class="nav-item" onclick="filterCatNav('social')"><span class="cat-dot" style="background:var(--cat-social)"></span> Social</div>
+  <div class="nav-item" onclick="filterCatNav('viagem')"><span class="cat-dot" style="background:var(--cat-viagem)"></span> Viagem</div>
+ </nav>
+ <div class="sidebar-bottom">
+  <div class="wa-status"><span class="wa-dot"></span> Jarvis ativo no WhatsApp</div>
+ </div>
+</aside>
+<div class="main">
+ <div class="topbar">
+  <div class="topbar-title" id="topbar-title">Todos os eventos</div>
+  <div class="topbar-right">
+   <div class="live-badge"><span class="live-dot2"></span> Ao vivo</div>
+   <div class="topbar-date" id="topbar-date"></div>
+   <div class="view-toggle">
+    <button class="view-btn active" id="btn-list" onclick="setView('list')">Lista</button>
+    <button class="view-btn" id="btn-cal" onclick="setView('calendar')">Calendário</button>
+   </div>
+  </div>
+ </div>
+ <div class="stats-bar">
+  <div class="stat-cell"><div class="stat-num" id="stat-aberto">0</div><div class="stat-label">Em aberto</div></div>
+  <div class="stat-cell"><div class="stat-num accent" id="stat-hoje">0</div><div class="stat-label">Hoje</div></div>
+  <div class="stat-cell"><div class="stat-num" id="stat-semana">0</div><div class="stat-label">Esta semana</div></div>
+  <div class="stat-cell"><div class="stat-num" id="stat-concluido">0</div><div class="stat-label">Concluídos</div></div>
+ </div>
+ <div class="content">
   <div class="filters">
-    <div class="filter-row">
-      <button class="pill active" data-date="all">Todos</button>
-      <button class="pill" data-date="today">Hoje</button>
-      <button class="pill" data-date="week">Semana</button>
-      <button class="pill" data-date="month">Mês</button>
-      <div class="view-toggle">
-        <button class="view-btn active" id="btn-list">Lista</button>
-        <button class="view-btn" id="btn-cal">Cal</button>
-      </div>
-    </div>
-    <div class="filter-row" id="cat-filters">
-      <button class="pill active" data-cat="all">Tudo</button>
-    </div>
-    <input class="search" id="search" placeholder="Buscar...">
+   <button class="filter-chip active" onclick="setFilter('todos',this)">Todos</button>
+   <button class="filter-chip" onclick="setFilter('hoje',this)">Hoje</button>
+   <button class="filter-chip" onclick="setFilter('semana',this)">Esta semana</button>
+   <button class="filter-chip" onclick="setFilter('mes',this)">Este mês</button>
   </div>
-
-  <!-- Category summary grid (always visible) -->
-  <div id="cat-summary-wrap" style="padding:0 24px 20px">
-    <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Categorias</div>
-    <div id="cat-summary" class="cat-summary-grid"></div>
-  </div>
-
-  <div id="list-view">
-    <div class="list" id="cards"></div>
-  </div>
-
-  <div id="cal-view" style="display:none">
+  <div class="list-view active" id="list-view"></div>
+  <div class="calendar-view" id="calendar-view">
+   <div class="cal-header">
+    <div class="cal-title" id="cal-month-title"></div>
     <div class="cal-nav">
-      <button class="cal-arrow" id="cal-prev">‹</button>
-      <div class="cal-month-label" id="cal-month-label"></div>
-      <button class="cal-arrow" id="cal-next">›</button>
+     <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+     <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
     </div>
-    <div class="cal-grid-wrap">
-      <div class="cal-weekdays">
-        <div class="cal-wd">Dom</div><div class="cal-wd">Seg</div><div class="cal-wd">Ter</div>
-        <div class="cal-wd">Qua</div><div class="cal-wd">Qui</div><div class="cal-wd">Sex</div><div class="cal-wd">Sáb</div>
-      </div>
-      <div class="cal-days" id="cal-days"></div>
-    </div>
+   </div>
+   <div class="cal-grid" id="cal-grid"></div>
   </div>
+ </div>
+</div>
 </div>
 
 <script>
 const SUPA_URL = 'https://fbgqzouxbagmmlzibyhl.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZiZ3F6b3V4YmFnbW1semlieWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NzYxNTEsImV4cCI6MjA4ODA1MjE1MX0.o4SCzzeLf2IkXIhMyGRq9DuzOZWbg4w-uxdCTTHaY_E';
 const H = { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON };
+const TZ = 'America/Sao_Paulo';
 
-const CAT_LABELS = { familia:'Família',escola:'Escola',trabalho:'Trabalho',saude:'Saúde',financeiro:'Financeiro',social:'Social',compras:'Compras',viagem:'Viagem',outros:'Outros' };
-const CAT_COLORS = { familia:'#A8522A',escola:'#5B7FA6',trabalho:'#4A7C5F',saude:'#7B5EA7',financeiro:'#B8860B',social:'#C4763A',compras:'#7A6652',viagem:'#4682B4',outros:'#8A7F78' };
-const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const catColors = {
+ familia:'#C07A4A',escola:'#4A7FA8',trabalho:'#3A7A5A',
+ saude:'#8A4A9A',financeiro:'#A89A4A',social:'#C04A6A',
+ compras:'#4A6AC0',viagem:'#4AAAC0',outros:'#7A7A7A'
+};
+const catLabels = {
+ familia:'Família',escola:'Escola',trabalho:'Trabalho',
+ saude:'Saúde',financeiro:'Financeiro',social:'Social',
+ compras:'Compras',viagem:'Viagem',outros:'Outros'
+};
+const ptMonths = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const ptDays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const ptDaysFull = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
 
-const params = new URLSearchParams(location.search);
-const token = params.get('t') || location.pathname.split('/d/').pop()?.split('/')[0] || location.pathname.split('/').pop();
-let allItems = [], user = null;
-let filterDate = 'all', filterCat = 'all', searchVal = '';
-let calMonth = new Date(); calMonth.setDate(1);
-let view = 'list';
+const token = new URLSearchParams(location.search).get('t') || location.pathname.split('/d/').pop()?.split('/')[0];
+const today = new Date();
+const pad = n => String(n).padStart(2,'0');
+const fmtDateStr = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const todayStr = fmtDateStr(today);
 
-async function fetchData() {
-  const uRes = await fetch(`${SUPA_URL}/rest/v1/jarvis_users?dashboard_token=eq.${token}&select=*&limit=1`, { headers: H });
-  const users = await uRes.json();
-  if (!users || !users.length) { show('not-found'); return; }
+let allItems = [], user = null, currentFilter = 'todos', currentCat = null, currentView = 'list';
+let calMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+async function supaFetch(path, params = '') {
+  const r = await fetch(`${SUPA_URL}/rest/v1/${path}${params}`, { headers: H });
+  return r.json();
+}
+
+async function init() {
+  if (!token) { showError(); return; }
+  const users = await supaFetch(`jarvis_users?dashboard_token=eq.${token}&select=*&limit=1`).catch(() => null);
+  if (!users || !users.length) { showError(); return; }
   user = users[0];
-  const days = Math.ceil((new Date(user.trial_ends_at) - Date.now()) / 86400000);
-  document.getElementById('user-pill').textContent = user.name.split(' ')[0] + (days > 0 ? ' · ' + days + 'd' : '');
 
-  const iRes = await fetch(`${SUPA_URL}/rest/v1/jarvis_items?user_id=eq.${user.id}&order=scheduled_time.asc.nullslast&limit=200`, { headers: H });
-  allItems = await iRes.json() || [];
-  buildCatFilters();
+  // Set user info
+  const initials = (user.name || 'U').split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('user-initials').textContent = initials;
+  document.getElementById('user-name-sb').textContent = user.name || 'Usuário';
+  const plan = user.subscription_status === 'trial' ? 'Trial' : user.subscription_status === 'active' ? 'Premium' : user.subscription_status || 'Free';
+  document.getElementById('user-plan-sb').textContent = 'Plano ' + plan;
+
+  await loadItems();
+  document.getElementById('loading-overlay').style.display = 'none';
+
+  // Live polling every 15s
+  setInterval(loadItems, 15000);
+}
+
+async function loadItems() {
+  const items = await supaFetch(`jarvis_items?user_id=eq.${user.id}&select=*&order=scheduled_time.asc.nullslast,created_at.desc`).catch(() => []);
+  allItems = Array.isArray(items) ? items : [];
   updateStats();
-  render();
-  show('app');
+  if (currentView === 'list') renderList();
+  else renderCalendar();
 }
 
-function show(id) {
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('not-found').style.display = 'none';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById(id).style.display = 'flex';
-  if (id === 'app') document.getElementById('app').style.display = 'block';
+function showError() {
+  document.getElementById('loading-overlay').style.display = 'none';
+  document.querySelector('.main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:16px"><div style="font-family:Cormorant Garamond,serif;font-size:22px;font-style:italic;color:var(--ink2)">Link inválido.</div><div style="font-size:12px;color:var(--muted)">Verifique o link enviado pelo Jarvis.</div></div>';
 }
 
-function buildCatFilters() {
-  const counts = {};
-  allItems.forEach(i => { const c = i.auto_category || 'outros'; counts[c] = (counts[c]||0)+1; });
-  const row = document.getElementById('cat-filters');
-  const total = allItems.length;
-  row.innerHTML = `<button class="pill active" data-cat="all">Tudo <span class="pill-count">${total}</span></button>`;
-  Object.entries(CAT_LABELS).forEach(([k, v]) => {
-    const n = counts[k] || 0;
-    const b = document.createElement('button');
-    b.className = 'pill';
-    b.dataset.cat = k;
-    b.innerHTML = `${v} <span class="pill-count">${n}</span>`;
-    row.appendChild(b);
-  });
-  row.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => {
-    filterCat = b.dataset.cat;
-    row.querySelectorAll('[data-cat]').forEach(x => { x.className = 'pill'; x.style.background = ''; x.style.color = ''; x.style.borderColor = ''; });
-    if (filterCat === 'all') { b.className = 'pill active'; }
-    else { b.style.background = CAT_COLORS[filterCat] || '#A8522A'; b.style.color = '#fff'; b.style.borderColor = 'transparent'; }
-    render();
-  }));
-  renderCatSummary(counts);
+function fmtTime(d) {
+  return d.toLocaleTimeString('pt-BR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });
+}
+function fmtEventDate(scheduled_time) {
+  if (!scheduled_time) return '';
+  const d = new Date(scheduled_time);
+  const dStr = d.toLocaleDateString('pt-BR', { timeZone: TZ });
+  const parts = dStr.split('/');
+  const localDate = new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+  const diff = Math.round((localDate - new Date(todayStr)) / 86400000);
+  const time = fmtTime(d);
+  if (diff === 0) return `Hoje, ${time}`;
+  if (diff === 1) return `Amanhã, ${time}`;
+  if (diff === -1) return `Ontem, ${time}`;
+  if (diff > 0 && diff < 7) return `${ptDaysFull[localDate.getDay()]}, ${time}`;
+  return `${pad(localDate.getDate())} ${ptMonths[localDate.getMonth()].slice(0,3)}, ${time}`;
+}
+function getLocalDateStr(scheduled_time) {
+  if (!scheduled_time) return null;
+  return new Date(scheduled_time).toLocaleDateString('pt-BR', { timeZone: TZ }).split('/').reverse().join('-').replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, (m,y,mo,d) => `${y}-${pad(mo)}-${pad(d)}`);
+}
+function getWeekEndStr() {
+  const d = new Date(today); d.setDate(d.getDate() + (6 - d.getDay())); return fmtDateStr(d);
+}
+function getMonthEndStr() {
+  return `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(new Date(today.getFullYear(),today.getMonth()+1,0).getDate())}`;
 }
 
-function renderCatSummary(counts) {
-  const el = document.getElementById('cat-summary');
-  if (!el) return;
-  el.innerHTML = Object.entries(CAT_LABELS).map(([k, v]) => {
-    const n = counts[k] || 0;
-    const color = CAT_COLORS[k] || '#8A7F78';
-    return `<div class="cat-card" data-cat="${k}" style="cursor:pointer">
-      <div class="cat-card-dot" style="background:${color}"></div>
-      <div class="cat-card-label">${v}</div>
-      <div class="cat-card-count" style="color:${n>0?color:'var(--muted)'}">${n}</div>
-    </div>`;
-  }).join('');
-  el.querySelectorAll('[data-cat]').forEach(c => c.addEventListener('click', () => {
-    filterCat = c.dataset.cat;
-    document.getElementById('btn-list').click();
-    document.querySelectorAll('#cat-filters [data-cat]').forEach(x => { x.className='pill'; x.style.background=''; x.style.color=''; x.style.borderColor=''; });
-    const pill = document.querySelector(`#cat-filters [data-cat="${filterCat}"]`);
-    if (pill) { pill.style.background = CAT_COLORS[filterCat]; pill.style.color='#fff'; pill.style.borderColor='transparent'; }
-    render();
-  }));
+function filteredItems() {
+  let items = [...allItems];
+  if (currentCat) items = items.filter(i => i.auto_category === currentCat);
+  if (currentFilter === 'hoje') items = items.filter(i => getLocalDateStr(i.scheduled_time) === todayStr);
+  else if (currentFilter === 'semana') items = items.filter(i => { const d = getLocalDateStr(i.scheduled_time); return d && d >= todayStr && d <= getWeekEndStr(); });
+  else if (currentFilter === 'mes') items = items.filter(i => { const d = getLocalDateStr(i.scheduled_time); return d && d >= todayStr && d <= getMonthEndStr(); });
+  return items;
 }
 
 function updateStats() {
-  document.getElementById('stat-open').textContent = allItems.filter(i => !i.done).length;
-  document.getElementById('stat-timed').textContent = allItems.filter(i => !i.done && i.scheduled_time).length;
-  document.getElementById('stat-done').textContent = allItems.filter(i => i.done).length;
-}
-
-function getFiltered() {
-  const now = new Date();
-  const ts = new Date(now); ts.setHours(0,0,0,0);
-  const te = new Date(now); te.setHours(23,59,59,999);
-  const tw = new Date(ts); tw.setDate(tw.getDate()+7);
-  const tm = new Date(ts); tm.setDate(tm.getDate()+30);
-  return allItems.filter(i => {
-    if (searchVal && !i.task.toLowerCase().includes(searchVal.toLowerCase())) return false;
-    if (filterCat !== 'all' && i.auto_category !== filterCat) return false;
-    if (filterDate !== 'all' && i.scheduled_time) {
-      const d = new Date(i.scheduled_time);
-      if (filterDate === 'today' && (d < ts || d > te)) return false;
-      if (filterDate === 'week' && (d < ts || d > tw)) return false;
-      if (filterDate === 'month' && (d < ts || d > tm)) return false;
-    }
-    return true;
-  });
-}
-
-function fmt(iso) {
-  return new Date(iso).toLocaleString('pt-BR', { weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' });
-}
-
-function render() {
-  if (view === 'list') renderList();
-  else renderCal();
+  const open = allItems.filter(i => i.status !== 'done');
+  document.getElementById('stat-aberto').textContent = open.length;
+  document.getElementById('stat-hoje').textContent = open.filter(i => getLocalDateStr(i.scheduled_time) === todayStr).length;
+  document.getElementById('stat-semana').textContent = open.filter(i => { const d = getLocalDateStr(i.scheduled_time); return d && d >= todayStr && d <= getWeekEndStr(); }).length;
+  document.getElementById('stat-concluido').textContent = allItems.filter(i => i.status === 'done').length;
 }
 
 function renderList() {
-  const items = getFiltered();
-  const el = document.getElementById('cards');
+  const container = document.getElementById('list-view');
+  const items = filteredItems();
+  const groups = {};
+  items.forEach(item => {
+    const dStr = getLocalDateStr(item.scheduled_time);
+    let g = 'Sem data';
+    if (dStr) {
+      const diff = Math.round((new Date(dStr) - new Date(todayStr)) / 86400000);
+      g = diff < 0 ? 'Passados' : diff === 0 ? 'Hoje' : diff === 1 ? 'Amanhã' : diff <= 7 ? 'Esta semana' : diff <= 30 ? 'Este mês' : 'Mais adiante';
+    }
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(item);
+  });
+  const order = ['Hoje','Amanhã','Esta semana','Este mês','Mais adiante','Passados','Sem data'];
+  container.innerHTML = '';
   if (!items.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-rule"></div><div class="empty-title">Seu Jarvis está pronto.</div><div class="empty-sub">Ainda não tem nada aqui.<br><br>Me encaminha qualquer compromisso, tarefa ou lembrete no WhatsApp — vai aparecer aqui em segundos, organizado automaticamente.</div><div class="empty-hint">aguardando sua primeira mensagem</div></div>`;
+    container.innerHTML = `<div class="empty-state"><div style="width:32px;height:1px;background:var(--accent);margin:0 auto 24px"></div><div class="empty-title">Seu Jarvis está pronto.</div><div class="empty-sub">Me encaminha qualquer compromisso, tarefa ou lembrete no WhatsApp — vai aparecer aqui em segundos, organizado automaticamente.</div><div class="empty-hint">Aguardando sua primeira mensagem</div></div>`;
     return;
   }
-  el.innerHTML = items.map(i => {
-    const cat = i.auto_category || 'outros';
-    const color = CAT_COLORS[cat] || '#8A7F78';
-    const label = CAT_LABELS[cat] || cat;
-    const parts = i.participants && i.participants.length ? `<span class="card-participants">${i.participants.join(', ')}</span>` : '';
-    const amount = i.amount ? `<span class="card-amount">R$ ${Number(i.amount).toFixed(2)}</span>` : '';
-    const date = i.scheduled_time ? `<span class="card-date">${fmt(i.scheduled_time)}</span>` : '';
-    return `<div class="card${i.done?' done':''}" data-id="${i.id}">
-      <div class="card-top"><span class="cat-pill" style="background:${color}">${label}</span>${date}</div>
-      <div class="card-title">${i.task}</div>
-      <div class="card-meta">${parts}${amount}<button class="check-btn${i.done?' checked':''}" data-id="${i.id}" data-done="${i.done?'1':'0'}" title="Marcar">✓</button></div>
-    </div>`;
-  }).join('');
-  el.querySelectorAll('.check-btn').forEach(b => b.addEventListener('click', async e => {
-    e.stopPropagation();
-    const id = b.dataset.id, done = b.dataset.done !== '1';
-    await fetch(`${SUPA_URL}/rest/v1/jarvis_items?id=eq.${id}`, { method:'PATCH', headers:{...H,'Content-Type':'application/json','Prefer':'return=minimal'}, body: JSON.stringify({done}) });
-    const idx = allItems.findIndex(x => x.id === id);
-    if (idx >= 0) allItems[idx].done = done;
-    updateStats(); render();
-  }));
-}
-
-function renderCal() {
-  const y = calMonth.getFullYear(), m = calMonth.getMonth();
-  document.getElementById('cal-month-label').textContent = MONTHS[m] + ' ' + y;
-  const map = {};
-  allItems.forEach(i => {
-    if (!i.scheduled_time) return;
-    const k = new Date(i.scheduled_time).toISOString().slice(0,10);
-    (map[k] = map[k] || []).push(i);
-  });
-  const first = new Date(y,m,1).getDay();
-  const total = new Date(y,m+1,0).getDate();
-  const today = new Date();
-  let html = '';
-  for (let i=0;i<first;i++) html += '<div class="cal-cell empty-cell"></div>';
-  for (let d=1;d<=total;d++) {
-    const isToday = d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
-    const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const dis = map[key]||[];
-    html += `<div class="cal-cell${isToday?' today':''}"><div class="cal-day-num">${d}</div>`;
-    dis.slice(0,2).forEach(it => {
-      html += `<div class="cal-item-dot" style="color:${CAT_COLORS[it.auto_category||'outros']||'var(--muted)'}">· ${it.task}</div>`;
+  order.forEach(g => {
+    if (!groups[g]) return;
+    const section = document.createElement('div');
+    section.className = 'list-group';
+    section.innerHTML = `<div class="list-group-label">${g}</div>`;
+    groups[g].forEach(item => {
+      const dStr = getLocalDateStr(item.scheduled_time);
+      const diff = dStr ? Math.round((new Date(dStr) - new Date(todayStr)) / 86400000) : null;
+      const urgency = diff === 0 ? `<span class="event-urgency urgency-today">Hoje</span>` :
+        diff === 1 ? `<span class="event-urgency urgency-soon">Amanhã</span>` : '';
+      const cat = item.auto_category || 'outros';
+      const done = item.status === 'done';
+      const color = catColors[cat] || '#7A7A7A';
+      const card = document.createElement('div');
+      card.className = `event-card${done ? ' done' : ''}`;
+      card.style.borderLeftColor = color;
+      card.innerHTML = `
+        <div class="event-left">
+          <div class="event-cat-tag"><span class="cat-dot" style="background:${color}"></span>${(catLabels[cat]||cat).toUpperCase()}</div>
+          <div class="event-title">${item.task || item.description || 'Sem título'}</div>
+          <div class="event-meta">${item.amount ? `<span>R$ ${Number(item.amount).toFixed(2)}</span>` : ''}${item.scheduled_time ? `<span>${fmtEventDate(item.scheduled_time)}</span>` : ''}</div>
+        </div>
+        <div class="event-right">
+          ${item.scheduled_time ? `<div class="event-date-primary">${fmtEventDate(item.scheduled_time)}</div>` : ''}
+          ${urgency}
+          <div class="event-check${done ? ' checked' : ''}" onclick="toggleDone('${item.id}',event)">${done ? '✓' : ''}</div>
+        </div>`;
+      section.appendChild(card);
     });
-    if (dis.length>2) html += `<div class="cal-item-dot" style="color:var(--muted)">+${dis.length-2}</div>`;
-    html += '</div>';
-  }
-  document.getElementById('cal-days').innerHTML = html;
+    container.appendChild(section);
+  });
 }
 
-// Date filters
-document.querySelectorAll('[data-date]').forEach(b => b.addEventListener('click', () => {
-  filterDate = b.dataset.date;
-  document.querySelectorAll('[data-date]').forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-  render();
-}));
+async function toggleDone(id, ev) {
+  ev.stopPropagation();
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  const newStatus = item.status === 'done' ? 'open' : 'done';
+  item.status = newStatus;
+  renderList(); updateStats();
+  await fetch(`${SUPA_URL}/rest/v1/jarvis_items?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: { ...H, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ status: newStatus })
+  }).catch(() => {});
+}
 
-// View toggle
-document.getElementById('btn-list').addEventListener('click', () => {
-  view = 'list';
-  document.getElementById('list-view').style.display = 'block';
-  document.getElementById('cal-view').style.display = 'none';
-  document.getElementById('btn-list').classList.add('active');
-  document.getElementById('btn-cal').classList.remove('active');
-  render();
-});
-document.getElementById('btn-cal').addEventListener('click', () => {
-  view = 'calendar';
-  document.getElementById('list-view').style.display = 'none';
-  document.getElementById('cal-view').style.display = 'block';
-  document.getElementById('btn-list').classList.remove('active');
-  document.getElementById('btn-cal').classList.add('active');
-  render();
-});
+function renderCalendar() {
+  const title = document.getElementById('cal-month-title');
+  title.textContent = `${ptMonths[calMonth.getMonth()]} ${calMonth.getFullYear()}`;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  ptDays.forEach(d => { const el = document.createElement('div'); el.className = 'cal-day-label'; el.textContent = d; grid.appendChild(el); });
+  const firstDay = new Date(calMonth.getFullYear(), calMonth.getMonth(), 1).getDay();
+  const daysInMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+1, 0).getDate();
+  const daysInPrev = new Date(calMonth.getFullYear(), calMonth.getMonth(), 0).getDate();
+  for (let i = firstDay-1; i >= 0; i--) { const el = document.createElement('div'); el.className = 'cal-day other-month'; el.innerHTML = `<div class="cal-day-num">${daysInPrev-i}</div>`; grid.appendChild(el); }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${calMonth.getFullYear()}-${pad(calMonth.getMonth()+1)}-${pad(d)}`;
+    const isToday = dateStr === todayStr;
+    const el = document.createElement('div');
+    el.className = `cal-day${isToday ? ' today' : ''}`;
+    el.innerHTML = `<div class="cal-day-num">${d}</div>`;
+    const dayItems = allItems.filter(i => getLocalDateStr(i.scheduled_time) === dateStr);
+    dayItems.slice(0,3).forEach(item => {
+      const cat = item.auto_category || 'outros';
+      const color = catColors[cat] || '#7A7A7A';
+      const pill = document.createElement('div');
+      pill.className = 'cal-event-pill';
+      pill.style.background = color + '20';
+      pill.style.color = color;
+      pill.textContent = item.task || item.description || '—';
+      el.appendChild(pill);
+    });
+    if (dayItems.length > 3) { const more = document.createElement('div'); more.className = 'cal-more'; more.textContent = `+${dayItems.length-3} mais`; el.appendChild(more); }
+    grid.appendChild(el);
+  }
+  const remaining = 42 - (firstDay + daysInMonth);
+  for (let d = 1; d <= remaining; d++) { const el = document.createElement('div'); el.className = 'cal-day other-month'; el.innerHTML = `<div class="cal-day-num">${d}</div>`; grid.appendChild(el); }
+}
 
-// Calendar navigation
-document.getElementById('cal-prev').addEventListener('click', () => {
-  calMonth.setMonth(calMonth.getMonth()-1);
-  renderCal();
-});
-document.getElementById('cal-next').addEventListener('click', () => {
-  calMonth.setMonth(calMonth.getMonth()+1);
-  renderCal();
-});
+function changeMonth(dir) { calMonth.setMonth(calMonth.getMonth() + dir); renderCalendar(); }
 
-// Search
-document.getElementById('search').addEventListener('input', e => { searchVal = e.target.value; render(); });
+function setView(v) {
+  currentView = v;
+  document.getElementById('list-view').classList.toggle('active', v === 'list');
+  document.getElementById('calendar-view').classList.toggle('active', v === 'calendar');
+  document.getElementById('btn-list').classList.toggle('active', v === 'list');
+  document.getElementById('btn-cal').classList.toggle('active', v === 'calendar');
+  document.getElementById('nav-list').classList.toggle('active', v === 'list');
+  document.getElementById('nav-cal').classList.toggle('active', v === 'calendar');
+  document.getElementById('topbar-title').textContent = v === 'list' ? 'Todos os eventos' : 'Calendário';
+  if (v === 'calendar') renderCalendar();
+}
 
-// Init
-fetchData().catch(() => show('not-found'));
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderList();
+}
 
-// Poll every 15s
-setInterval(() => {
-  if (!user) return;
-  fetch(`${SUPA_URL}/rest/v1/jarvis_items?user_id=eq.${user.id}&order=scheduled_time.asc.nullslast&limit=200`, { headers: H })
-    .then(r => r.json()).then(d => { allItems = d||[]; updateStats(); render(); }).catch(()=>{});
-}, 15000);
+function filterCatNav(cat) {
+  currentCat = currentCat === cat ? null : cat;
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(el => {
+    if (el.id === 'nav-list' || el.id === 'nav-cal') return;
+    const label = el.textContent.trim().toLowerCase().replace('ú','u').replace('í','i').replace('â','a').replace('ê','e');
+    const catLabel = catLabels[cat]?.toLowerCase().replace('ú','u').replace('í','i').replace('â','a') || cat;
+    el.classList.toggle('active', currentCat === cat && label.includes(catLabel.slice(0,4)));
+  });
+  setView('list');
+  renderList();
+}
+
+// Topbar date
+document.getElementById('topbar-date').textContent =
+  today.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: TZ });
+
+init();
 </script>
 </body>
 </html>
