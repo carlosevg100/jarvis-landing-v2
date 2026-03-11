@@ -244,6 +244,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .msg-anim { opacity:0; transform:translateY(8px); transition:opacity .35s ease, transform .35s cubic-bezier(.16,1,.3,1); }
 .msg-anim.msg-visible { opacity:1; transform:translateY(0); }
 .msg-highlight { border-left:2px solid #A8522A; padding-left:8px; }
+.msg-audio-wrap { max-width:68%; }
 .msg-sub { font-size:10.5px; color:rgba(0,0,0,0.45); margin-top:4px; line-height:1.5; }
 </style>
 </head>
@@ -587,7 +588,7 @@ function buildMsgEl(m) {
   var d = document.createElement('div');
   var inner = '';
   if (m.t === 'user') {
-    d.className = 'msg user msg-anim';
+    d.className = 'msg user msg-anim' + (m.audio ? ' msg-audio-wrap' : '');
     if (m.fwd) {
       inner += '<div class="msg-fwd-label">&#8627; Encaminhada</div>';
     }
