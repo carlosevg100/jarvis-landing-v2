@@ -324,8 +324,8 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         <p class="problem-card-body">Sobre a assembleia. Voce foi? Voce lembrou?</p>
       </div>
       <div class="problem-card">
-        <p class="problem-card-title">Pagamento mencionado num grupo.</p>
-        <p class="problem-card-body">Ninguem confirmou. Atrasou. Claro.</p>
+        <p class="problem-card-title">Prazo que passou despercebido.</p>
+        <p class="problem-card-body">Estava numa mensagem. Voce leu na hora. Nao anotou. Expirou.</p>
       </div>
     </div>
 
@@ -389,7 +389,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         </button>
         <div class="acc-body">
           <div class="acc-inner">
-            <p class="acc-before">Voce esta no grupo da turma da Olivia. 200 mensagens por semana. Datas, uniformes, eventos, arrecadacoes. Voce tenta se lembrar de tudo. As vezes consegue. As vezes nao.</p>
+            <p class="acc-before">Voce acompanha os comunicados da turma da Olivia. Datas, uniformes, eventos, arrecadacoes. Chegam em momentos aleatorios. Voce tenta guardar na cabeca. As vezes consegue. As vezes nao.</p>
             <div class="acc-divider"></div>
             <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, trajar caipira, levar R$15." Semana que vem: lembrete automatico. Voce aparece na festa. <em>Olivia sorri.</em></p>
           </div>
@@ -458,7 +458,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 
     <div class="testi-list reveal">
       <div class="testi-card">
-        <p class="testi-text">"Eu estava em 6 grupos de escola ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a nao perder data. Nao e exagero: reduziu minha ansiedade de domingo a noite."</p>
+        <p class="testi-text">"Eu acompanhava comunicados de 6 turmas ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a nao perder data. Nao e exagero: reduziu minha ansiedade de domingo a noite."</p>
         <div class="testi-author">
           <div class="testi-initials">FR</div>
           <div>
@@ -870,6 +870,15 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+  // ── Phone mask ──────────────────────────────────────────────
+  document.getElementById('f-phone').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    else if (v.length > 0) v = '(' + v;
+    this.value = v;
+  });
+
   // ── Form submit ─────────────────────────────────────────────
   async function submitForm(e) {
     e.preventDefault();
@@ -902,8 +911,9 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         document.getElementById('reg-form').innerHTML =
           '<div style="padding:20px 0;text-align:center;">' +
           '<p style="font-family:\'Bebas Neue\',sans-serif;font-size:40px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">PRONTO.</p>' +
-          '<p style="font-size:14px;font-weight:300;color:rgba(244,241,234,0.5);line-height:1.6;">O Jarvis vai te mandar uma mensagem<br>no WhatsApp em instantes.</p>' +
+          '<p style="font-size:14px;font-weight:300;color:rgba(244,241,234,0.5);line-height:1.6;">Em segundos voce recebe uma mensagem no WhatsApp.</p>' +
           '</div>';
+        setTimeout(closeModal, 2200);
       } else if (res.status === 409) {
         msg.className = 'modal-msg error';
         msg.textContent = 'Esse numero ja tem conta.';
