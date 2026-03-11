@@ -30,6 +30,8 @@ body::after {
   pointer-events: none;
   z-index: 999;
 }
+
+/* ─── NAV ─────────────────────────────────────────────────── */
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -44,7 +46,17 @@ nav {
 .nav-pill { background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25); color: var(--accent); padding: 7px 16px; font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 100px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; display: flex; align-items: center; gap: 6px; }
 .live-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.8s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 24px 40px; position: relative; overflow: hidden; }
+
+/* ─── HERO MOBILE ─────────────────────────────────────────── */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 24px 40px;
+  position: relative;
+  overflow: hidden;
+}
 .bg-letter { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%); font-family: 'Bebas Neue', sans-serif; font-size: 85vw; color: rgba(200,255,0,0.025); pointer-events: none; line-height: 1; user-select: none; opacity: 0; animation: fadeIn 2s 0.5s forwards; }
 .glow { position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(200,255,0,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; animation: glowPulse 5s ease-in-out infinite; }
 @keyframes glowPulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:1; } 50%{ transform: translateX(-50%) scale(1.3); opacity:0.6; } }
@@ -57,10 +69,12 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 .l3 { display:block; color:var(--white); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
 .sub { font-size: 15px; font-weight: 300; line-height: 1.65; color: rgba(244,241,234,0.5); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.7s 1.0s forwards; }
 .sub strong { color: var(--white); font-weight: 400; }
-.btn-primary { width: 100%; background: var(--accent); color: var(--black); border: none; padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; margin-bottom: 12px; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; display: flex; align-items: center; justify-content: space-between; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s; cursor: pointer; }
-.btn-primary:active { transform: scale(0.98); background: #d4ff1a; }
+.hero-btns { display: flex; flex-direction: column; gap: 12px; }
+.btn-primary { width: 100%; background: var(--accent); color: var(--black); border: none; padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; display: flex; align-items: center; justify-content: space-between; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s; cursor: pointer; }
+.btn-primary:hover { background: #d4ff1a; }
+.btn-primary:active { transform: scale(0.98); }
 .btn-secondary { width: 100%; background: transparent; color: rgba(244,241,234,0.4); border: 1px solid var(--border); padding: 16px 24px; font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.25s forwards; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s, color 0.2s; }
-.btn-secondary:active { color: var(--white); border-color: rgba(244,241,234,0.2); }
+.btn-secondary:hover { color: var(--white); border-color: rgba(244,241,234,0.25); }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin-top: 40px; opacity: 0; animation: fadeUp 0.7s 1.4s forwards; }
 .stat { background: var(--black); padding: 18px 16px; }
 .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--white); letter-spacing: 1px; display: block; line-height: 1; margin-bottom: 4px; }
@@ -71,679 +85,228 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 .avatar:first-child { margin-left: 0; }
 .proof-text { font-size: 12px; color: rgba(244,241,234,0.4); font-weight: 300; line-height: 1.4; }
 .proof-text strong { color: rgba(244,241,234,0.7); font-weight: 400; }
+
+/* Hero demo — hidden on mobile */
+.hero-demo { display: none; }
+
 @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@media (min-width: 480px) { body { display: flex; flex-direction: column; align-items: center; } nav { max-width: 420px; left: 50%; right: auto; width: 420px; transform: translateX(-50%); } .hero { max-width: 420px; width: 100%; } }
 
-/* ──────────────────────────────────────────────────────────────
-   SEÇÕES ABAIXO DO HERO
-   Todas usam max-width: 420px centralizado (mesma lógica do hero)
-────────────────────────────────────────────────────────────── */
-
-.section {
-  width: 100%;
-  padding: 72px 24px;
+/* ─── TABLET: centraliza hero em 420px ────────────────────── */
+@media (min-width: 480px) and (max-width: 899px) {
+  body { display: flex; flex-direction: column; align-items: center; }
+  nav { max-width: 420px; left: 50%; right: auto; width: 420px; transform: translateX(-50%); }
+  .hero { max-width: 420px; width: 100%; }
 }
 
-@media (min-width: 480px) {
-  .section {
-    max-width: 420px;
+/* ─── DESKTOP LAYOUT (min-width: 900px) ───────────────────── */
+@media (min-width: 900px) {
+  nav {
+    padding: 24px 60px;
+    max-width: none;
   }
-}
-
-.section-tag {
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: rgba(244,241,234,0.25);
-  font-weight: 500;
-  margin-bottom: 32px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-tag::before {
-  content: '';
-  display: block;
-  width: 16px;
-  height: 1px;
-  background: rgba(244,241,234,0.25);
-  flex-shrink: 0;
-}
-
-/* ─── THE PROBLEM ─────────────────────────────────────────── */
-
-.problem-wrap {
-  background: #0d0d0d;
-}
-
-.problem-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  margin-bottom: 40px;
-}
-
-.problem-card {
-  background: #0d0d0d;
-  padding: 22px 18px;
-}
-
-.problem-card-title {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--white);
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.problem-card-body {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.45);
-  line-height: 1.6;
-}
-
-.problem-transition {
-  border-top: 1px solid var(--border);
-  padding-top: 32px;
-}
-
-.problem-transition p {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.5);
-  line-height: 1.7;
-}
-
-.problem-transition p strong {
-  color: var(--white);
-  font-weight: 400;
-  display: block;
-  margin-bottom: 4px;
-}
-
-/* ─── HOW IT WORKS ────────────────────────────────────────── */
-
-.how-wrap {
-  background: var(--white);
-}
-
-.how-wrap .section-tag {
-  color: rgba(6,6,6,0.3);
-}
-.how-wrap .section-tag::before {
-  background: rgba(6,6,6,0.2);
-}
-
-.steps {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.step-item {
-  padding: 24px 0;
-  border-bottom: 1px solid rgba(6,6,6,0.08);
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.step-item.animate-start {
-  opacity: 0;
-  transform: translateY(16px);
-}
-.step-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.step-item:last-child { border-bottom: none; }
-
-.step-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 13px;
-  color: rgba(6,6,6,0.25);
-  letter-spacing: 1px;
-  flex-shrink: 0;
-  padding-top: 2px;
-  width: 24px;
-}
-
-.step-content {}
-
-.step-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #060606;
-  margin-bottom: 6px;
-  line-height: 1.3;
-}
-
-.step-desc {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(6,6,6,0.55);
-  line-height: 1.65;
-}
-
-.how-closer {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(6,6,6,0.08);
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(6,6,6,0.45);
-  font-style: italic;
-}
-
-/* ─── USE CASES ───────────────────────────────────────────── */
-
-.cases-wrap {
-  background: var(--black);
-}
-
-.accordion {
-  display: flex;
-  flex-direction: column;
-}
-
-.acc-item {
-  border-bottom: 1px solid var(--border);
-}
-
-.acc-trigger {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 20px 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  cursor: pointer;
-  text-align: left;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.acc-trigger-text {}
-
-.acc-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--white);
-  margin-bottom: 3px;
-}
-
-.acc-teaser {
-  font-size: 12px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.3);
-}
-
-.acc-icon {
-  font-size: 18px;
-  color: rgba(244,241,234,0.25);
-  flex-shrink: 0;
-  transition: transform 0.25s ease;
-  margin-top: 2px;
-}
-
-.acc-item.open .acc-icon {
-  transform: rotate(45deg);
-}
-
-.acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease;
-}
-
-.acc-item.open .acc-body {
-  max-height: 400px;
-}
-
-.acc-inner {
-  padding-bottom: 24px;
-}
-
-.acc-before {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.4);
-  line-height: 1.65;
-  margin-bottom: 16px;
-}
-
-.acc-divider {
-  height: 1px;
-  background: var(--border);
-  margin-bottom: 16px;
-}
-
-.acc-after {
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(244,241,234,0.85);
-  line-height: 1.65;
-}
-
-.acc-after em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-/* ─── DEPOIMENTOS ─────────────────────────────────────────── */
-
-.testi-wrap {
-  background: #0d0d0d;
-}
-
-.testi-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  background: var(--border);
-}
-
-.testi-card {
-  background: #0d0d0d;
-  padding: 24px 20px;
-}
-
-.testi-text {
-  font-size: 14px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.6);
-  line-height: 1.7;
-  margin-bottom: 18px;
-  font-style: italic;
-}
-
-.testi-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.testi-initials {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #222;
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(244,241,234,0.4);
-  flex-shrink: 0;
-}
-
-.testi-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--white);
-  line-height: 1.3;
-}
-
-.testi-role {
-  font-size: 11px;
-  color: rgba(244,241,234,0.3);
-  font-weight: 300;
-}
-
-/* ─── PRICING ─────────────────────────────────────────────── */
-
-.pricing-wrap {
-  background: var(--black);
-  border-top: 1px solid var(--border);
-}
-
-.pricing-wrap .section {
-  text-align: center;
-}
-
-.pricing-pre {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.4);
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-
-.pricing-amount {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2px;
-  margin-bottom: 8px;
-}
-
-.pricing-currency {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 22px;
-  font-weight: 400;
-  color: var(--white);
-  margin-top: 8px;
-}
-
-.pricing-number {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 72px;
-  line-height: 1;
-  color: var(--white);
-  letter-spacing: -1px;
-}
-
-.pricing-cents {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 22px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.5);
-  margin-top: 8px;
-}
-
-.pricing-period {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.3);
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-
-.pricing-trial {
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 400;
-  margin-bottom: 32px;
-  letter-spacing: 0.5px;
-}
-
-.pricing-note {
-  font-size: 12px;
-  color: rgba(244,241,234,0.25);
-  font-weight: 300;
-  margin-top: 16px;
-  line-height: 1.6;
-}
-
-/* ─── CTA FINAL ───────────────────────────────────────────── */
-
-.cta-wrap {
-  background: var(--black);
-}
-
-.cta-headline {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(44px, 12vw, 64px);
-  line-height: 0.92;
-  letter-spacing: -0.5px;
-  color: var(--white);
-  margin-bottom: 36px;
-}
-
-.cta-headline span {
-  color: var(--accent);
-}
-
-.cta-sub {
-  margin-top: 16px;
-  font-size: 12px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.25);
-  text-align: center;
-  letter-spacing: 0.5px;
-}
-
-/* ─── FOOTER ──────────────────────────────────────────────── */
-
-.footer-wrap {
-  background: var(--black);
-  border-top: 1px solid var(--border);
-}
-
-.footer-inner {
-  padding: 28px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-@media (min-width: 480px) {
-  .footer-inner {
-    max-width: 420px;
-    margin: 0 auto;
-  }
-}
-
-.footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 4px;
-  color: rgba(244,241,234,0.3);
-}
-
-.footer-copy {
-  font-size: 11px;
-  color: rgba(244,241,234,0.2);
-  font-weight: 300;
-}
-
-/* ─── MODAL ───────────────────────────────────────────────── */
-
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  z-index: 300;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 0;
-}
-
-.modal-overlay.active { display: flex; }
-
-@media (min-width: 480px) {
-  .modal-overlay {
+  nav .nav-logo { font-size: 22px; }
+
+  .hero {
+    min-height: 100svh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 20px;
+    max-width: none;
   }
-}
 
-.modal-card {
-  background: #0d0d0d;
-  border: 1px solid var(--border);
-  border-bottom: none;
-  width: 100%;
-  max-width: 420px;
-  padding: 32px 24px 40px;
-  position: relative;
-}
-
-@media (min-width: 480px) {
-  .modal-card {
-    border-bottom: 1px solid var(--border);
+  .hero-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 60px;
+    max-width: 1100px;
+    width: 100%;
+    padding: 100px 60px 80px;
   }
-}
 
-.modal-handle {
-  width: 36px;
-  height: 3px;
-  background: rgba(244,241,234,0.15);
-  border-radius: 2px;
-  margin: 0 auto 28px;
-}
+  .hero-content {
+    flex: 0 0 55%;
+    max-width: 55%;
+  }
 
-@media (min-width: 480px) {
-  .modal-handle { display: none; }
-}
+  .spacer { height: 0; }
 
-.modal-close {
-  position: absolute;
-  top: 20px; right: 20px;
-  background: none; border: none;
-  color: rgba(244,241,234,0.25);
-  font-size: 20px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1;
-  transition: color 0.15s;
-  display: none;
-}
-@media (min-width: 480px) { .modal-close { display: block; } }
-.modal-close:hover { color: var(--white); }
+  h1 {
+    font-size: clamp(72px, 8vw, 120px);
+  }
 
-.modal-tag {
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 500;
-  margin-bottom: 10px;
-}
+  .hero-btns {
+    flex-direction: row;
+    gap: 12px;
+  }
 
-.modal-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px;
-  letter-spacing: 1px;
-  color: var(--white);
-  margin-bottom: 6px;
-}
+  .btn-primary {
+    width: auto;
+    min-width: 220px;
+    justify-content: space-between;
+    gap: 24px;
+  }
 
-.modal-sub {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(244,241,234,0.4);
-  margin-bottom: 28px;
-  line-height: 1.55;
-}
+  .btn-secondary {
+    width: auto;
+    min-width: 180px;
+  }
 
-.field {
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 0;
-  position: relative;
-}
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 48px;
+  }
 
-.field input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 300;
-  padding: 16px 0;
-  transition: border-color 0.15s;
-}
-.field input::placeholder { color: rgba(244,241,234,0.2); }
-.field:focus-within {
-  border-bottom-color: rgba(244,241,234,0.3);
-}
+  /* Hero demo — visible on desktop */
+  .hero-demo {
+    display: flex;
+    flex: 0 0 45%;
+    max-width: 45%;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.6s forwards;
+  }
 
-.field + .field { margin-top: 0; }
+  .demo-phone {
+    background: #111111;
+    border: 1px solid rgba(244,241,234,0.1);
+    border-radius: 20px;
+    padding: 20px 0 0;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,255,0,0.06);
+  }
 
-.modal-submit {
-  width: 100%;
-  background: var(--accent);
-  color: var(--black);
-  border: none;
-  padding: 18px 24px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 24px;
-  transition: background 0.2s, transform 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.modal-submit:hover { background: #d4ff1a; }
-.modal-submit:active { transform: scale(0.98); }
-.modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .demo-topbar {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid rgba(244,241,234,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-.modal-note {
-  font-size: 11px;
-  color: rgba(244,241,234,0.2);
-  text-align: center;
-  margin-top: 14px;
-  font-weight: 300;
-  letter-spacing: 0.3px;
-}
+  .demo-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: var(--black);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
 
-.modal-msg {
-  font-size: 13px;
-  text-align: center;
-  margin-top: 14px;
-  min-height: 18px;
-  line-height: 1.5;
-}
-.modal-msg.success { color: var(--accent); }
-.modal-msg.error { color: rgba(255,80,70,0.9); }
+  .demo-name { font-size: 13px; font-weight: 500; color: var(--white); }
+  .demo-status { font-size: 11px; color: rgba(244,241,234,0.3); font-weight: 300; }
 
-/* Scroll reveal helper — visible by default, JS adds animation */
-.reveal {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.reveal.animate-start {
-  opacity: 0;
-  transform: translateY(20px);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+  .demo-msgs {
+    padding: 20px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 280px;
+  }
+
+  .dmsg {
+    max-width: 85%;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.55;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .dmsg.show { opacity: 1; transform: translateY(0); }
+  .dmsg.user { background: rgba(244,241,234,0.07); color: rgba(244,241,234,0.7); align-self: flex-end; border-bottom-right-radius: 3px; }
+  .dmsg.jarvis { background: rgba(200,255,0,0.08); border: 1px solid rgba(200,255,0,0.15); color: rgba(244,241,234,0.85); align-self: flex-start; border-bottom-left-radius: 3px; }
+  .dmsg.muted { color: rgba(244,241,234,0.35); font-size: 12px; background: transparent; border: none; padding: 2px 0; }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV — EXATO DO CADU, sem alterar -->
+<!-- NAV -->
 <nav>
   <div class="nav-logo">JARVIS</div>
   <div class="nav-pill"><span class="live-dot"></span>Beta aberto</div>
 </nav>
 
-<!-- HERO — EXATO DO CADU, sem alterar -->
+<!-- HERO -->
 <section class="hero">
   <div class="bg-letter">J</div>
   <div class="glow"></div>
-  <div class="spacer"></div>
-  <div class="eyebrow">Assistente pessoal</div>
-  <h1>
-    <span class="l1">VOCE</span>
-    <span class="l2">ACABOU DE</span>
-    <span class="l3">CONTRATAR<br>O JARVIS.</span>
-  </h1>
-  <p class="sub">Manda <strong>audio, foto ou texto</strong> no WhatsApp.<br>Ele entende, organiza e te avisa.<br><strong>Nada se perde. Nada esquece.</strong></p>
-  <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
-  <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
-  <div class="stats">
-    <div class="stat"><span class="stat-num">0</span><span class="stat-label">Instalacao<br>necessaria</span></div>
-    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponivel</span></div>
-    <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memoria<br>e contexto</span></div>
-    <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>comecar</span></div>
-  </div>
-  <div class="proof">
-    <div class="avatars">
-      <div class="avatar">C</div><div class="avatar">A</div><div class="avatar">R</div><div class="avatar">M</div>
+
+  <!-- hero-inner: flexível (column mobile, row desktop) -->
+  <div class="hero-inner" style="display:contents;">
+
+    <!-- LEFT: texto + botões + stats -->
+    <div class="hero-content" style="display:contents;">
+      <div class="spacer"></div>
+      <div class="eyebrow">Assistente pessoal</div>
+      <h1>
+        <span class="l1">VOCE</span>
+        <span class="l2">ACABOU DE</span>
+        <span class="l3">CONTRATAR<br>O JARVIS.</span>
+      </h1>
+      <p class="sub">Manda <strong>audio, foto ou texto</strong> no WhatsApp.<br>Ele entende, organiza e te avisa.<br><strong>Nada se perde. Nada esquece.</strong></p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
+        <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">0</span><span class="stat-label">Instalacao<br>necessaria</span></div>
+        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponivel</span></div>
+        <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memoria<br>e contexto</span></div>
+        <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>comecar</span></div>
+      </div>
+      <div class="proof">
+        <div class="avatars">
+          <div class="avatar">C</div><div class="avatar">A</div><div class="avatar">R</div><div class="avatar">M</div>
+        </div>
+        <p class="proof-text"><strong>+2.400 pessoas</strong> ja estao<br>usando o Jarvis hoje</p>
+      </div>
     </div>
-    <p class="proof-text"><strong>+2.400 pessoas</strong> ja estao<br>usando o Jarvis hoje</p>
-  </div>
+
+    <!-- RIGHT: chat demo (desktop only) -->
+    <div class="hero-demo">
+      <div class="demo-phone">
+        <div class="demo-topbar">
+          <div class="demo-avatar">J</div>
+          <div>
+            <p class="demo-name">Jarvis</p>
+            <p class="demo-status">online</p>
+          </div>
+        </div>
+        <div class="demo-msgs" id="demo-msgs"></div>
+      </div>
+    </div>
+
+  </div><!-- /hero-inner -->
 </section>
 
+<style>
+/* ── Desktop: hero-inner real layout ───────────────────────── */
+@media (min-width: 900px) {
+  .hero { justify-content: center; align-items: center; }
+  .hero-inner { display: flex !important; flex-direction: row; align-items: center; gap: 60px; max-width: 1100px; width: 100%; padding: 100px 60px 80px; }
+  .hero-content { display: flex !important; flex-direction: column; flex: 0 0 55%; max-width: 55%; }
+  .hero .spacer { display: none; }
+  .bg-letter { font-size: 60vw; }
+}
+</style>
+
 <!-- ── SEÇÃO 1: THE PROBLEM ─────────────────────────────── -->
-<div id="problem" class="problem-wrap" style="display:flex;flex-direction:column;align-items:center;">
+<div id="problem" class="problem-wrap sec-wrap">
   <div class="section">
     <p class="section-tag reveal">O problema</p>
 
@@ -769,15 +332,14 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     <div class="problem-transition reveal">
       <p>
         <strong>Nao e falta de atencao. E excesso de mensagem.</strong>
-        O WhatsApp nao foi feito pra lembrar por voce.<br>
-        O Jarvis foi.
+        O WhatsApp nao foi feito pra lembrar por voce.<br>O Jarvis foi.
       </p>
     </div>
   </div>
 </div>
 
 <!-- ── SEÇÃO 2: HOW IT WORKS ───────────────────────────── -->
-<div id="how" class="how-wrap" style="display:flex;flex-direction:column;align-items:center;">
+<div id="how" class="how-wrap sec-wrap">
   <div class="section">
     <p class="section-tag">Como funciona</p>
 
@@ -810,13 +372,14 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 </div>
 
 <!-- ── SEÇÃO 3: USE CASES ──────────────────────────────── -->
-<div id="cases" class="cases-wrap" style="display:flex;flex-direction:column;align-items:center;">
+<div id="cases" class="cases-wrap sec-wrap">
   <div class="section">
     <p class="section-tag reveal">Situacoes reais</p>
 
-    <div class="accordion reveal">
+    <!-- Mobile: acordeão | Desktop: grid 2x2 -->
+    <div class="accordion reveal" id="cases-accordion">
 
-      <div class="acc-item">
+      <div class="acc-item" data-idx="0">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
             <p class="acc-title">Grupo de escola</p>
@@ -833,7 +396,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         </div>
       </div>
 
-      <div class="acc-item">
+      <div class="acc-item" data-idx="1">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
             <p class="acc-title">Reuniao com 5 tarefas</p>
@@ -850,7 +413,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         </div>
       </div>
 
-      <div class="acc-item">
+      <div class="acc-item" data-idx="2">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
             <p class="acc-title">Audio de 3 minutos</p>
@@ -867,7 +430,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         </div>
       </div>
 
-      <div class="acc-item">
+      <div class="acc-item" data-idx="3">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
             <p class="acc-title">PDF ou print com prazo</p>
@@ -889,7 +452,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 </div>
 
 <!-- ── SEÇÃO 4: DEPOIMENTOS ────────────────────────────── -->
-<div class="testi-wrap" style="display:flex;flex-direction:column;align-items:center;">
+<div class="testi-wrap sec-wrap">
   <div class="section">
     <p class="section-tag reveal">Quem usa</p>
 
@@ -904,7 +467,6 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
           </div>
         </div>
       </div>
-
       <div class="testi-card">
         <p class="testi-text">"Minha rotina e reuniao atras de reuniao. Eu mandava o audio das reunioes pro Jarvis e chegava na proxima ja com o resumo das tarefas pendentes. Meu gestor perguntou o que tinha mudado."</p>
         <div class="testi-author">
@@ -915,7 +477,6 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
           </div>
         </div>
       </div>
-
       <div class="testi-card">
         <p class="testi-text">"Tres meses usando e ainda nao cancelei — e ja testei tudo que existe no mercado. O Jarvis e o unico que funciona do jeito que a minha cabeca funciona."</p>
         <div class="testi-author">
@@ -931,8 +492,8 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 </div>
 
 <!-- ── SEÇÃO 5: PRICING ────────────────────────────────── -->
-<div id="pricing" class="pricing-wrap" style="display:flex;flex-direction:column;align-items:center;">
-  <div class="section" style="text-align:center;">
+<div id="pricing" class="pricing-wrap sec-wrap" style="border-top:1px solid var(--border);">
+  <div class="section pricing-section">
     <p class="section-tag reveal" style="justify-content:center;">Preco</p>
 
     <p class="pricing-pre reveal">Organize sua vida por menos do que um cafe por semana.</p>
@@ -942,25 +503,23 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       <span class="pricing-number">19</span>
       <span class="pricing-cents">,90</span>
     </div>
-
     <p class="pricing-period reveal">/mes</p>
     <p class="pricing-trial reveal">3 dias gratis &mdash; cancela quando quiser</p>
 
-    <button class="btn-primary reveal" style="margin-top:0;opacity:1;animation:none;" onclick="openModal()">Quero testar gratis <span>&#8594;</span></button>
+    <button class="btn-primary pricing-btn reveal" onclick="openModal()">Quero testar gratis <span>&#8594;</span></button>
 
     <p class="pricing-note reveal">Sem contrato. Sem anuidade. Sem pegadinha.<br>Comeca gratis. Continua porque faz sentido.</p>
   </div>
 </div>
 
 <!-- ── SEÇÃO 6: CTA FINAL ──────────────────────────────── -->
-<div class="cta-wrap" style="display:flex;flex-direction:column;align-items:center;border-top:1px solid var(--border);">
+<div class="cta-wrap sec-wrap" style="border-top:1px solid var(--border);">
   <div class="section">
     <h2 class="cta-headline reveal">
       VOCE JA<br>ENCAMINHA<br><span>MENSAGENS</span><br>TODO DIA.
     </h2>
     <p class="sub reveal" style="margin-bottom:28px;">Agora elas trabalham por voce.</p>
-
-    <button class="btn-primary reveal" style="margin-bottom:0;opacity:1;animation:none;" onclick="openModal()">Comecar gratis agora <span>&#8594;</span></button>
+    <button class="btn-primary reveal" style="opacity:1;animation:none;" onclick="openModal()">Comecar gratis agora <span>&#8594;</span></button>
     <p class="cta-sub reveal">Sem cadastro complicado. So o WhatsApp que voce ja tem.</p>
   </div>
 </div>
@@ -978,32 +537,222 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   <div class="modal-card">
     <div class="modal-handle"></div>
     <button class="modal-close" onclick="closeModal()">&times;</button>
-
     <p class="modal-tag">Ativar agora</p>
     <h3 class="modal-title">COMECAR GRATIS</h3>
     <p class="modal-sub">3 dias gratis, sem cartao. Voce recebe uma mensagem no WhatsApp em segundos.</p>
-
     <form id="reg-form" onsubmit="submitForm(event)">
-      <div class="field">
-        <input id="f-name" type="text" placeholder="Nome" autocomplete="name" required>
-      </div>
-      <div class="field">
-        <input id="f-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required>
-      </div>
-
-      <button class="modal-submit" type="submit" id="submit-btn">
-        Criar minha conta <span>&#8594;</span>
-      </button>
-
+      <div class="field"><input id="f-name" type="text" placeholder="Nome" autocomplete="name" required></div>
+      <div class="field"><input id="f-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
+      <button class="modal-submit" type="submit" id="submit-btn">Criar minha conta <span>&#8594;</span></button>
       <p class="modal-note">Voce recebera uma mensagem do Jarvis em instantes.</p>
       <p class="modal-msg" id="form-msg"></p>
     </form>
   </div>
 </div>
 
+<style>
+/* ─── SHARED SECTION WRAPPER (mobile + desktop) ──────────── */
+.sec-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section {
+  width: 100%;
+  padding: 72px 24px;
+}
+
+.section-tag {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(244,241,234,0.25);
+  font-weight: 500;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: rgba(244,241,234,0.25);
+  flex-shrink: 0;
+}
+
+/* ─── THE PROBLEM ─────────────────────────────────────────── */
+.problem-wrap { background: #0d0d0d; }
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-bottom: 40px;
+}
+.problem-card { background: #0d0d0d; padding: 22px 18px; }
+.problem-card-title { font-size: 12px; font-weight: 500; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
+.problem-card-body { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.45); line-height: 1.6; }
+
+.problem-transition { border-top: 1px solid var(--border); padding-top: 32px; }
+.problem-transition p { font-size: 15px; font-weight: 300; color: rgba(244,241,234,0.5); line-height: 1.7; }
+.problem-transition p strong { color: var(--white); font-weight: 400; display: block; margin-bottom: 4px; }
+
+/* ─── HOW IT WORKS ────────────────────────────────────────── */
+.how-wrap { background: var(--white); }
+.how-wrap .section-tag { color: rgba(6,6,6,0.3); }
+.how-wrap .section-tag::before { background: rgba(6,6,6,0.2); }
+
+.steps { display: flex; flex-direction: column; }
+.step-item { padding: 24px 0; border-bottom: 1px solid rgba(6,6,6,0.08); display: flex; gap: 20px; align-items: flex-start; }
+.step-item:last-child { border-bottom: none; }
+.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: rgba(6,6,6,0.25); letter-spacing: 1px; flex-shrink: 0; padding-top: 2px; width: 24px; }
+.step-title { font-size: 16px; font-weight: 500; color: #060606; margin-bottom: 6px; line-height: 1.3; }
+.step-desc { font-size: 13px; font-weight: 300; color: rgba(6,6,6,0.55); line-height: 1.65; }
+.how-closer { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(6,6,6,0.08); font-size: 14px; font-weight: 400; color: rgba(6,6,6,0.45); font-style: italic; }
+
+/* ─── USE CASES ───────────────────────────────────────────── */
+.cases-wrap { background: var(--black); }
+.accordion { display: flex; flex-direction: column; }
+.acc-item { border-bottom: 1px solid var(--border); }
+.acc-trigger { width: 100%; background: none; border: none; padding: 20px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; cursor: pointer; text-align: left; }
+.acc-title { font-size: 15px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
+.acc-teaser { font-size: 12px; font-weight: 300; color: rgba(244,241,234,0.3); }
+.acc-icon { font-size: 18px; color: rgba(244,241,234,0.25); flex-shrink: 0; transition: transform 0.25s ease; margin-top: 2px; }
+.acc-item.open .acc-icon { transform: rotate(45deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.acc-item.open .acc-body { max-height: 400px; }
+.acc-inner { padding-bottom: 24px; }
+.acc-before { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.4); line-height: 1.65; margin-bottom: 16px; }
+.acc-divider { height: 1px; background: var(--border); margin-bottom: 16px; }
+.acc-after { font-size: 13px; font-weight: 400; color: rgba(244,241,234,0.85); line-height: 1.65; }
+.acc-after em { color: var(--accent); font-style: normal; }
+
+/* ─── DEPOIMENTOS ─────────────────────────────────────────── */
+.testi-wrap { background: #0d0d0d; }
+.testi-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+.testi-card { background: #0d0d0d; padding: 24px 20px; }
+.testi-text { font-size: 14px; font-weight: 300; color: rgba(244,241,234,0.6); line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-initials { width: 32px; height: 32px; border-radius: 50%; background: #222; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: rgba(244,241,234,0.4); flex-shrink: 0; }
+.testi-name { font-size: 13px; font-weight: 500; color: var(--white); line-height: 1.3; }
+.testi-role { font-size: 11px; color: rgba(244,241,234,0.3); font-weight: 300; }
+
+/* ─── PRICING ─────────────────────────────────────────────── */
+.pricing-wrap { background: var(--black); }
+.pricing-section { text-align: center; }
+.pricing-pre { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.4); margin-bottom: 28px; line-height: 1.6; }
+.pricing-amount { display: flex; align-items: flex-start; justify-content: center; gap: 2px; margin-bottom: 8px; }
+.pricing-currency { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 400; color: var(--white); margin-top: 8px; }
+.pricing-number { font-family: 'Bebas Neue', sans-serif; font-size: 72px; line-height: 1; color: var(--white); letter-spacing: -1px; }
+.pricing-cents { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 300; color: rgba(244,241,234,0.5); margin-top: 8px; }
+.pricing-period { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.3); letter-spacing: 1px; margin-bottom: 6px; }
+.pricing-trial { font-size: 12px; color: var(--accent); font-weight: 400; margin-bottom: 32px; letter-spacing: 0.5px; }
+.pricing-btn { display: flex; width: 100%; justify-content: space-between; margin-top: 0; }
+.pricing-note { font-size: 12px; color: rgba(244,241,234,0.25); font-weight: 300; margin-top: 16px; line-height: 1.6; }
+
+/* ─── CTA FINAL ───────────────────────────────────────────── */
+.cta-wrap { background: var(--black); }
+.cta-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 12vw, 64px); line-height: 0.92; letter-spacing: -0.5px; color: var(--white); margin-bottom: 24px; }
+.cta-headline span { color: var(--accent); }
+.cta-sub { margin-top: 16px; font-size: 12px; font-weight: 300; color: rgba(244,241,234,0.25); letter-spacing: 0.5px; }
+
+/* ─── FOOTER ──────────────────────────────────────────────── */
+.footer-wrap { background: var(--black); border-top: 1px solid var(--border); }
+.footer-inner { padding: 28px 24px; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 4px; color: rgba(244,241,234,0.3); }
+.footer-copy { font-size: 11px; color: rgba(244,241,234,0.2); font-weight: 300; }
+
+/* ─── MODAL ───────────────────────────────────────────────── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 300; align-items: flex-end; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal-card { background: #0d0d0d; border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 420px; padding: 32px 24px 40px; position: relative; }
+.modal-handle { width: 36px; height: 3px; background: rgba(244,241,234,0.15); border-radius: 2px; margin: 0 auto 28px; }
+.modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: rgba(244,241,234,0.25); font-size: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; line-height: 1; transition: color 0.15s; display: none; }
+.modal-tag { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 10px; }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: var(--white); margin-bottom: 6px; }
+.modal-sub { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.4); margin-bottom: 28px; line-height: 1.55; }
+.field { border-bottom: 1px solid var(--border); }
+.field input { width: 100%; background: transparent; border: none; outline: none; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 16px 0; }
+.field input::placeholder { color: rgba(244,241,234,0.2); }
+.field:focus-within { border-bottom-color: rgba(244,241,234,0.3); }
+.modal-submit { width: 100%; background: var(--accent); color: var(--black); border: none; padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 24px; transition: background 0.2s, transform 0.15s; }
+.modal-submit:hover { background: #d4ff1a; }
+.modal-submit:active { transform: scale(0.98); }
+.modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.modal-note { font-size: 11px; color: rgba(244,241,234,0.2); text-align: center; margin-top: 14px; font-weight: 300; letter-spacing: 0.3px; }
+.modal-msg { font-size: 13px; text-align: center; margin-top: 14px; min-height: 18px; line-height: 1.5; }
+.modal-msg.success { color: var(--accent); }
+.modal-msg.error { color: rgba(255,80,70,0.9); }
+
+/* ─── SCROLL REVEAL ───────────────────────────────────────── */
+.reveal { opacity: 1; transform: none; transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.animate-start { opacity: 0; transform: translateY(20px); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── DESKTOP SECTION OVERRIDES (min-width: 900px) ──────── */
+@media (min-width: 900px) {
+  .sec-wrap { align-items: center; }
+
+  .section { max-width: 1100px; padding: 88px 60px; }
+
+  /* Problem: 4 colunas */
+  .problem-grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* How it works: 3 colunas lado a lado */
+  .steps { flex-direction: row; gap: 0; align-items: flex-start; }
+  .step-item {
+    flex: 1;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 32px 0 0;
+    border-bottom: none;
+    border-right: 1px solid rgba(6,6,6,0.08);
+    margin-right: 32px;
+  }
+  .step-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+  .step-num { width: auto; padding-top: 0; font-size: 11px; }
+  .step-title { font-size: 15px; }
+
+  /* Use cases: grid 2x2, sem acordeão */
+  .accordion { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(244,241,234,0.06); }
+  .acc-item { background: var(--black); padding: 28px 24px; border-bottom: none; }
+  .acc-trigger { cursor: default; pointer-events: none; padding: 0 0 12px 0; }
+  .acc-icon { display: none; }
+  .acc-body { max-height: none !important; overflow: visible; }
+  .acc-inner { padding-bottom: 0; }
+  .acc-title { font-size: 16px; margin-bottom: 4px; }
+  .acc-teaser { font-size: 11px; margin-bottom: 0; }
+
+  /* Depoimentos: 3 colunas */
+  .testi-list { flex-direction: row; }
+  .testi-card { flex: 1; }
+
+  /* Pricing: mais espaçado */
+  .pricing-number { font-size: 96px; }
+  .pricing-btn { width: auto; min-width: 280px; display: inline-flex; margin: 0 auto; }
+
+  /* CTA final: mais espaçado */
+  .cta-headline { font-size: clamp(56px, 7vw, 96px); }
+
+  /* Footer */
+  .footer-inner { max-width: 1100px; margin: 0 auto; padding: 28px 60px; }
+
+  /* Modal */
+  .modal-overlay { align-items: center; padding: 20px; }
+  .modal-card { border-bottom: 1px solid var(--border); }
+  .modal-handle { display: none; }
+  .modal-close { display: block; }
+}
+</style>
+
 <script>
-  // ── Accordion ──────────────────────────────────────────────
+  // ── Accordion (mobile) ──────────────────────────────────────
   function toggleAcc(btn) {
+    if (window.innerWidth >= 900) return;
     const item = btn.closest('.acc-item');
     const isOpen = item.classList.contains('open');
     document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
@@ -1025,29 +774,83 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     revealObs.observe(el);
   });
 
-  // Fallback: se IntersectionObserver não disparar em 1.5s, mostra tudo
+  // Fallback: 1.5s
   setTimeout(() => {
-    document.querySelectorAll('.animate-start:not(.visible), .step-item.animate-start:not(.visible)').forEach(el => {
+    document.querySelectorAll('.animate-start:not(.visible)').forEach(el => {
       el.classList.add('visible');
     });
   }, 1500);
 
-  // ── Step items reveal (staggered) ──────────────────────────
-  const stepObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const steps = e.target.querySelectorAll('.step-item');
-        steps.forEach((s, i) => {
-          s.classList.add('animate-start');
-          setTimeout(() => s.classList.add('visible'), i * 120);
-        });
-        stepObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
+  // ── Desktop chat demo ───────────────────────────────────────
+  const CONVERSATIONS = [
+    [
+      { side: 'user', text: '[audio 0:42]', delay: 400 },
+      { side: 'jarvis', text: 'Processando...', delay: 1200, temp: true },
+      { side: 'jarvis', text: 'Salvo.\n\nReuniao com Alberto — amanha, 15h.\nPagar fornecedor — sexta, R$2.400.\nBuscar Filippo — quinta, 17h.', delay: 2800 },
+    ],
+    [
+      { side: 'user', text: 'Festa junina da Olivia — 21 de junho, trajar caipira, levar R$15', delay: 400 },
+      { side: 'jarvis', text: 'Processando...', delay: 1100, temp: true },
+      { side: 'jarvis', text: 'Salvo. Festa junina Olivia — 21/06, R$15.\n\nLembro voce 2 dias antes.', delay: 2400 },
+    ],
+    [
+      { side: 'user', text: '[imagem: boleto.jpg]', delay: 400 },
+      { side: 'jarvis', text: 'Processando...', delay: 1300, temp: true },
+      { side: 'jarvis', text: 'Salvo. Vencimento — 15/03, R$890.\n\nLembro voce 1 dia antes.', delay: 3000 },
+    ],
+  ];
 
-  const stepsEl = document.querySelector('.steps');
-  if (stepsEl) stepObs.observe(stepsEl);
+  let convIdx = 0;
+  let demoStarted = false;
+
+  function runConversation() {
+    const msgs = document.getElementById('demo-msgs');
+    if (!msgs) return;
+    msgs.innerHTML = '';
+    const conv = CONVERSATIONS[convIdx % CONVERSATIONS.length];
+    convIdx++;
+
+    let tempEl = null;
+
+    conv.forEach((m, i) => {
+      setTimeout(() => {
+        if (m.temp) {
+          tempEl = document.createElement('div');
+          tempEl.className = 'dmsg jarvis muted';
+          tempEl.textContent = m.text;
+          msgs.appendChild(tempEl);
+          setTimeout(() => tempEl && tempEl.classList.add('show'), 20);
+        } else {
+          if (tempEl) { tempEl.remove(); tempEl = null; }
+          const el = document.createElement('div');
+          el.className = 'dmsg ' + m.side;
+          el.textContent = m.text;
+          msgs.appendChild(el);
+          setTimeout(() => el.classList.add('show'), 20);
+          msgs.scrollTop = msgs.scrollHeight;
+        }
+      }, m.delay);
+    });
+
+    // Next conversation after delay
+    const total = conv[conv.length - 1].delay + 3500;
+    setTimeout(runConversation, total);
+  }
+
+  // Start demo when hero-demo enters view
+  const demoEl = document.querySelector('.hero-demo');
+  if (demoEl) {
+    const demoObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !demoStarted && window.innerWidth >= 900) {
+          demoStarted = true;
+          runConversation();
+          demoObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    demoObs.observe(demoEl);
+  }
 
   // ── Modal ───────────────────────────────────────────────────
   function openModal() {
