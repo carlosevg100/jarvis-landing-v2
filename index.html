@@ -746,11 +746,11 @@ async function register() {
     });
 
     if (res.ok) {
-      // Send welcome WhatsApp message
-      fetch('https://jarvis-app-flax.vercel.app/api/welcome', {
+      // Send welcome WhatsApp message via Z-API
+      fetch('https://api.z-api.io/instances/3EFEBBD525E2B2A086780A6168796A02/token/A8DE08592C24EF3C69F6262C/send-text', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, name })
+        headers: { 'Content-Type': 'application/json', 'Client-Token': 'Fd4ec948ab29c46e9899a0ebd559f671fS' },
+        body: JSON.stringify({ phone, message: 'Olá, ' + name.split(' ')[0] + '! 👋\n\nSou o *Jarvis*, seu assistente pessoal no WhatsApp.\n\nMe manda qualquer mensagem para começar — um lembrete, um áudio, uma imagem ou um documento. Eu organizo tudo.\n\n_Exemplo: "Me lembra de buscar a Olivia às 17h"_ 🗂️' })
       }).catch(() => {}); // fire and forget
       document.getElementById('reg-form').innerHTML =
         '<div style="padding:24px 0;text-align:center;">' +
