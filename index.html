@@ -4,695 +4,656 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jarvis</title>
-<meta name="description" content="Manda áudio, foto ou texto no WhatsApp. O Jarvis entende, organiza e te avisa na hora certa.">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<meta name="description" content="Converse com o Jarvis direto no WhatsApp. Ele organiza, lembra e cuida.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --bg: #FAF8F4;
-  --bg-subtle: #F2EDE6;
-  --bg-card: #EEEAE3;
-  --text: #1C1A18;
-  --text-2: rgba(28,26,24,0.5);
-  --text-3: rgba(28,26,24,0.25);
-  --accent: #B85C3A;
-  --accent-light: rgba(184,92,58,0.08);
-  --border: rgba(28,26,24,0.08);
-  --btn-bg: #1C1A18;
-  --btn-text: #FAF8F4;
+  --bg: #F5F0E8; --ink: #1A1714; --ink2: #3A3430;
+  --muted: rgba(26,23,20,0.42); --accent: #A8522A; --accent2: #C4763A;
+  --border: rgba(26,23,20,0.1); --white: #FDFAF5;
+  --bg-subtle: #EDE8DF; --bg-card: #E5DFD4;
 }
-html, body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 999;
+html, body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:999; mix-blend-mode:multiply; }
+nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; justify-content:space-between; align-items:center; z-index:100; background:linear-gradient(to bottom, var(--bg) 55%, transparent); }
+.nav-left { display:flex; flex-direction:column; gap:2px; }
+.nav-logo { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; letter-spacing:7px; text-transform:uppercase; color:var(--ink); opacity:0; animation:fadeUp .6s .1s forwards; }
+.nav-sub { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); font-weight:300; opacity:0; animation:fadeUp .6s .2s forwards; }
+.nav-pill { background:var(--ink); color:var(--white); padding:8px 16px; border-radius:100px; font-size:10px; font-weight:500; letter-spacing:2px; text-transform:uppercase; display:flex; align-items:center; gap:7px; opacity:0; animation:fadeUp .6s .2s forwards; }
+.live-dot { width:5px;height:5px;background:#6EE97B;border-radius:50%;animation:blink 2s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-mobile { display:flex; flex-direction:column; min-height:100svh; padding:90px 28px 48px; gap:0; }
+.chaos { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,10vw,52px); font-weight:300; color:rgba(26,23,20,0.22); line-height:1.15; letter-spacing:-0.5px; margin-bottom:20px; opacity:0; animation:fadeUp .8s .3s forwards; }
+.rule { width:36px; height:2px; background:var(--accent); margin-bottom:20px; opacity:0; animation:growLine .6s .9s forwards; transform-origin:left; transform:scaleX(0); }
+@keyframes growLine { to { opacity:1; transform:scaleX(1); } }
+.signoff { font-family:'Cormorant Garamond',serif; font-size:clamp(54px,16vw,80px); font-weight:400; font-style:italic; color:var(--ink); line-height:1; letter-spacing:-1px; margin-bottom:6px; opacity:0; animation:fadeUp .9s 1.0s cubic-bezier(.16,1,.3,1) forwards; }
+.signoff span { color:var(--accent); }
+.sub { font-size:15px; font-weight:300; line-height:1.7; color:var(--ink2); margin-bottom:10px; opacity:0; animation:fadeUp .7s 1.4s forwards; }
+.sub strong { color:var(--ink); font-weight:500; }
+.wa-badge { display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--ink2); border:1px solid var(--border); padding:9px 14px; border-radius:6px; font-size:12px; font-weight:400; letter-spacing:0.3px; margin-bottom:32px; opacity:0; animation:fadeUp .6s 1.6s forwards; width:fit-content; }
+.wa-icon { width:16px; height:16px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; color:#fff; font-weight:600; }
+.phone-wrap { width:100%; display:flex; justify-content:center; margin-bottom:36px; opacity:0; animation:fadeUp .9s 1.8s cubic-bezier(.16,1,.3,1) forwards; }
+.phone { width:min(280px,80vw); background:#1A1714; border-radius:36px; padding:12px; box-shadow:0 40px 80px rgba(26,23,20,0.22),0 0 0 1px rgba(26,23,20,0.15),inset 0 0 0 1px rgba(255,255,255,0.05); }
+.phone-notch { width:80px; height:22px; background:#1A1714; border-radius:0 0 14px 14px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; gap:6px; }
+.notch-cam { width:8px;height:8px;background:#2a2724;border-radius:50%; }
+.notch-speaker { width:36px;height:4px;background:#2a2724;border-radius:2px; }
+.phone-screen { background:#ECE5DD; border-radius:26px; overflow:hidden; min-height:380px; display:flex; flex-direction:column; }
+.wa-header { background:#075E54; padding:10px 14px; display:flex; align-items:center; gap:10px; }
+.wa-avatar { width:34px; height:34px; background:var(--accent2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:16px; color:white; font-weight:400; flex-shrink:0; }
+.wa-info { flex:1; }
+.wa-name { color:white; font-size:13px; font-weight:500; line-height:1; margin-bottom:2px; }
+.wa-status { color:rgba(255,255,255,.7); font-size:10px; display:flex; align-items:center; gap:4px; }
+.wa-status-dot { width:5px;height:5px;background:#6EE97B;border-radius:50%; }
+.wa-more { color:rgba(255,255,255,.8); font-size:18px; line-height:1; }
+.wa-messages { flex:1; padding:14px 10px; display:flex; flex-direction:column; gap:8px; background:#ECE5DD; }
+.msg { max-width:82%; padding:8px 11px; border-radius:8px; font-size:12px; line-height:1.5; position:relative; opacity:0; }
+.msg-time { font-size:9px; color:rgba(0,0,0,0.38); text-align:right; margin-top:3px; }
+.msg.user { background:#DCF8C6; align-self:flex-end; border-radius:8px 8px 2px 8px; color:#111; }
+.msg.jarvis { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; color:#111; box-shadow:0 1px 2px rgba(0,0,0,0.08); }
+.msg.jarvis strong { color:var(--accent); font-weight:500; }
+.typing { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; padding:10px 14px; box-shadow:0 1px 2px rgba(0,0,0,0.08); display:flex; gap:4px; align-items:center; opacity:0; }
+.typing-dot { width:6px; height:6px; background:rgba(0,0,0,0.25); border-radius:50%; }
+.wa-input { background:#F0F0F0; padding:8px 10px; display:flex; align-items:center; gap:8px; }
+.wa-input-field { flex:1; background:white; border-radius:20px; padding:8px 12px; font-size:11px; color:rgba(0,0,0,0.4); }
+.wa-send { width:32px; height:32px; background:#075E54; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; color:white; }
+.btn-primary { width:100%; background:var(--ink); color:var(--white); border:none; padding:18px 24px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; opacity:0; animation:fadeUp .6s 2.4s forwards; -webkit-tap-highlight-color:transparent; transition:transform .15s,background .2s; }
+.btn-primary:active{transform:scale(.99);}
+.btn-secondary { width:100%; background:transparent; color:var(--muted); border:1px solid var(--border); padding:15px 24px; font-family:'DM Sans',sans-serif; font-weight:300; font-size:13px; letter-spacing:1px; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; opacity:0; animation:fadeUp .6s 2.5s forwards; -webkit-tap-highlight-color:transparent; }
+.stats { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin-top:32px; opacity:0; animation:fadeUp .6s 2.6s forwards; }
+.stat { background:var(--bg); padding:16px 14px; }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; color:var(--ink); display:block; line-height:1; margin-bottom:4px; }
+.stat-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); line-height:1.5; }
+.proof { margin-top:20px; display:flex; align-items:center; gap:12px; opacity:0; animation:fadeUp .6s 2.7s forwards; }
+.avatars { display:flex; }
+.avatar { width:26px;height:26px; border-radius:50%; border:1.5px solid var(--bg); background:rgba(26,23,20,0.08); margin-left:-7px; display:flex;align-items:center;justify-content:center; }
+.avatar:first-child{margin-left:0;}
+.proof-text{font-size:12px;color:var(--muted);font-weight:300;line-height:1.5;}
+.proof-text strong{color:var(--ink2);font-weight:400;}
+.hero-web { display:none; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+@media(min-width:768px){
+  .hero-mobile{display:none!important;}
+  .hero-web { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; min-height:100vh; padding:100px 72px 72px; max-width:1200px; margin:0 auto; }
+  .web-left{display:flex;flex-direction:column;}
+  .web-right{display:flex;justify-content:center;}
+  .web-chaos { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,5vw,60px); font-weight:300; color:rgba(26,23,20,0.2); line-height:1.1; letter-spacing:-1px; margin-bottom:20px; opacity:0; animation:fadeUp .8s .3s forwards; }
+  .web-rule { width:40px; height:2px; background:var(--accent); margin-bottom:20px; opacity:0; animation:growLine .6s .9s forwards; transform-origin:left; transform:scaleX(0); }
+  .web-signoff { font-family:'Cormorant Garamond',serif; font-size:clamp(64px,7vw,96px); font-weight:400; font-style:italic; line-height:1; letter-spacing:-1px; color:var(--ink); margin-bottom:8px; opacity:0; animation:fadeUp .9s 1.0s cubic-bezier(.16,1,.3,1) forwards; }
+  .web-signoff span{color:var(--accent);}
+  .web-sub { font-size:17px; font-weight:300; line-height:1.7; color:var(--ink2); margin-bottom:10px; opacity:0; animation:fadeUp .7s 1.4s forwards; }
+  .web-sub strong{color:var(--ink);font-weight:500;}
+  .web-wa-badge { display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--ink2); border:1px solid var(--border); padding:9px 16px; border-radius:6px; font-size:13px; font-weight:400; letter-spacing:.3px; margin-bottom:36px; opacity:0; animation:fadeUp .6s 1.6s forwards; width:fit-content; }
+  .web-wa-icon { width:18px;height:18px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:#fff;font-weight:600; }
+  .web-ctas { display:flex; gap:14px; margin-bottom:40px; opacity:0; animation:fadeUp .6s 1.8s forwards; }
+  .web-btn-primary { background:var(--ink);color:var(--white);border:none; padding:16px 32px; font-family:'DM Sans',sans-serif;font-weight:400;font-size:13px;letter-spacing:2px;text-transform:uppercase; display:flex;align-items:center;gap:12px; cursor:pointer;transition:transform .15s,background .2s; }
+  .web-btn-primary:hover{background:var(--ink2);}
+  .web-btn-secondary { background:transparent;color:var(--muted); border:1px solid var(--border); padding:16px 28px; font-family:'DM Sans',sans-serif;font-weight:300;font-size:13px;letter-spacing:1px; display:flex;align-items:center;gap:10px; cursor:pointer;transition:border-color .2s,color .2s; }
+  .web-btn-secondary:hover{color:var(--ink);border-color:rgba(26,23,20,.25);}
+  .web-stats { display:flex;gap:0; border-top:1px solid var(--border); padding-top:28px; opacity:0; animation:fadeUp .6s 2.0s forwards; }
+  .web-stat{padding-right:32px;}
+  .web-stat+.web-stat{border-left:1px solid var(--border);padding-left:32px;}
+  .web-stat-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--ink);display:block;line-height:1;margin-bottom:4px;}
+  .web-stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+  .web-phone-wrap{opacity:0;animation:fadeUp 1s 1.2s cubic-bezier(.16,1,.3,1) forwards;}
+  .web-phone{width:260px;background:#1A1714;border-radius:40px;padding:12px;box-shadow:0 60px 120px rgba(26,23,20,.28),0 0 0 1px rgba(26,23,20,.15),inset 0 0 0 1px rgba(255,255,255,.05);}
 }
 
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  padding: 20px 24px; display: flex; justify-content: space-between; align-items: center;
-  z-index: 50; background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
-}
-.nav-logo { display: flex; flex-direction: column; opacity: 0; animation: fadeUp 0.7s 0.1s forwards; }
-.nav-logo-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 6px; color: var(--text); font-weight: 500; }
-.nav-logo-sub { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 2px; color: var(--text-3); display: block; }
-.nav-pill { border: 1px solid var(--border); color: var(--text-2); padding: 7px 16px; font-size: 10px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 2px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; display: flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
-.live-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+/* ─── SECTIONS ─────────────────────────────────────────── */
+.sec-wrap { display:flex; flex-direction:column; align-items:center; }
+.section { width:100%; padding:72px 28px; }
+@media(min-width:768px){ .section { max-width:1100px; padding:88px 72px; } }
 
-.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 24px 40px; position: relative; overflow: hidden; background: var(--bg); }
-.bg-letter { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%); font-family: 'Cormorant Garamond', serif; font-size: 85vw; color: rgba(184,92,58,0.03); pointer-events: none; line-height: 1; user-select: none; opacity: 0; animation: fadeIn 2s 0.5s forwards; }
-.glow { position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(184,92,58,0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
-.spacer { height: 80px; }
-.eyebrow { font-size: 10px; letter-spacing: 4px; color: var(--accent); font-weight: 400; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.7s 0.3s forwards; font-family: 'DM Sans', sans-serif; }
-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 12vw, 80px); line-height: 1.0; font-weight: 400; color: var(--text); margin-bottom: 28px; }
-.l1 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-.l2 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
-.sub { font-size: 15px; font-weight: 300; line-height: 1.7; color: var(--text-2); margin-top: 0; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; font-family: 'DM Sans', sans-serif; }
-.sub strong { color: var(--text); font-weight: 400; }
-.hero-btns { display: flex; flex-direction: column; gap: 12px; }
-.btn-primary { width: 100%; background: var(--btn-bg); color: var(--btn-text); border: none; padding: 16px 28px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; border-radius: 0; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; display: flex; align-items: center; justify-content: space-between; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s; cursor: pointer; }
-.btn-primary:hover { background: #2e2b27; }
-.btn-primary:active { transform: scale(0.98); }
-.btn-secondary { width: 100%; background: transparent; color: var(--text-2); border: 1px solid var(--border); padding: 14px 24px; font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 0.5px; border-radius: 0; opacity: 0; animation: fadeUp 0.7s 1.25s forwards; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s, color 0.2s; }
-.btn-secondary:hover { color: var(--text); border-color: rgba(28,26,24,0.25); }
-.stats { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-card); border: 1px solid var(--border); margin-top: 40px; opacity: 0; animation: fadeUp 0.7s 1.4s forwards; }
-.stat { padding: 18px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.stat:nth-child(2n) { border-right: none; }
-.stat:nth-child(n+3) { border-bottom: none; }
-.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--text); display: block; line-height: 1; margin-bottom: 4px; }
-.stat-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); font-weight: 300; line-height: 1.4; font-family: 'DM Sans', sans-serif; }
-.proof { margin-top: 28px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.7s 1.5s forwards; background: var(--bg-card); border: 1px solid var(--border); padding: 14px 18px; }
-.avatars { display: flex; }
-.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--bg-card); background: var(--bg); margin-left: -7px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: var(--text-3); }
-.avatar:first-child { margin-left: 0; }
-.proof-text { font-size: 12px; color: var(--text-2); font-weight: 300; line-height: 1.4; font-family: 'DM Sans', sans-serif; }
-.proof-text strong { color: var(--text); font-weight: 400; }
-.hero-demo { display: none; }
+.sec-tag { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:400; margin-bottom:32px; display:flex; align-items:center; gap:10px; font-family:'DM Sans',sans-serif; }
+.sec-tag::before { content:''; display:block; width:16px; height:1px; background:var(--muted); flex-shrink:0; }
 
-.h-list { font-family:'Cormorant Garamond',serif; font-size:clamp(28px,6vw,44px); font-weight:300; color:var(--text-3); line-height:1.15; margin:0; opacity:0; animation:fadeUp 0.8s 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
-.h-transition { font-family:'Cormorant Garamond',serif; font-size:clamp(15px,3vw,20px); font-weight:400; color:var(--text-2); margin:20px 0 0; letter-spacing:0.01em; opacity:0; animation:fadeUp 0.7s 0.6s forwards; }
-.divider { width:32px; height:1px; background:var(--accent); margin:28px 0; opacity:0; animation:fadeUp 0.6s 0.75s forwards; }
-.h-turn { font-family:'Cormorant Garamond',serif; font-size:clamp(24px,5vw,36px); font-weight:500; color:var(--text); line-height:1.2; margin:0; opacity:0; animation:fadeUp 0.8s 0.85s cubic-bezier(0.16,1,0.3,1) forwards; }
-.h-signature { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,8vw,60px); font-weight:600; color:var(--text); line-height:1.0; margin:12px 0 32px; opacity:0; animation:fadeUp 0.8s 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+/* Problem */
+.problem-wrap { background:var(--bg-subtle); }
+.prob-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin-bottom:40px; }
+@media(min-width:768px){ .prob-grid { grid-template-columns:repeat(4,1fr); } }
+.prob-card { background:var(--bg-subtle); padding:22px 18px; }
+.prob-card-title { font-size:12px; font-weight:500; color:var(--ink); margin-bottom:8px; line-height:1.4; font-family:'DM Sans',sans-serif; }
+.prob-card-body { font-size:13px; font-weight:300; color:var(--muted); line-height:1.6; font-family:'DM Sans',sans-serif; }
+.prob-outro { border-top:1px solid var(--border); padding-top:32px; }
+.prob-outro p { font-size:15px; font-weight:300; color:var(--muted); line-height:1.7; font-family:'DM Sans',sans-serif; }
+.prob-outro p strong { color:var(--ink); font-weight:400; display:block; margin-bottom:4px; }
 
-@media (min-width: 480px) and (max-width: 899px) {
-  body { display: flex; flex-direction: column; align-items: center; }
-  nav { max-width: 420px; left: 50%; right: auto; width: 420px; transform: translateX(-50%); }
-  .hero { max-width: 420px; width: 100%; }
+/* How it works — dark inversion */
+.how-wrap { background:var(--ink); }
+.how-wrap .sec-tag { color:rgba(253,250,245,0.3); }
+.how-wrap .sec-tag::before { background:rgba(253,250,245,0.2); }
+.steps { display:flex; flex-direction:column; }
+.step-item { padding:24px 0; border-bottom:1px solid rgba(253,250,245,0.08); display:flex; gap:20px; align-items:flex-start; }
+.step-item:last-child { border-bottom:none; }
+.step-num { font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:2px; color:rgba(253,250,245,0.2); flex-shrink:0; padding-top:2px; width:24px; }
+.step-title { font-size:16px; font-weight:500; color:var(--white); margin-bottom:6px; line-height:1.3; font-family:'DM Sans',sans-serif; }
+.step-desc { font-size:13px; font-weight:300; color:rgba(253,250,245,0.55); line-height:1.65; font-family:'DM Sans',sans-serif; }
+.step-closer { margin-top:32px; padding-top:24px; border-top:1px solid rgba(253,250,245,0.08); font-size:14px; color:rgba(253,250,245,0.35); font-style:italic; font-family:'DM Sans',sans-serif; }
+@media(min-width:768px){
+  .steps { flex-direction:row; }
+  .step-item { flex:1; flex-direction:column; gap:12px; padding:0 32px 0 0; border-bottom:none; border-right:1px solid rgba(253,250,245,0.08); margin-right:32px; }
+  .step-item:last-child { border-right:none; padding-right:0; margin-right:0; }
 }
 
-@media (min-width: 900px) {
-  nav { padding: 24px 60px; max-width: none; }
-  nav .nav-logo-name { font-size: 20px; }
-  .hero { min-height: 100svh; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; max-width: none; }
-  .hero-inner { display: flex; flex-direction: row; align-items: center; gap: 60px; max-width: 1100px; width: 100%; padding: 100px 60px 80px; }
-  .hero-content { flex: 0 0 55%; max-width: 55%; }
-  .spacer { height: 0; }
-  h1 { font-size: clamp(52px, 7vw, 80px); }
-  .hero-btns { flex-direction: row; gap: 12px; }
-  .btn-primary { width: auto; min-width: 220px; justify-content: space-between; gap: 24px; }
-  .btn-secondary { width: auto; min-width: 180px; }
-  .stats { grid-template-columns: repeat(4, 1fr); margin-top: 48px; }
-  .stat { border-bottom: none; }
-  .stat:nth-child(2n) { border-right: 1px solid var(--border); }
-  .stat:last-child { border-right: none; }
-  .hero-demo { display: flex; flex: 0 0 45%; max-width: 45%; flex-direction: column; justify-content: center; opacity: 0; animation: fadeUp 0.8s 1.6s forwards; }
-  .demo-phone { background: var(--bg-card); border: 1px solid var(--border); border-radius: 0; padding: 20px 0 0; overflow: hidden; }
-  .demo-topbar { padding: 0 20px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-  .demo-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--btn-text); letter-spacing: 1px; flex-shrink: 0; }
-  .demo-name { font-size: 13px; font-weight: 500; color: var(--text); }
-  .demo-status { font-size: 11px; color: var(--text-3); font-weight: 300; }
-  .demo-msgs { padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 10px; min-height: 280px; }
-  .dmsg { max-width: 85%; padding: 10px 14px; font-size: 13px; font-weight: 300; line-height: 1.55; border-radius: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease; }
-  .dmsg.show { opacity: 1; transform: translateY(0); }
-  .dmsg.user { background: var(--bg-subtle); border: 1px solid var(--border); color: var(--text-2); align-self: flex-end; }
-  .dmsg.jarvis { background: var(--accent-light); border: 1px solid rgba(184,92,58,0.2); color: var(--text); align-self: flex-start; }
-  .dmsg.muted { color: var(--text-3); font-size: 12px; background: transparent; border: none; padding: 2px 0; }
-  .bg-letter { font-size: 60vw; }
+/* Use Cases */
+.cases-wrap { background:var(--bg); }
+.accordion { display:flex; flex-direction:column; }
+.acc-item { border-bottom:1px solid var(--border); }
+.acc-trigger { width:100%; background:none; border:none; padding:20px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; cursor:pointer; text-align:left; -webkit-tap-highlight-color:transparent; }
+.acc-title { font-size:15px; font-weight:500; color:var(--ink); margin-bottom:3px; font-family:'DM Sans',sans-serif; }
+.acc-teaser { font-size:12px; font-weight:300; color:var(--muted); font-family:'DM Sans',sans-serif; }
+.acc-icon { font-size:16px; color:var(--muted); flex-shrink:0; transition:transform .25s; margin-top:2px; }
+.acc-item.open .acc-icon { transform:rotate(45deg); }
+.acc-body { max-height:0; overflow:hidden; transition:max-height .35s ease; }
+.acc-item.open .acc-body { max-height:400px; }
+.acc-inner { padding-bottom:24px; }
+.acc-before { font-size:13px; font-weight:300; color:var(--muted); line-height:1.65; margin-bottom:16px; font-family:'DM Sans',sans-serif; }
+.acc-divider { height:1px; background:var(--border); margin-bottom:16px; }
+.acc-after { font-size:13px; font-weight:400; color:var(--ink); line-height:1.65; font-family:'DM Sans',sans-serif; }
+.acc-after em { color:var(--accent); font-style:normal; }
+@media(min-width:768px){
+  .accordion { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+  .acc-item { background:var(--bg); padding:28px 24px; border-bottom:none; }
+  .acc-trigger { pointer-events:none; padding:0 0 12px 0; }
+  .acc-icon { display:none; }
+  .acc-body { max-height:none!important; overflow:visible; }
+  .acc-inner { padding-bottom:0; }
 }
+
+/* Depoimentos */
+.testi-wrap { background:var(--bg-subtle); }
+.testi-list { display:flex; flex-direction:column; gap:1px; background:var(--border); }
+@media(min-width:768px){ .testi-list { flex-direction:row; } }
+.testi-card { background:var(--bg-subtle); padding:24px 20px; }
+@media(min-width:768px){ .testi-card { flex:1; } }
+.testi-text { font-size:14px; font-weight:300; color:var(--muted); line-height:1.7; margin-bottom:18px; font-style:italic; font-family:'DM Sans',sans-serif; }
+.testi-author { display:flex; align-items:center; gap:12px; }
+.testi-initials { width:32px; height:32px; border-radius:50%; background:var(--bg-card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:500; color:var(--muted); flex-shrink:0; }
+.testi-name { font-size:13px; font-weight:500; color:var(--ink); line-height:1.3; font-family:'DM Sans',sans-serif; }
+.testi-role { font-size:11px; color:var(--muted); font-weight:300; font-family:'DM Sans',sans-serif; }
+
+/* Pricing */
+.pricing-wrap { background:var(--bg); border-top:1px solid var(--border); }
+.pricing-inner { text-align:center; }
+.pricing-pre { font-size:14px; font-weight:300; color:var(--muted); margin-bottom:28px; line-height:1.6; font-family:'DM Sans',sans-serif; }
+.pricing-amount { display:flex; align-items:flex-start; justify-content:center; gap:2px; margin-bottom:8px; }
+.pricing-cur { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:300; color:var(--ink2); margin-top:8px; }
+.pricing-num { font-family:'Cormorant Garamond',serif; font-size:72px; line-height:1; color:var(--ink); font-weight:400; }
+@media(min-width:768px){ .pricing-num { font-size:96px; } }
+.pricing-cents { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:300; color:var(--muted); margin-top:8px; }
+.pricing-period { font-size:13px; font-weight:300; color:var(--muted); letter-spacing:1px; margin-bottom:6px; font-family:'DM Sans',sans-serif; }
+.pricing-trial { font-size:12px; color:var(--accent); font-weight:400; margin-bottom:32px; letter-spacing:0.5px; font-family:'DM Sans',sans-serif; }
+.pricing-note { font-size:12px; color:var(--muted); font-weight:300; margin-top:16px; line-height:1.6; font-family:'DM Sans',sans-serif; }
+.pricing-btn { background:var(--ink); color:var(--white); border:none; padding:16px 32px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:inline-flex; align-items:center; gap:12px; transition:background .2s; }
+.pricing-btn:hover { background:var(--ink2); }
+
+/* CTA Final — dark inversion */
+.cta-wrap { background:var(--ink); border-top:1px solid rgba(253,250,245,0.06); }
+.cta-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,10vw,72px); line-height:0.95; color:var(--white); margin-bottom:24px; font-weight:400; font-style:italic; }
+.cta-headline span { color:var(--accent2); }
+.cta-sub { font-size:15px; font-weight:300; color:rgba(253,250,245,0.4); margin-bottom:28px; line-height:1.7; font-family:'DM Sans',sans-serif; }
+.cta-btn { background:var(--white); color:var(--ink); border:none; padding:16px 32px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:inline-flex; align-items:center; gap:12px; transition:background .2s; }
+.cta-btn:hover { background:var(--bg); }
+.cta-note { font-size:12px; color:rgba(253,250,245,0.2); margin-top:16px; font-weight:300; font-family:'DM Sans',sans-serif; }
+
+/* Footer */
+.footer-wrap { background:var(--ink); border-top:1px solid rgba(253,250,245,0.06); }
+.footer-inner { padding:28px 28px; display:flex; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto; }
+.footer-logo { font-family:'Cormorant Garamond',serif; font-size:16px; letter-spacing:6px; text-transform:uppercase; color:rgba(253,250,245,0.25); }
+.footer-copy { font-size:11px; color:rgba(253,250,245,0.2); font-weight:300; font-family:'DM Sans',sans-serif; }
+
+/* Modal */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,23,20,0.75); z-index:200; align-items:flex-end; justify-content:center; }
+.modal-overlay.open { display:flex; }
+@media(min-width:640px){ .modal-overlay { align-items:center; padding:24px; } }
+.modal-card { background:var(--bg); width:100%; max-width:380px; padding:36px 32px 40px; position:relative; border:1px solid var(--border); border-bottom:none; }
+@media(min-width:640px){ .modal-card { border-bottom:1px solid var(--border); } }
+.modal-handle { width:36px; height:3px; background:var(--border); border-radius:2px; margin:0 auto 28px; }
+@media(min-width:640px){ .modal-handle { display:none; } }
+.modal-close { position:absolute; top:16px; right:16px; background:none; border:none; font-size:20px; color:var(--muted); cursor:pointer; display:none; line-height:1; transition:color .15s; }
+@media(min-width:640px){ .modal-close { display:block; } }
+.modal-close:hover { color:var(--ink); }
+.modal-tag { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:400; margin-bottom:10px; font-family:'DM Sans',sans-serif; }
+.modal-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:400; color:var(--ink); margin-bottom:8px; }
+.modal-sub { font-size:13px; font-weight:300; color:var(--muted); margin-bottom:28px; line-height:1.6; font-family:'DM Sans',sans-serif; }
+.modal-field { border-bottom:1px solid var(--border); margin-bottom:4px; }
+.modal-field:focus-within { border-bottom-color:rgba(26,23,20,0.3); }
+.modal-field input { width:100%; border:none; background:transparent; padding:12px 0; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; }
+.modal-field input::placeholder { color:rgba(26,23,20,0.25); }
+.modal-submit { width:100%; background:var(--ink); color:var(--white); border:none; padding:16px 24px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-top:24px; transition:background .2s, transform .15s; }
+.modal-submit:hover { background:var(--ink2); }
+.modal-submit:disabled { opacity:.5; cursor:not-allowed; }
+.modal-note { font-size:11px; color:var(--muted); text-align:center; margin-top:12px; font-weight:300; font-family:'DM Sans',sans-serif; }
+.modal-msg { font-size:13px; text-align:center; margin-top:12px; min-height:18px; line-height:1.5; font-family:'DM Sans',sans-serif; }
+.modal-msg.error { color:var(--accent); }
+
+/* Scroll reveal */
+.reveal { opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease; }
+.reveal.anim { opacity:0; transform:translateY(16px); }
+.reveal.anim.vis { opacity:1; transform:translateY(0); }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">
-    <span class="nav-logo-name">JARVIS</span>
-    <span class="nav-logo-sub">by OLpi Technologies</span>
+  <div class="nav-left">
+    <div class="nav-logo">Jarvis</div>
+    <div class="nav-sub">by Olpi Technologies</div>
   </div>
   <div class="nav-pill"><span class="live-dot"></span> Beta aberto</div>
 </nav>
 
-<section class="hero">
-  <div class="bg-letter">J</div>
-  <div class="glow"></div>
-  <div class="hero-inner" style="display:contents;">
-    <div class="hero-content" style="display:contents;">
-      <div class="spacer"></div>
-      <div class="eyebrow">— Assistente pessoal</div>
-      <p class="h-list">Reuniões, tarefas, filhos, prazos, etc.</p>
-      <div class="divider"></div>
-      <p class="h-signature">Prazer, <span style="color:var(--accent)">Jarvis</span>.</p>
-      <p class="sub">Converse direto no WhatsApp — áudio, foto ou texto.<br>Ele organiza, lembra e cuida. Como uma assistente real.</p>
-      <div class="hero-btns">
-        <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
-        <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
-      </div>
-      <div class="stats">
-        <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
-        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
-        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Memória<br>e contexto</span></div>
-        <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
-      </div>
-      <div class="proof">
-        <div class="avatars">
-          <div class="avatar">C</div><div class="avatar">A</div><div class="avatar">R</div><div class="avatar">M</div>
+<!-- MOBILE HERO -->
+<div class="hero-mobile">
+  <div class="chaos">Reuniões, tarefas,<br>filhos, prazos, etc.</div>
+  <div class="rule"></div>
+  <div class="signoff">Prazer, <span>Jarvis.</span></div>
+  <p class="sub" style="margin-top:16px;">No meio de tudo, alguém precisa<br><strong>lembrar e te ajudar a organizar.</strong></p>
+  <div class="wa-badge"><div class="wa-icon">&#10003;</div>Direto no WhatsApp. Sem app.</div>
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-speaker"></div><div class="notch-cam"></div></div>
+      <div class="phone-screen">
+        <div class="wa-header">
+          <div class="wa-avatar">J</div>
+          <div class="wa-info"><div class="wa-name">Jarvis</div><div class="wa-status"><span class="wa-status-dot"></span>online</div></div>
+          <div class="wa-more">&#8942;</div>
         </div>
-        <p class="proof-text"><strong>+2.400 pessoas</strong> já estão<br>usando o Jarvis hoje</p>
-      </div>
-    </div>
-    <div class="hero-demo">
-      <div class="demo-phone">
-        <div class="demo-topbar">
-          <div class="demo-avatar">J</div>
-          <div>
-            <p class="demo-name">Jarvis</p>
-            <p class="demo-status">online</p>
-          </div>
-        </div>
-        <div class="demo-msgs" id="demo-msgs"></div>
+        <div class="wa-messages" id="msgs-mobile"></div>
+        <div class="wa-input"><div class="wa-input-field">Mensagem</div><div class="wa-send">&#10148;</div></div>
       </div>
     </div>
   </div>
-</section>
-
-<style>
-@media (min-width: 900px) {
-  .hero { justify-content: center; align-items: center; }
-  .hero-inner { display: flex !important; flex-direction: row; align-items: center; gap: 60px; max-width: 1100px; width: 100%; padding: 100px 60px 80px; }
-  .hero-content { display: flex !important; flex-direction: column; flex: 0 0 55%; max-width: 55%; }
-  .hero .spacer { display: none; }
-}
-</style>
-
-<div id="problem" class="problem-wrap sec-wrap">
-  <div class="section">
-    <p class="section-tag reveal">O problema</p>
-    <div class="problem-grid reveal">
-      <div class="problem-card">
-        <p class="problem-card-title">Grupo da escola da Olivia.</p>
-        <p class="problem-card-body">47 mensagens sobre a festa junina. Data? Perdida em algum lugar lá no meio.</p>
-      </div>
-      <div class="problem-card">
-        <p class="problem-card-title">Áudio de 4 minutos do seu chefe.</p>
-        <p class="problem-card-body">"Vou ouvir depois." Depois nunca chegou. As tarefas, também não.</p>
-      </div>
-      <div class="problem-card">
-        <p class="problem-card-title">Print do condomínio.</p>
-        <p class="problem-card-body">Sobre a assembleia. Você foi? Você lembrou?</p>
-      </div>
-      <div class="problem-card">
-        <p class="problem-card-title">Prazo que passou despercebido.</p>
-        <p class="problem-card-body">Estava numa mensagem. Você leu na hora. Não anotou. Expirou.</p>
-      </div>
+  <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
+  <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
+    <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memória<br>e contexto</span></div>
+    <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
+  </div>
+  <div class="proof">
+    <div class="avatars">
+      <div class="avatar" style="font-size:10px;color:var(--muted);">F</div>
+      <div class="avatar" style="font-size:10px;color:var(--muted);">R</div>
+      <div class="avatar" style="font-size:10px;color:var(--muted);">A</div>
+      <div class="avatar" style="font-size:10px;color:var(--muted);">M</div>
     </div>
-    <div class="problem-transition reveal">
-      <p><strong>Não é falta de atenção. É excesso de mensagem.</strong> O WhatsApp não foi feito pra lembrar por você.<br>O Jarvis foi.</p>
+    <p class="proof-text"><strong>+2.400 pessoas</strong> já usam<br>o Jarvis hoje</p>
+  </div>
+</div>
+
+<!-- WEB HERO -->
+<div class="hero-web">
+  <div class="web-left">
+    <div class="web-chaos">Reuniões, tarefas, filhos,<br>prazos, etc.</div>
+    <div class="web-rule"></div>
+    <div class="web-signoff">Prazer, <span>Jarvis.</span></div>
+    <p class="web-sub" style="margin-top:16px;">No meio de tudo, alguém precisa<br><strong>lembrar e te ajudar a organizar.</strong></p>
+    <div class="web-wa-badge"><div class="web-wa-icon">&#10003;</div>Direto no WhatsApp. Zero instalação.</div>
+    <div class="web-ctas">
+      <button class="web-btn-primary" onclick="openModal()">Ativar o Jarvis &#8594;</button>
+      <button class="web-btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+    </div>
+    <div class="web-stats">
+      <div class="web-stat"><span class="web-stat-num">Zero</span><span class="web-stat-label">Instalação</span></div>
+      <div class="web-stat"><span class="web-stat-num">24/7</span><span class="web-stat-label">Disponível</span></div>
+      <div class="web-stat"><span class="web-stat-num">&#8734;</span><span class="web-stat-label">Memória</span></div>
+      <div class="web-stat"><span class="web-stat-num">1 min</span><span class="web-stat-label">Para começar</span></div>
+    </div>
+  </div>
+  <div class="web-right">
+    <div class="web-phone-wrap">
+      <div class="web-phone">
+        <div class="phone-notch"><div class="notch-speaker"></div><div class="notch-cam"></div></div>
+        <div class="phone-screen">
+          <div class="wa-header">
+            <div class="wa-avatar">J</div>
+            <div class="wa-info"><div class="wa-name">Jarvis</div><div class="wa-status"><span class="wa-status-dot"></span>online</div></div>
+            <div class="wa-more">&#8942;</div>
+          </div>
+          <div class="wa-messages" id="msgs-web"></div>
+          <div class="wa-input"><div class="wa-input-field">Mensagem</div><div class="wa-send">&#10148;</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- ── SEÇÃO 1: THE PROBLEM ─────────────────────────────── -->
+<div id="problem" class="problem-wrap sec-wrap">
+  <div class="section">
+    <p class="sec-tag reveal">O problema</p>
+    <div class="prob-grid reveal">
+      <div class="prob-card">
+        <p class="prob-card-title">Áudio de 4 minutos do seu chefe.</p>
+        <p class="prob-card-body">"Vou ouvir depois." Depois nunca chegou. As tarefas, também não.</p>
+      </div>
+      <div class="prob-card">
+        <p class="prob-card-title">Comunicados da escola da Olivia.</p>
+        <p class="prob-card-body">Data, uniforme, arrecadação. Chegam em momentos aleatórios. Você tenta guardar. Às vezes não consegue.</p>
+      </div>
+      <div class="prob-card">
+        <p class="prob-card-title">Print do condomínio.</p>
+        <p class="prob-card-body">Sobre a assembleia. Você foi? Você lembrou?</p>
+      </div>
+      <div class="prob-card">
+        <p class="prob-card-title">Prazo que passou despercebido.</p>
+        <p class="prob-card-body">Estava numa mensagem. Você leu na hora. Não anotou. Expirou.</p>
+      </div>
+    </div>
+    <div class="prob-outro reveal">
+      <p><strong>Não é falta de atenção. É excesso de mensagem.</strong>
+      O WhatsApp não foi feito pra lembrar por você.<br>O Jarvis foi.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 2: HOW IT WORKS ───────────────────────────── -->
 <div id="how" class="how-wrap sec-wrap">
   <div class="section">
-    <p class="section-tag">Como funciona</p>
+    <p class="sec-tag reveal">Como funciona</p>
     <div class="steps">
       <div class="step-item">
         <span class="step-num">01</span>
-        <div class="step-content">
+        <div>
           <p class="step-title">Você encaminha qualquer coisa</p>
           <p class="step-desc">Áudio, print, texto bagunçado, PDF. O mesmo gesto que você já faz todo dia. Encaminha pro Jarvis.</p>
         </div>
       </div>
       <div class="step-item">
         <span class="step-num">02</span>
-        <div class="step-content">
+        <div>
           <p class="step-title">Jarvis entende e organiza</p>
           <p class="step-desc">Extrai o que importa — data, tarefa, compromisso, prazo. Organiza sem você fazer nada.</p>
         </div>
       </div>
       <div class="step-item">
         <span class="step-num">03</span>
-        <div class="step-content">
+        <div>
           <p class="step-title">Você é lembrado na hora certa</p>
           <p class="step-desc">No WhatsApp. Sem precisar checar nada. Sem abrir nenhum app.</p>
         </div>
       </div>
     </div>
-    <p class="how-closer reveal">É isso. Três passos. Uma mudança permanente.</p>
+    <p class="step-closer reveal">É isso. Três passos. Uma mudança permanente.</p>
   </div>
 </div>
 
+<!-- ── SEÇÃO 3: USE CASES ──────────────────────────────── -->
 <div id="cases" class="cases-wrap sec-wrap">
   <div class="section">
-    <p class="section-tag reveal">Situações reais</p>
-    <div class="accordion reveal" id="cases-accordion">
-      <div class="acc-item" data-idx="0">
+    <p class="sec-tag reveal">Situações reais</p>
+    <div class="accordion reveal">
+      <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div class="acc-trigger-text">
-            <p class="acc-title">Grupo de escola</p>
-            <p class="acc-teaser">A mãe que não pode errar</p>
-          </div>
+          <div><p class="acc-title">Escola da Olivia</p><p class="acc-teaser">A mãe que não pode errar</p></div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
-          <p class="acc-before">Você acompanha os comunicados da turma da Olivia. Datas, uniformes, eventos, arrecadações. Chegam em momentos aleatórios. Você tenta guardar na cabeça. Às vezes consegue. Às vezes não.</p>
+          <p class="acc-before">Você acompanha os comunicados da turma da Olivia. Datas, uniformes, eventos, arrecadações. Chegam em momentos aleatórios. Você tenta guardar na cabeça.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, trajar caipira, levar R$15." Semana que vem: lembrete automático. Você aparece na festa. <em>Olivia sorri.</em></p>
+          <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, traje caipira, levar R$15." Semana que vem: lembrete automático. Você aparece na festa. <em>Olivia sorri.</em></p>
         </div></div>
       </div>
-      <div class="acc-item" data-idx="1">
+      <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div class="acc-trigger-text">
-            <p class="acc-title">Reunião com 5 tarefas</p>
-            <p class="acc-teaser">O profissional com agenda cheia</p>
-          </div>
+          <div><p class="acc-title">Reunião com 5 tarefas</p><p class="acc-teaser">O profissional com agenda cheia</p></div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
           <p class="acc-before">Reunião termina. Você abriu o bloco de notas? Não. Vai anotar depois? Vai. Anotou? Não. Na sexta o gestor pergunta pelo entregável.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Mandou o áudio da reunião pro Jarvis. Em minutos: lista de tarefas, responsáveis, prazos. <em>Você entrega antes do prazo. Parece que tem superpoder.</em></p>
+          <p class="acc-after">Mandou o áudio da reunião pro Jarvis. Em minutos: lista de tarefas, responsáveis, prazos. <em>Você entrega antes do prazo.</em></p>
         </div></div>
       </div>
-      <div class="acc-item" data-idx="2">
+      <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div class="acc-trigger-text">
-            <p class="acc-title">Áudio de 3 minutos</p>
-            <p class="acc-teaser">O áudio que "vou ouvir depois"</p>
-          </div>
+          <div><p class="acc-title">Áudio de 3 minutos</p><p class="acc-teaser">O áudio que "vou ouvir depois"</p></div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
-          <p class="acc-before">Seu parceiro mandou um áudio longo com um recado importante. Você estava dirigindo. Marcou pra ouvir depois. Esqueceu. Recado perdido.</p>
+          <p class="acc-before">Seu parceiro mandou um áudio longo com um recado importante. Você estava dirigindo. Marcou pra ouvir depois. Esqueceu.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Encaminhou o áudio pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado e programou o lembrete. <em>Quando chegou em casa, você já sabia de tudo.</em></p>
+          <p class="acc-after">Encaminhou pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado, programou o lembrete. <em>Quando chegou em casa, você já sabia de tudo.</em></p>
         </div></div>
       </div>
-      <div class="acc-item" data-idx="3">
+      <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div class="acc-trigger-text">
-            <p class="acc-title">PDF ou print com prazo</p>
-            <p class="acc-teaser">O documento com data enterrada</p>
-          </div>
+          <div><p class="acc-title">PDF ou print com prazo</p><p class="acc-teaser">O documento com data enterrada</p></div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
-          <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovação. PDF da proposta com validade de 10 dias. Você salva. Esquece onde salvou. O prazo passa.</p>
+          <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovação. PDF da proposta com validade de 10 dias. Você salva. Esquece onde. O prazo passa.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Encaminhou pro Jarvis. Ele leu, extraiu a data, criou o lembrete automático. Dois dias antes: "Atenção — prazo amanhã." <em>Você age a tempo. Sempre.</em></p>
+          <p class="acc-after">Encaminhou pro Jarvis. Dois dias antes: "Atenção — prazo amanhã." <em>Você age a tempo. Sempre.</em></p>
         </div></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ── DEPOIMENTOS ─────────────────────────────────────── -->
 <div class="testi-wrap sec-wrap">
   <div class="section">
-    <p class="section-tag reveal">Quem usa</p>
+    <p class="sec-tag reveal">Quem usa</p>
     <div class="testi-list reveal">
       <div class="testi-card">
-        <p class="testi-text">"Eu acompanhava comunicados de 6 turmas ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a não perder data. Não é exagero: reduziu minha ansiedade de domingo à noite."</p>
+        <p class="testi-text">"Eu acompanhava comunicados de 6 turmas ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a não perder data. Reduziu minha ansiedade de domingo à noite."</p>
         <div class="testi-author">
           <div class="testi-initials">FR</div>
-          <div>
-            <p class="testi-name">Fernanda R., 38 anos</p>
-            <p class="testi-role">Mãe do Bento e da Luísa — São Paulo</p>
-          </div>
+          <div><p class="testi-name">Fernanda R., 38 anos</p><p class="testi-role">Mãe do Bento e da Luisa — São Paulo</p></div>
         </div>
       </div>
       <div class="testi-card">
-        <p class="testi-text">"Minha rotina é reunião atrás de reunião. Eu mandava o áudio das reuniões pro Jarvis e chegava na próxima já com o resumo das tarefas pendentes. Meu gestor perguntou o que tinha mudado."</p>
+        <p class="testi-text">"Minha rotina é reunião atrás de reunião. Mandava o áudio das reuniões pro Jarvis e chegava na próxima já com o resumo das tarefas pendentes. Meu gestor perguntou o que tinha mudado."</p>
         <div class="testi-author">
           <div class="testi-initials">RM</div>
-          <div>
-            <p class="testi-name">Rodrigo M., 34 anos</p>
-            <p class="testi-role">Gerente Comercial — Curitiba</p>
-          </div>
+          <div><p class="testi-name">Rodrigo M., 34 anos</p><p class="testi-role">Gerente Comercial — Curitiba</p></div>
         </div>
       </div>
       <div class="testi-card">
-        <p class="testi-text">"Três meses usando e ainda não cancelei — e já testei tudo que existe no mercado. O Jarvis é o único que funciona do jeito que a minha cabeça funciona."</p>
+        <p class="testi-text">"Três meses usando e ainda não cancelei — e já testei tudo que existe. O Jarvis é o único que funciona do jeito que a minha cabeça funciona."</p>
         <div class="testi-author">
           <div class="testi-initials">MT</div>
-          <div>
-            <p class="testi-name">Marcelo T., 41 anos</p>
-            <p class="testi-role">Empreendedor — Belo Horizonte</p>
-          </div>
+          <div><p class="testi-name">Marcelo T., 41 anos</p><p class="testi-role">Empreendedor — Belo Horizonte</p></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ── PRICING ─────────────────────────────────────────── -->
 <div id="pricing" class="pricing-wrap sec-wrap">
-  <div class="section pricing-section">
-    <p class="section-tag reveal" style="justify-content:center;">Preço</p>
+  <div class="section pricing-inner">
+    <p class="sec-tag reveal" style="justify-content:center;">Preço</p>
     <p class="pricing-pre reveal">Organize sua vida por menos do que um café por semana.</p>
     <div class="pricing-amount reveal">
-      <span class="pricing-currency">R$</span>
-      <span class="pricing-number">19</span>
+      <span class="pricing-cur">R$</span>
+      <span class="pricing-num">19</span>
       <span class="pricing-cents">,90</span>
     </div>
     <p class="pricing-period reveal">/mês</p>
     <p class="pricing-trial reveal">3 dias grátis &mdash; cancela quando quiser</p>
-    <button class="btn-primary pricing-btn reveal" onclick="openModal()">Quero testar grátis <span>&#8594;</span></button>
-    <p class="pricing-note reveal">Sem contrato. Sem anuidade. Sem pegadinha.<br>Começa grátis. Continua porque faz sentido.</p>
+    <button class="pricing-btn reveal" onclick="openModal()">Quero testar grátis &#8594;</button>
+    <p class="pricing-note reveal">Sem contrato. Sem anuidade. Comece grátis. Continue porque faz sentido.</p>
   </div>
 </div>
 
+<!-- ── CTA FINAL ───────────────────────────────────────── -->
 <div class="cta-wrap sec-wrap">
   <div class="section">
     <h2 class="cta-headline reveal">Você já<br>encaminha<br><span>mensagens</span><br>todo dia.</h2>
-    <p class="sub reveal" style="margin-bottom:28px;">Agora elas trabalham por você.</p>
-    <button class="btn-primary reveal" style="opacity:1;animation:none;" onclick="openModal()">Começar grátis agora <span>&#8594;</span></button>
-    <p class="cta-sub reveal">Sem cadastro complicado. Só o WhatsApp que você já tem.</p>
+    <p class="cta-sub reveal">Agora elas trabalham por você.</p>
+    <button class="cta-btn reveal" onclick="openModal()">Começar grátis agora &#8594;</button>
+    <p class="cta-note reveal">Sem cadastro complicado. Só o WhatsApp que você já tem.</p>
   </div>
 </div>
 
+<!-- FOOTER -->
 <div class="footer-wrap">
   <div class="footer-inner">
-    <span class="footer-logo">JARVIS</span>
-    <span class="footer-copy">&copy; 2026 Jarvis</span>
+    <span class="footer-logo">Jarvis</span>
+    <span class="footer-copy">&copy; 2026 Jarvis / OLpi Technologies</span>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal" onclick="handleOverlay(event)">
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlay(event)">
   <div class="modal-card">
     <div class="modal-handle"></div>
     <button class="modal-close" onclick="closeModal()">&times;</button>
     <p class="modal-tag">Ativar agora</p>
     <h3 class="modal-title">Começar grátis</h3>
     <p class="modal-sub">3 dias grátis, sem cartão. Você recebe uma mensagem no WhatsApp em segundos.</p>
-    <form id="reg-form" onsubmit="submitForm(event)">
-      <div class="field"><input id="f-name" type="text" placeholder="Nome" autocomplete="name" required></div>
-      <div class="field"><input id="f-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
-      <button class="modal-submit" type="submit" id="submit-btn">Criar minha conta <span>&#8594;</span></button>
+    <div id="reg-form">
+      <div class="modal-field"><input id="reg-name" type="text" placeholder="Nome" autocomplete="name" required></div>
+      <div class="modal-field"><input id="reg-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
+      <button class="modal-submit" id="modal-submit" onclick="register()">Criar minha conta <span>&#8594;</span></button>
       <p class="modal-note">Você receberá uma mensagem do Jarvis em instantes.</p>
-      <p class="modal-msg" id="form-msg"></p>
-    </form>
+      <p class="modal-msg" id="reg-msg"></p>
+    </div>
   </div>
 </div>
 
-<style>
-.sec-wrap { display: flex; flex-direction: column; align-items: center; }
-.section { width: 100%; padding: 72px 24px; }
-.section-tag { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-3); font-weight: 500; margin-bottom: 32px; display: flex; align-items: center; gap: 10px; font-family: 'DM Sans', sans-serif; }
-.section-tag::before { content: ''; display: block; width: 16px; height: 1px; background: var(--text-3); flex-shrink: 0; }
-
-.problem-wrap { background: var(--bg-subtle); }
-.problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin-bottom: 40px; }
-.problem-card { background: var(--bg-card); padding: 22px 18px; }
-.problem-card-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 8px; line-height: 1.4; font-family: 'DM Sans', sans-serif; }
-.problem-card-body { font-size: 13px; font-weight: 300; color: var(--text-2); line-height: 1.6; font-family: 'DM Sans', sans-serif; }
-.problem-transition { border-top: 1px solid var(--border); padding-top: 32px; }
-.problem-transition p { font-size: 15px; font-weight: 300; color: var(--text-2); line-height: 1.7; font-family: 'DM Sans', sans-serif; }
-.problem-transition p strong { color: var(--text); font-weight: 400; display: block; margin-bottom: 4px; }
-
-.how-wrap { background: var(--text); }
-.how-wrap .section-tag { color: rgba(250,248,244,0.3); }
-.how-wrap .section-tag::before { background: rgba(250,248,244,0.3); }
-.steps { display: flex; flex-direction: column; }
-.step-item { padding: 24px 0; border-bottom: 1px solid rgba(250,248,244,0.08); display: flex; gap: 20px; align-items: flex-start; }
-.step-item:last-child { border-bottom: none; }
-.step-num { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(250,248,244,0.25); letter-spacing: 1px; flex-shrink: 0; padding-top: 2px; width: 24px; }
-.step-title { font-size: 16px; font-weight: 500; color: var(--bg); margin-bottom: 6px; line-height: 1.3; font-family: 'DM Sans', sans-serif; }
-.step-desc { font-size: 13px; font-weight: 300; color: rgba(250,248,244,0.55); line-height: 1.65; font-family: 'DM Sans', sans-serif; }
-.how-closer { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(250,248,244,0.08); font-size: 14px; font-weight: 300; color: rgba(250,248,244,0.45); font-style: italic; font-family: 'DM Sans', sans-serif; }
-
-.cases-wrap { background: var(--bg); }
-.accordion { display: flex; flex-direction: column; }
-.acc-item { border-bottom: 1px solid var(--border); }
-.acc-trigger { width: 100%; background: none; border: none; padding: 20px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; cursor: pointer; text-align: left; }
-.acc-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; font-family: 'DM Sans', sans-serif; }
-.acc-teaser { font-size: 12px; font-weight: 300; color: var(--text-3); font-family: 'DM Sans', sans-serif; }
-.acc-icon { font-size: 18px; color: var(--text-3); flex-shrink: 0; transition: transform 0.25s ease; margin-top: 2px; }
-.acc-item.open .acc-icon { transform: rotate(45deg); }
-.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-.acc-item.open .acc-body { max-height: 400px; }
-.acc-inner { padding-bottom: 24px; }
-.acc-before { font-size: 13px; font-weight: 300; color: var(--text-2); line-height: 1.65; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
-.acc-divider { height: 1px; background: var(--border); margin-bottom: 16px; }
-.acc-after { font-size: 13px; font-weight: 400; color: var(--text); line-height: 1.65; font-family: 'DM Sans', sans-serif; }
-.acc-after em { color: var(--accent); font-style: normal; }
-
-.testi-wrap { background: var(--bg-subtle); }
-.testi-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
-.testi-card { background: var(--bg-card); padding: 24px 20px; }
-.testi-text { font-size: 14px; font-weight: 300; color: var(--text-2); line-height: 1.7; margin-bottom: 18px; font-style: italic; font-family: 'DM Sans', sans-serif; }
-.testi-author { display: flex; align-items: center; gap: 12px; }
-.testi-initials { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--text-3); flex-shrink: 0; }
-.testi-name { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; font-family: 'DM Sans', sans-serif; }
-.testi-role { font-size: 11px; color: var(--text-3); font-weight: 300; font-family: 'DM Sans', sans-serif; }
-
-.pricing-wrap { background: var(--bg-subtle); }
-.pricing-section { text-align: center; }
-.pricing-pre { font-size: 13px; font-weight: 300; color: var(--text-2); margin-bottom: 28px; line-height: 1.6; font-family: 'DM Sans', sans-serif; }
-.pricing-amount { display: flex; align-items: flex-start; justify-content: center; gap: 2px; margin-bottom: 8px; }
-.pricing-currency { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 300; color: var(--text-2); margin-top: 8px; }
-.pricing-number { font-family: 'Cormorant Garamond', serif; font-size: 72px; line-height: 1; color: var(--text); }
-.pricing-cents { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 300; color: var(--text-2); margin-top: 8px; }
-.pricing-period { font-size: 13px; font-weight: 300; color: var(--text-3); letter-spacing: 1px; margin-bottom: 6px; font-family: 'DM Sans', sans-serif; }
-.pricing-trial { font-size: 12px; color: var(--accent); font-weight: 400; margin-bottom: 32px; letter-spacing: 0.5px; font-family: 'DM Sans', sans-serif; }
-.pricing-btn { display: flex; width: 100%; justify-content: space-between; margin-top: 0; }
-.pricing-note { font-size: 12px; color: var(--text-3); font-weight: 300; margin-top: 16px; line-height: 1.6; font-family: 'DM Sans', sans-serif; }
-
-.cta-wrap { background: var(--text); }
-.cta-wrap .sub { color: rgba(250,248,244,0.5); }
-.cta-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px, 10vw, 72px); line-height: 0.95; font-weight: 400; color: var(--bg); margin-bottom: 24px; }
-.cta-headline span { color: var(--accent); }
-.cta-wrap .btn-primary { background: var(--bg); color: var(--text); }
-.cta-wrap .btn-primary:hover { background: #f0ece5; }
-.cta-sub { margin-top: 16px; font-size: 12px; font-weight: 300; color: rgba(250,248,244,0.25); letter-spacing: 0.5px; font-family: 'DM Sans', sans-serif; }
-
-.footer-wrap { background: var(--text); border-top: 1px solid rgba(250,248,244,0.08); }
-.footer-inner { padding: 28px 24px; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 4px; color: rgba(250,248,244,0.3); }
-.footer-copy { font-size: 11px; color: rgba(250,248,244,0.2); font-weight: 300; font-family: 'DM Sans', sans-serif; }
-
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28,26,24,0.85); z-index: 300; align-items: flex-end; justify-content: center; }
-.modal-overlay.active { display: flex; }
-.modal-card { background: var(--bg); border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 420px; padding: 32px 24px 40px; position: relative; }
-.modal-handle { width: 36px; height: 3px; background: rgba(28,26,24,0.16); border-radius: 2px; margin: 0 auto 28px; }
-.modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-3); font-size: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; line-height: 1; transition: color 0.15s; display: none; }
-.modal-tag { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
-.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
-.modal-sub { font-size: 13px; font-weight: 300; color: var(--text-2); margin-bottom: 28px; line-height: 1.55; font-family: 'DM Sans', sans-serif; }
-.field { border-bottom: 1px solid var(--border); }
-.field input { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 16px 0; }
-.field input::placeholder { color: var(--text-3); }
-.field:focus-within { border-bottom-color: rgba(28,26,24,0.3); }
-.modal-submit { width: 100%; background: var(--btn-bg); color: var(--btn-text); border: none; padding: 16px 28px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; border-radius: 0; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 24px; transition: background 0.2s, transform 0.15s; }
-.modal-submit:hover { background: #2e2b27; }
-.modal-submit:active { transform: scale(0.98); }
-.modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.modal-note { font-size: 11px; color: var(--text-3); text-align: center; margin-top: 14px; font-weight: 300; letter-spacing: 0.3px; font-family: 'DM Sans', sans-serif; }
-.modal-msg { font-size: 13px; text-align: center; margin-top: 14px; min-height: 18px; line-height: 1.5; }
-.modal-msg.success { color: var(--accent); }
-.modal-msg.error { color: rgba(184,92,58,0.9); }
-
-.reveal { opacity: 1; transform: none; transition: opacity 0.5s ease, transform 0.5s ease; }
-.reveal.animate-start { opacity: 0; transform: translateY(20px); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-
-@media (min-width: 900px) {
-  .sec-wrap { align-items: center; }
-  .section { max-width: 1100px; padding: 88px 60px; }
-  .problem-grid { grid-template-columns: repeat(4, 1fr); }
-  .steps { flex-direction: row; gap: 0; align-items: flex-start; }
-  .step-item { flex: 1; flex-direction: column; gap: 12px; padding: 0 32px 0 0; border-bottom: none; border-right: 1px solid rgba(250,248,244,0.08); margin-right: 32px; }
-  .step-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
-  .step-num { width: auto; padding-top: 0; font-size: 11px; }
-  .step-title { font-size: 15px; }
-  .accordion { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
-  .acc-item { background: var(--bg); padding: 28px 24px; border-bottom: none; }
-  .acc-trigger { cursor: default; pointer-events: none; padding: 0 0 12px 0; }
-  .acc-icon { display: none; }
-  .acc-body { max-height: none !important; overflow: visible; }
-  .acc-inner { padding-bottom: 0; }
-  .acc-title { font-size: 16px; margin-bottom: 4px; }
-  .acc-teaser { font-size: 11px; margin-bottom: 0; }
-  .testi-list { flex-direction: row; }
-  .testi-card { flex: 1; }
-  .pricing-number { font-size: 96px; }
-  .pricing-btn { width: auto; min-width: 280px; display: inline-flex; margin: 0 auto; }
-  .cta-headline { font-size: clamp(56px, 7vw, 96px); }
-  .footer-inner { max-width: 1100px; margin: 0 auto; padding: 28px 60px; }
-  .modal-overlay { align-items: center; padding: 20px; }
-  .modal-card { border-bottom: 1px solid var(--border); }
-  .modal-handle { display: none; }
-  .modal-close { display: block; }
-}
-</style>
-
 <script>
-  function toggleAcc(btn) {
-    if (window.innerWidth >= 900) return;
-    var item = btn.closest('.acc-item');
-    var isOpen = item.classList.contains('open');
-    document.querySelectorAll('.acc-item').forEach(function(i) { i.classList.remove('open'); });
-    if (!isOpen) item.classList.add('open');
-  }
+// ── Chat animation ──────────────────────────────────────
+const conversation = [
+  { type:'user', text:'Festa junina da Olivia — 21 de junho, trajar caipira, levar R$15', time:'09:41' },
+  { type:'typing', delay:1200 },
+  { type:'jarvis', text:'<strong>Salvo.</strong> Festa junina da Olivia — 21/06, traje caipira, R$15.<br>Lembro você 2 dias antes.', time:'09:41', showAfter:2400 },
+  { type:'user', text:'Reunião com cliente amanhã 14h, confirmar pauta antes', time:'09:43', showAfter:3600 },
+  { type:'typing', delay:4800 },
+  { type:'jarvis', text:'Anotado. Amanhã às <strong>13h30</strong> te lembro de confirmar a pauta com o cliente.', time:'09:43', showAfter:5600 },
+];
 
-  var revealObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.reveal').forEach(function(el) {
-    el.classList.add('animate-start');
-    revealObs.observe(el);
-  });
-
-  setTimeout(function() {
-    document.querySelectorAll('.animate-start:not(.visible)').forEach(function(el) { el.classList.add('visible'); });
-  }, 2000);
-
-  var CONVERSATIONS = [
-    [
-      { side: 'user', text: '[audio 0:42]', delay: 400 },
-      { side: 'jarvis', text: 'Processando...', delay: 1200, temp: true },
-      { side: 'jarvis', text: 'Salvo.\n\nReunião com Alberto \u2014 amanhã, 15h.\nPagar fornecedor \u2014 sexta, R$2.400.\nBuscar Filippo \u2014 quinta, 17h.', delay: 2800 },
-    ],
-    [
-      { side: 'user', text: 'Festa junina da Olivia \u2014 21 de junho, trajar caipira, levar R$15', delay: 400 },
-      { side: 'jarvis', text: 'Processando...', delay: 1100, temp: true },
-      { side: 'jarvis', text: 'Salvo. Festa junina Olivia \u2014 21/06, R$15.\n\nLembro você 2 dias antes.', delay: 2400 },
-    ],
-    [
-      { side: 'user', text: '[imagem: boleto.jpg]', delay: 400 },
-      { side: 'jarvis', text: 'Processando...', delay: 1300, temp: true },
-      { side: 'jarvis', text: 'Salvo. Vencimento \u2014 15/03, R$890.\n\nLembro você 1 dia antes.', delay: 3000 },
-    ],
-  ];
-
-  var convIdx = 0;
-  var demoStarted = false;
-
-  function runConversation() {
-    var msgs = document.getElementById('demo-msgs');
-    if (!msgs) return;
-    msgs.innerHTML = '';
-    var conv = CONVERSATIONS[convIdx % CONVERSATIONS.length];
-    convIdx++;
-    var tempEl = null;
-    conv.forEach(function(m) {
-      setTimeout(function() {
-        if (m.temp) {
-          tempEl = document.createElement('div');
-          tempEl.className = 'dmsg jarvis muted';
-          tempEl.textContent = m.text;
-          msgs.appendChild(tempEl);
-          setTimeout(function() { if (tempEl) tempEl.classList.add('show'); }, 20);
-        } else {
-          if (tempEl) { tempEl.remove(); tempEl = null; }
-          var el = document.createElement('div');
-          el.className = 'dmsg ' + m.side;
-          el.textContent = m.text;
-          msgs.appendChild(el);
-          setTimeout(function() { el.classList.add('show'); }, 20);
-          msgs.scrollTop = msgs.scrollHeight;
-        }
-      }, m.delay);
-    });
-    var total = conv[conv.length - 1].delay + 3500;
-    setTimeout(runConversation, total);
-  }
-
-  var demoEl = document.querySelector('.hero-demo');
-  if (demoEl) {
-    var demoObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting && !demoStarted && window.innerWidth >= 900) {
-          demoStarted = true;
-          runConversation();
-          demoObs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    demoObs.observe(demoEl);
-  }
-
-  function openModal() {
-    document.getElementById('modal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    setTimeout(function() { document.getElementById('f-name').focus(); }, 100);
-  }
-
-  function closeModal() {
-    document.getElementById('modal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  function handleOverlay(e) {
-    if (e.target === document.getElementById('modal')) closeModal();
-  }
-
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
-
-  document.getElementById('f-phone').addEventListener('input', function() {
-    var v = this.value.replace(/\D/g, '').slice(0, 11);
-    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
-    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
-    else if (v.length > 0) v = '(' + v;
-    this.value = v;
-  });
-
-  async function submitForm(e) {
-    e.preventDefault();
-    var name = document.getElementById('f-name').value.trim();
-    var raw = document.getElementById('f-phone').value.replace(/\D/g, '');
-    var phone = raw.startsWith('55') ? raw : '55' + raw;
-    var btn = document.getElementById('submit-btn');
-    var msg = document.getElementById('form-msg');
-
-    if (phone.length < 12 || phone.length > 13) {
-      msg.className = 'modal-msg error';
-      msg.textContent = 'Número inválido. Use: 11 99999-9999';
+function buildChat(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let typingEl = null;
+  conversation.forEach((item) => {
+    if (item.type === 'typing') {
+      setTimeout(() => {
+        typingEl = document.createElement('div');
+        typingEl.className = 'typing';
+        typingEl.innerHTML = '<div class="typing-dot" style="animation:typingBounce .8s .0s infinite"></div><div class="typing-dot" style="animation:typingBounce .8s .15s infinite"></div><div class="typing-dot" style="animation:typingBounce .8s .3s infinite"></div>';
+        typingEl.style.animation = 'fadeIn .3s forwards';
+        container.appendChild(typingEl);
+        container.scrollTop = container.scrollHeight;
+      }, item.delay);
       return;
     }
+    const delay = item.showAfter || 0;
+    setTimeout(() => {
+      if (typingEl) { typingEl.remove(); typingEl = null; }
+      const msg = document.createElement('div');
+      msg.className = 'msg ' + item.type;
+      msg.innerHTML = item.text + '<div class="msg-time">' + item.time + (item.type === 'jarvis' ? ' vv' : '') + '</div>';
+      msg.style.animation = 'fadeUp .4s cubic-bezier(.16,1,.3,1) forwards';
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }, delay);
+  });
+}
 
-    btn.querySelector('span').textContent = '';
-    btn.childNodes[0].textContent = 'Criando conta...';
-    btn.disabled = true;
-    msg.textContent = '';
+buildChat('msgs-mobile');
+buildChat('msgs-web');
 
-    try {
-      var res = await fetch('https://backend-production-f3cb.up.railway.app/api/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name, whatsapp_number: phone, source: 'landing' })
-      });
-      var data = await res.json();
+// ── Accordion ───────────────────────────────────────────
+function toggleAcc(btn) {
+  if (window.innerWidth >= 768) return;
+  const item = btn.closest('.acc-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
 
-      if (res.ok) {
-        document.getElementById('reg-form').innerHTML =
-          '<div style="padding:20px 0;text-align:center;">' +
-          "<p style=\"font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;color:var(--accent);margin-bottom:10px;\">Pronto.</p>" +
-          '<p style="font-size:14px;font-weight:300;color:var(--text-2);line-height:1.6;">Em segundos você recebe uma mensagem no WhatsApp.</p>' +
-          '</div>';
-        setTimeout(closeModal, 2200);
-      } else if (res.status === 409) {
-        msg.className = 'modal-msg error';
-        msg.textContent = 'Esse número já tem conta.';
-        btn.childNodes[0].textContent = 'Criar minha conta';
-        btn.querySelector('span').textContent = '\u2192';
-        btn.disabled = false;
-      } else {
-        msg.className = 'modal-msg error';
-        msg.textContent = data.error || 'Algo deu errado. Tente novamente.';
-        btn.childNodes[0].textContent = 'Criar minha conta';
-        btn.querySelector('span').textContent = '\u2192';
-        btn.disabled = false;
-      }
-    } catch(err) {
-      msg.className = 'modal-msg error';
-      msg.textContent = 'Erro de conexão. Tente novamente.';
-      btn.childNodes[0].textContent = 'Criar minha conta';
-      btn.querySelector('span').textContent = '\u2192';
+// ── Scroll reveal ────────────────────────────────────────
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => { el.classList.add('anim'); obs.observe(el); });
+setTimeout(() => { document.querySelectorAll('.anim:not(.vis)').forEach(el => el.classList.add('vis')); }, 1500);
+
+// ── Phone mask ───────────────────────────────────────────
+document.getElementById('reg-phone').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+  else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+  else if (v.length > 0) v = '(' + v;
+  this.value = v;
+});
+
+// ── Modal ────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('reg-name').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── Register ─────────────────────────────────────────────
+async function register() {
+  const name = document.getElementById('reg-name').value.trim();
+  const phoneRaw = document.getElementById('reg-phone').value.replace(/\D/g, '');
+  const phone = phoneRaw.startsWith('55') ? phoneRaw : '55' + phoneRaw;
+  const msgEl = document.getElementById('reg-msg');
+  const btn = document.getElementById('modal-submit');
+
+  if (!name || phoneRaw.length < 10) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Preencha nome e WhatsApp.'; return; }
+  if (phone.length < 12 || phone.length > 13) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Número inválido. Use: (11) 99999-9999'; return; }
+
+  btn.disabled = true;
+  btn.childNodes[0].textContent = 'Aguarde...';
+  msgEl.textContent = '';
+
+  try {
+    const res = await fetch('https://backend-production-f3cb.up.railway.app/api/users/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
+    });
+
+    if (res.ok) {
+      document.getElementById('reg-form').innerHTML =
+        '<div style="padding:24px 0;text-align:center;">' +
+        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
+        '<p style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.6;">Verifique o WhatsApp em instantes.</p>' +
+        '</div>';
+      setTimeout(closeModal, 2500);
+    } else if (res.status === 409) {
+      msgEl.className = 'modal-msg error';
+      msgEl.textContent = 'Esse número já tem uma conta.';
       btn.disabled = false;
+      btn.childNodes[0].textContent = 'Criar minha conta';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      msgEl.className = 'modal-msg error';
+      msgEl.textContent = data.error || 'Erro ao criar conta. Tente novamente.';
+      btn.disabled = false;
+      btn.childNodes[0].textContent = 'Criar minha conta';
     }
+  } catch {
+    msgEl.className = 'modal-msg error';
+    msgEl.textContent = 'Erro de conexão. Tente novamente.';
+    btn.disabled = false;
+    btn.childNodes[0].textContent = 'Criar minha conta';
   }
+}
 </script>
+<style>@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}</style>
 </body>
 </html>
