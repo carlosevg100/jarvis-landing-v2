@@ -99,7 +99,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   .web-stat-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--ink);display:block;line-height:1;margin-bottom:4px;}
   .web-stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
   .web-phone-wrap{opacity:0;animation:fadeUp 1s 1.2s cubic-bezier(.16,1,.3,1) forwards;}
-  .web-phone{width:260px;background:#1A1714;border-radius:40px;padding:12px;box-shadow:0 60px 120px rgba(26,23,20,.28),0 0 0 1px rgba(26,23,20,.15),inset 0 0 0 1px rgba(255,255,255,.05);}
+  .web-phone{width:290px;background:#1A1714;border-radius:44px;padding:14px;box-shadow:0 60px 120px rgba(26,23,20,.28),0 0 0 1px rgba(26,23,20,.18),inset 0 0 0 1px rgba(255,255,255,.06);}
 }
 
 /* ─── SECTIONS ─────────────────────────────────────────── */
@@ -546,140 +546,123 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 <script>
 // ── Chat animation ──────────────────────────────────────
 const conversation = [
-  { type:'user', text:'Festa junina da Olivia — 21 de junho, trajar caipira, levar R$15', time:'09:41' },
-  { type:'typing', delay:1200 },
-  { type:'jarvis', text:'<strong>Salvo.</strong> Festa junina da Olivia — 21/06, traje caipira, R$15.<br>Lembro você 2 dias antes.', time:'09:41', showAfter:2400 },
-  { type:'user', text:'Reunião com cliente amanhã 14h, confirmar pauta antes', time:'09:43', showAfter:3600 },
-  { type:'typing', delay:4800 },
-  { type:'jarvis', text:'Anotado. Amanhã às <strong>13h30</strong> te lembro de confirmar a pauta com o cliente.', time:'09:43', showAfter:5600 },
+  {
+    type:'user', fwd:true,
+    html:'Reunião com professor da Olivia<br><span style="font-size:10.5px;color:rgba(0,0,0,0.55);">10/04 às 10h — Sala 3, Bloco B</span>',
+    time:'09:41'
+  },
+  { type:'typing', delay:900 },
+  {
+    type:'jarvis',
+    html:'<strong>Salvo.</strong> Reunião com o professor da Olivia — 10 de abril, 10h, Sala 3.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.5);">Quer ser lembrada antes?</span>',
+    time:'09:41', showAfter:2200
+  },
+  { type:'user', html:'Sim, me lembra 1 dia antes', time:'09:42', showAfter:3400 },
+  {
+    type:'jarvis',
+    html:'✓ Lembrete: <strong>9 de abril</strong>, manhã.',
+    time:'09:42', showAfter:4400
+  },
+  {
+    type:'user', img:true,
+    imgIcon:'🎂',
+    imgTitle:'Convite — Festa da Luisa',
+    imgSub:'22/03 · 16h · Tema Princesas',
+    time:'09:43', showAfter:5800
+  },
+  { type:'typing', delay:6600 },
+  {
+    type:'jarvis',
+    html:'🎉 Li o convite: <strong>Festa da Luisa</strong>, 22/03, 16h, tema princesas. Salvo. Te lembro na véspera.',
+    time:'09:43', showAfter:8000
+  },
+  {
+    type:'user', audio:true, dur:'0:18',
+    time:'09:45', showAfter:9600
+  },
+  { type:'typing', delay:10400 },
+  {
+    type:'jarvis',
+    html:'🔔 Entendido: <strong>ligar pro seu marido</strong> em 10 minutos.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.5);">⏰ Lembrete programado: 09:55.</span>',
+    time:'09:45', showAfter:11800
+  },
 ];
+
+const WAVE_HEIGHTS = [4,7,12,9,14,8,5,13,10,6,11,7,9,13,5,8,12,6,10,7];
+
+function makeAudioWave() {
+  return WAVE_HEIGHTS.map(h =>
+    `<div class="msg-audio-bar" style="height:${h}px"></div>`
+  ).join('');
+}
+
+function buildMsg(item) {
+  const div = document.createElement('div');
+  if (item.type === 'user') {
+    div.className = 'msg user';
+    let inner = '';
+    if (item.fwd) {
+      inner += `<div class="msg-fwd-label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline><polyline points="15 18 21 12 15 6"></polyline></svg> Encaminhada</div>`;
+    }
+    if (item.img) {
+      inner += `<div class="msg-img-block"><div class="msg-img-icon">${item.imgIcon}</div><div class="msg-img-meta"><div class="msg-img-title">${item.imgTitle}</div><div class="msg-img-sub">${item.imgSub}</div></div></div>`;
+    } else if (item.audio) {
+      inner += `<div class="msg-audio-block"><div class="msg-audio-icon">▶</div><div class="msg-audio-wave">${makeAudioWave()}</div><span class="msg-audio-dur">${item.dur}</span></div>`;
+    } else {
+      inner += item.html || item.text || '';
+    }
+    inner += `<div class="msg-time">${item.time} ✓✓</div>`;
+    div.innerHTML = inner;
+  } else {
+    div.className = 'msg jarvis';
+    div.innerHTML = (item.html || item.text || '') + `<div class="msg-time">${item.time}</div>`;
+  }
+  div.style.animation = 'fadeUp .35s cubic-bezier(.16,1,.3,1) forwards';
+  return div;
+}
 
 function buildChat(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
   let typingEl = null;
-  conversation.forEach((item) => {
-    if (item.type === 'typing') {
+
+  function runConversation() {
+    container.innerHTML = '';
+    typingEl = null;
+    let baseDelay = 0;
+
+    conversation.forEach((item, idx) => {
+      if (item.type === 'typing') {
+        setTimeout(() => {
+          typingEl = document.createElement('div');
+          typingEl.className = 'typing';
+          typingEl.innerHTML = [0,150,300].map(d =>
+            `<div class="typing-dot" style="animation:typingBounce .8s ${d}ms infinite ease-in-out"></div>`
+          ).join('');
+          typingEl.style.animation = 'fadeIn .2s forwards';
+          container.appendChild(typingEl);
+        }, item.delay + baseDelay);
+        return;
+      }
+
+      const delay = (item.showAfter || 0) + baseDelay;
       setTimeout(() => {
-        typingEl = document.createElement('div');
-        typingEl.className = 'typing';
-        typingEl.innerHTML = '<div class="typing-dot" style="animation:typingBounce .8s .0s infinite"></div><div class="typing-dot" style="animation:typingBounce .8s .15s infinite"></div><div class="typing-dot" style="animation:typingBounce .8s .3s infinite"></div>';
-        typingEl.style.animation = 'fadeIn .3s forwards';
-        container.appendChild(typingEl);
-        container.scrollTop = container.scrollHeight;
-      }, item.delay);
-      return;
-    }
-    const delay = item.showAfter || 0;
-    setTimeout(() => {
-      if (typingEl) { typingEl.remove(); typingEl = null; }
-      const msg = document.createElement('div');
-      msg.className = 'msg ' + item.type;
-      msg.innerHTML = item.text + '<div class="msg-time">' + item.time + (item.type === 'jarvis' ? ' vv' : '') + '</div>';
-      msg.style.animation = 'fadeUp .4s cubic-bezier(.16,1,.3,1) forwards';
-      container.appendChild(msg);
-      container.scrollTop = container.scrollHeight;
-    }, delay);
-  });
+        if (typingEl) { typingEl.remove(); typingEl = null; }
+        container.appendChild(buildMsg(item));
+        // scroll last msg into view
+        container.lastChild.scrollIntoView({ block: 'end', behavior: 'smooth' });
+      }, delay);
+    });
+
+    // Loop after last message + pause
+    const lastDelay = Math.max(...conversation.filter(i => i.showAfter).map(i => i.showAfter)) + baseDelay + 3500;
+    setTimeout(runConversation, lastDelay);
+  }
+
+  runConversation();
 }
 
 buildChat('msgs-mobile');
 buildChat('msgs-web');
 
-// ── Accordion ───────────────────────────────────────────
-function toggleAcc(btn) {
-  if (window.innerWidth >= 768) return;
-  const item = btn.closest('.acc-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
-}
-
-// ── Scroll reveal ────────────────────────────────────────
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.reveal').forEach(el => { el.classList.add('anim'); obs.observe(el); });
-setTimeout(() => { document.querySelectorAll('.anim:not(.vis)').forEach(el => el.classList.add('vis')); }, 1500);
-
-// ── Phone mask ───────────────────────────────────────────
-document.getElementById('reg-phone').addEventListener('input', function() {
-  let v = this.value.replace(/\D/g,'').slice(0,11);
-  if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
-  else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
-  else if (v.length > 0) v = '(' + v;
-  this.value = v;
-});
-
-// ── Modal ────────────────────────────────────────────────
-function openModal() {
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('reg-name').focus(), 100);
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function handleOverlay(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-// ── Register ─────────────────────────────────────────────
-async function register() {
-  const name = document.getElementById('reg-name').value.trim();
-  const phoneRaw = document.getElementById('reg-phone').value.replace(/\D/g, '');
-  const phone = phoneRaw.startsWith('55') ? phoneRaw : '55' + phoneRaw;
-  const msgEl = document.getElementById('reg-msg');
-  const btn = document.getElementById('modal-submit');
-
-  if (!name || phoneRaw.length < 10) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Preencha nome e WhatsApp.'; return; }
-  if (phone.length < 12 || phone.length > 13) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Número inválido. Use: (11) 99999-9999'; return; }
-
-  btn.disabled = true;
-  btn.childNodes[0].textContent = 'Aguarde...';
-  msgEl.textContent = '';
-
-  try {
-    const res = await fetch('https://jarvis-backend-six.vercel.app/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
-    });
-
-    if (res.ok) {
-      document.getElementById('reg-form').innerHTML =
-        '<div style="padding:24px 0;text-align:center;">' +
-        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
-        '<p style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.6;">Verifique o WhatsApp em instantes.</p>' +
-        '</div>';
-      setTimeout(closeModal, 2500);
-    } else if (res.status === 409) {
-      msgEl.className = 'modal-msg error';
-      msgEl.textContent = 'Esse número já tem uma conta.';
-      btn.disabled = false;
-      btn.childNodes[0].textContent = 'Criar minha conta';
-    } else {
-      const data = await res.json().catch(() => ({}));
-      msgEl.className = 'modal-msg error';
-      msgEl.textContent = data.error || 'Erro ao criar conta. Tente novamente.';
-      btn.disabled = false;
-      btn.childNodes[0].textContent = 'Criar minha conta';
-    }
-  } catch {
-    msgEl.className = 'modal-msg error';
-    msgEl.textContent = 'Erro de conexão. Tente novamente.';
-    btn.disabled = false;
-    btn.childNodes[0].textContent = 'Criar minha conta';
-  }
-}
-</script>
-<style>@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}</style>
-</body>
-</html>
 
