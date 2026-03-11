@@ -476,7 +476,24 @@ function renderCalendar() {
     const el = document.createElement('div');
     el.className = `cal-day${isToday ? ' today' : ''}`;
     el.innerHTML = `<div class="cal-day-num">${d}</div>`;
-    const dayItems = allItems.filter(i => getLocalDateStr(i.scheduled_time) === dateStr);
+    // Expand recurring items: check if any recurring item falls on this day
+    const dayItems = allItems.filter(i => {
+      if (getLocalDateStr(i.scheduled_time) === dateStr) return true;
+      // For recurring items, check if this date matches the recurrence pattern
+      if (!i.recurring || !i.recurrence_rule) return false;
+      const WD = {weekly_sunday:0,weekly_monday:1,weekly_tuesday:2,weekly_wednesday:3,weekly_thursday:4,weekly_friday:5,weekly_saturday:6};
+      const rule = i.recurrence_rule;
+      const cellDate = new Date(dateStr + 'T12:00:00');
+      const firstDate = i.scheduled_time ? new Date(i.scheduled_time) : null;
+      if (!firstDate || cellDate < firstDate) return false; // don't show before first occurrence
+      if (rule === 'daily') return true;
+      if (rule === 'weekly') return true;
+      if (WD[rule] !== undefined) return cellDate.getDay() === WD[rule];
+      const mdMatch = rule.match(/^monthly_day_(\d+)$/);
+      if (mdMatch) return cellDate.getDate() === parseInt(mdMatch[1]);
+      if (rule === 'monthly') return cellDate.getDate() === firstDate.getDate();
+      return false;
+    });
     dayItems.slice(0,3).forEach(item => {
       const cat = item.auto_category || 'outros';
       const color = catColors[cat] || '#7A7A7A';
