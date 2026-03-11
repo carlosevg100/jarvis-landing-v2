@@ -5,19 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jarvis</title>
 <meta name="description" content="Manda áudio, foto ou texto no WhatsApp. O Jarvis entende, organiza e te avisa na hora certa.">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --black: #060606;
-  --white: #F4F1EA;
-  --accent: #C8FF00;
-  --mid: #141414;
-  --border: rgba(244,241,234,0.08);
+  --bg: #FAF8F4;
+  --bg-subtle: #F2EDE6;
+  --bg-card: #EEEAE3;
+  --text: #1C1A18;
+  --text-2: rgba(28,26,24,0.5);
+  --text-3: rgba(28,26,24,0.25);
+  --accent: #B85C3A;
+  --accent-light: rgba(184,92,58,0.08);
+  --border: rgba(28,26,24,0.08);
+  --btn-bg: #1C1A18;
+  --btn-text: #FAF8F4;
 }
 html, body {
-  background: var(--black);
-  color: var(--white);
+  background: var(--bg);
+  color: var(--text);
   font-family: 'DM Sans', sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -26,7 +32,7 @@ body::after {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 999;
 }
@@ -40,12 +46,13 @@ nav {
   justify-content: space-between;
   align-items: center;
   z-index: 50;
-  background: linear-gradient(to bottom, var(--black) 0%, transparent 100%);
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
 }
-.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 5px; color: var(--white); opacity: 0; animation: fadeUp 0.7s 0.1s forwards; }
-.nav-pill { background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25); color: var(--accent); padding: 7px 16px; font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 100px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; display: flex; align-items: center; gap: 6px; }
-.live-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.8s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.nav-logo-wrap { display: flex; flex-direction: column; opacity: 0; animation: fadeUp 0.7s 0.1s forwards; }
+.nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 6px; color: var(--text); font-weight: 500; line-height: 1; }
+.nav-byline { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 2px; color: var(--text-3); display: block; margin-top: 2px; }
+.nav-pill { border: 1px solid var(--border); color: var(--text-2); padding: 7px 16px; font-size: 10px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 2px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; display: flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
+.live-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
 
 /* ─── HERO MOBILE ─────────────────────────────────────────── */
 .hero {
@@ -56,35 +63,36 @@ nav {
   padding: 0 24px 40px;
   position: relative;
   overflow: hidden;
+  background: var(--bg);
 }
-.bg-letter { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%); font-family: 'Bebas Neue', sans-serif; font-size: 85vw; color: rgba(200,255,0,0.025); pointer-events: none; line-height: 1; user-select: none; opacity: 0; animation: fadeIn 2s 0.5s forwards; }
-.glow { position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(200,255,0,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; animation: glowPulse 5s ease-in-out infinite; }
-@keyframes glowPulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:1; } 50%{ transform: translateX(-50%) scale(1.3); opacity:0.6; } }
+.bg-letter { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%); font-family: 'Cormorant Garamond', serif; font-size: 85vw; color: rgba(184,92,58,0.03); pointer-events: none; line-height: 1; user-select: none; opacity: 0; animation: fadeIn 2s 0.5s forwards; }
+.glow { position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(184,92,58,0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
 .spacer { height: 80px; }
-.eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s 0.4s forwards; display: flex; align-items: center; gap: 10px; }
+.eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-weight: 400; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s 0.4s forwards; display: flex; align-items: center; gap: 10px; font-family: 'DM Sans', sans-serif; }
 .eyebrow::before { content:''; display:block; width:24px; height:1px; background: var(--accent); flex-shrink: 0; }
-h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); line-height: 0.9; letter-spacing: -1px; margin-bottom: 28px; }
-.l1 { display:block; color:var(--white); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-.l2 { display:block; color:var(--accent); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
-.l3 { display:block; color:var(--white); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
-.sub { font-size: 15px; font-weight: 300; line-height: 1.65; color: rgba(244,241,234,0.5); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.7s 1.0s forwards; }
-.sub strong { color: var(--white); font-weight: 400; }
+h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 12vw, 80px); line-height: 1.0; font-weight: 400; margin-bottom: 28px; color: var(--text); }
+.l1 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+.l2 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
+.sub { font-size: 16px; font-weight: 300; line-height: 1.7; color: var(--text-2); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.7s 1.0s forwards; }
+.sub strong { color: var(--text); font-weight: 400; }
 .hero-btns { display: flex; flex-direction: column; gap: 12px; }
-.btn-primary { width: 100%; background: var(--accent); color: var(--black); border: none; padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; display: flex; align-items: center; justify-content: space-between; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s; cursor: pointer; }
-.btn-primary:hover { background: #d4ff1a; }
+.btn-primary { width: 100%; background: var(--btn-bg); color: var(--btn-text); border: none; padding: 16px 28px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; display: flex; align-items: center; justify-content: space-between; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s; cursor: pointer; border-radius: 0; }
+.btn-primary:hover { background: #2a2825; }
 .btn-primary:active { transform: scale(0.98); }
-.btn-secondary { width: 100%; background: transparent; color: rgba(244,241,234,0.4); border: 1px solid var(--border); padding: 16px 24px; font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.25s forwards; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s, color 0.2s; }
-.btn-secondary:hover { color: var(--white); border-color: rgba(244,241,234,0.25); }
-.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin-top: 40px; opacity: 0; animation: fadeUp 0.7s 1.4s forwards; }
-.stat { background: var(--black); padding: 18px 16px; }
-.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--white); letter-spacing: 1px; display: block; line-height: 1; margin-bottom: 4px; }
-.stat-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(244,241,234,0.3); font-weight: 300; line-height: 1.4; }
+.btn-secondary { width: 100%; background: transparent; color: var(--text-2); border: 1px solid var(--border); padding: 14px 24px; font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.25s forwards; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s, color 0.2s; border-radius: 0; }
+.btn-secondary:hover { color: var(--text); border-color: rgba(28,26,24,0.25); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-card); border: 1px solid var(--border); margin-top: 40px; opacity: 0; animation: fadeUp 0.7s 1.4s forwards; }
+.stat { padding: 18px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stat:nth-child(2n) { border-right: none; }
+.stat:nth-child(n+3) { border-bottom: none; }
+.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--text); display: block; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); font-weight: 300; line-height: 1.4; font-family: 'DM Sans', sans-serif; }
 .proof { margin-top: 28px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.7s 1.5s forwards; }
 .avatars { display: flex; }
-.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--black); background: var(--mid); margin-left: -7px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: rgba(244,241,234,0.5); }
+.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--bg); background: var(--bg-card); margin-left: -7px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: var(--text-3); border: 1px solid var(--border); }
 .avatar:first-child { margin-left: 0; }
-.proof-text { font-size: 12px; color: rgba(244,241,234,0.4); font-weight: 300; line-height: 1.4; }
-.proof-text strong { color: rgba(244,241,234,0.7); font-weight: 400; }
+.proof-text { font-size: 12px; color: var(--text-2); font-weight: 300; line-height: 1.4; }
+.proof-text strong { color: var(--text); font-weight: 400; }
 
 /* Hero demo — hidden on mobile */
 .hero-demo { display: none; }
@@ -105,7 +113,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     padding: 24px 60px;
     max-width: none;
   }
-  nav .nav-logo { font-size: 22px; }
+  nav .nav-logo { font-size: 20px; }
 
   .hero {
     min-height: 100svh;
@@ -135,7 +143,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   .spacer { height: 0; }
 
   h1 {
-    font-size: clamp(72px, 8vw, 120px);
+    font-size: clamp(52px, 8vw, 80px);
   }
 
   .hero-btns {
@@ -159,6 +167,9 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     grid-template-columns: repeat(4, 1fr);
     margin-top: 48px;
   }
+  .stat { border-bottom: none; }
+  .stat:nth-child(2n) { border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
 
   /* Hero demo — visible on desktop */
   .hero-demo {
@@ -172,17 +183,16 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   }
 
   .demo-phone {
-    background: #111111;
-    border: 1px solid rgba(244,241,234,0.1);
-    border-radius: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 0;
     padding: 20px 0 0;
     overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,255,0,0.06);
   }
 
   .demo-topbar {
     padding: 0 20px 16px;
-    border-bottom: 1px solid rgba(244,241,234,0.06);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -196,15 +206,15 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 14px;
-    color: var(--black);
+    color: var(--btn-text);
     letter-spacing: 1px;
     flex-shrink: 0;
   }
 
-  .demo-name { font-size: 13px; font-weight: 500; color: var(--white); }
-  .demo-status { font-size: 11px; color: rgba(244,241,234,0.3); font-weight: 300; }
+  .demo-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .demo-status { font-size: 11px; color: var(--text-3); font-weight: 300; }
 
   .demo-msgs {
     padding: 20px 20px 24px;
@@ -220,16 +230,16 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     font-size: 13px;
     font-weight: 300;
     line-height: 1.55;
-    border-radius: 12px;
+    border-radius: 0;
     opacity: 0;
     transform: translateY(8px);
     transition: opacity 0.35s ease, transform 0.35s ease;
   }
 
   .dmsg.show { opacity: 1; transform: translateY(0); }
-  .dmsg.user { background: rgba(244,241,234,0.07); color: rgba(244,241,234,0.7); align-self: flex-end; border-bottom-right-radius: 3px; }
-  .dmsg.jarvis { background: rgba(200,255,0,0.08); border: 1px solid rgba(200,255,0,0.15); color: rgba(244,241,234,0.85); align-self: flex-start; border-bottom-left-radius: 3px; }
-  .dmsg.muted { color: rgba(244,241,234,0.35); font-size: 12px; background: transparent; border: none; padding: 2px 0; }
+  .dmsg.user { background: var(--bg-subtle); border: 1px solid var(--border); color: var(--text-2); align-self: flex-end; }
+  .dmsg.jarvis { background: var(--accent-light); border: 1px solid rgba(184,92,58,0.2); color: var(--text); align-self: flex-start; }
+  .dmsg.muted { color: var(--text-3); font-size: 12px; background: transparent; border: none; padding: 2px 0; }
 }
 </style>
 </head>
@@ -237,7 +247,10 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">JARVIS</div>
+  <div class="nav-logo-wrap">
+    <div class="nav-logo">JARVIS</div>
+    <span class="nav-byline">by OLpi Technologies</span>
+  </div>
   <div class="nav-pill"><span class="live-dot"></span>Beta aberto</div>
 </nav>
 
@@ -246,34 +259,31 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   <div class="bg-letter">J</div>
   <div class="glow"></div>
 
-  <!-- hero-inner: flexível (column mobile, row desktop) -->
   <div class="hero-inner" style="display:contents;">
 
-    <!-- LEFT: texto + botões + stats -->
     <div class="hero-content" style="display:contents;">
       <div class="spacer"></div>
       <div class="eyebrow">Assistente pessoal</div>
       <h1>
-        <span class="l1">VOCE</span>
-        <span class="l2">ACABOU DE</span>
-        <span class="l3">CONTRATAR<br>O JARVIS.</span>
+        <span class="l1">Você acabou de</span>
+        <span class="l2">contratar o Jarvis.</span>
       </h1>
-      <p class="sub">Manda <strong>audio, foto ou texto</strong> no WhatsApp.<br>Ele entende, organiza e te avisa.<br><strong>Nada se perde. Nada esquece.</strong></p>
+      <p class="sub">Manda <strong>áudio, foto ou texto</strong> no WhatsApp.<br>Ele entende, organiza e te avisa na hora certa.<br><strong>Nada se perde. Nada esquece.</strong></p>
       <div class="hero-btns">
         <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
         <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
       </div>
       <div class="stats">
-        <div class="stat"><span class="stat-num">0</span><span class="stat-label">Instalacao<br>necessaria</span></div>
-        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponivel</span></div>
-        <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memoria<br>e contexto</span></div>
-        <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>comecar</span></div>
+        <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
+        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
+        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Memória<br>e contexto</span></div>
+        <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
       </div>
       <div class="proof">
         <div class="avatars">
           <div class="avatar">C</div><div class="avatar">A</div><div class="avatar">R</div><div class="avatar">M</div>
         </div>
-        <p class="proof-text"><strong>+2.400 pessoas</strong> ja estao<br>usando o Jarvis hoje</p>
+        <p class="proof-text"><strong>+2.400 pessoas</strong> já estão<br>usando o Jarvis hoje</p>
       </div>
     </div>
 
@@ -291,7 +301,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       </div>
     </div>
 
-  </div><!-- /hero-inner -->
+  </div>
 </section>
 
 <style>
@@ -313,26 +323,26 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     <div class="problem-grid reveal">
       <div class="problem-card">
         <p class="problem-card-title">Grupo da escola da Olivia.</p>
-        <p class="problem-card-body">47 mensagens sobre a festa junina. Data? Perdida em algum lugar la no meio.</p>
+        <p class="problem-card-body">47 mensagens sobre a festa junina. Data? Perdida em algum lugar lá no meio.</p>
       </div>
       <div class="problem-card">
-        <p class="problem-card-title">Audio de 4 minutos do seu chefe.</p>
-        <p class="problem-card-body">"Vou ouvir depois." Depois nunca chegou. As tarefas, tambem nao.</p>
+        <p class="problem-card-title">Áudio de 4 minutos do seu chefe.</p>
+        <p class="problem-card-body">"Vou ouvir depois." Depois nunca chegou. As tarefas, também não.</p>
       </div>
       <div class="problem-card">
-        <p class="problem-card-title">Print do condominio.</p>
-        <p class="problem-card-body">Sobre a assembleia. Voce foi? Voce lembrou?</p>
+        <p class="problem-card-title">Print do condomínio.</p>
+        <p class="problem-card-body">Sobre a assembleia. Você foi? Você lembrou?</p>
       </div>
       <div class="problem-card">
         <p class="problem-card-title">Prazo que passou despercebido.</p>
-        <p class="problem-card-body">Estava numa mensagem. Voce leu na hora. Nao anotou. Expirou.</p>
+        <p class="problem-card-body">Estava numa mensagem. Você leu na hora. Não anotou. Expirou.</p>
       </div>
     </div>
 
     <div class="problem-transition reveal">
       <p>
-        <strong>Nao e falta de atencao. E excesso de mensagem.</strong>
-        O WhatsApp nao foi feito pra lembrar por voce.<br>O Jarvis foi.
+        <strong>Não é falta de atenção. É excesso de mensagem.</strong>
+        O WhatsApp não foi feito pra lembrar por você.<br>O Jarvis foi.
       </p>
     </div>
   </div>
@@ -347,51 +357,50 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       <div class="step-item">
         <span class="step-num">01</span>
         <div class="step-content">
-          <p class="step-title">Voce encaminha qualquer coisa</p>
-          <p class="step-desc">Audio, print, texto baguncado, PDF. O mesmo gesto que voce ja faz todo dia. Encaminha pro Jarvis.</p>
+          <p class="step-title">Você encaminha qualquer coisa</p>
+          <p class="step-desc">Áudio, print, texto bagunçado, PDF. O mesmo gesto que você já faz todo dia. Encaminha pro Jarvis.</p>
         </div>
       </div>
       <div class="step-item">
         <span class="step-num">02</span>
         <div class="step-content">
           <p class="step-title">Jarvis entende e organiza</p>
-          <p class="step-desc">Extrai o que importa — data, tarefa, compromisso, prazo. Organiza sem voce fazer nada.</p>
+          <p class="step-desc">Extrai o que importa — data, tarefa, compromisso, prazo. Organiza sem você fazer nada.</p>
         </div>
       </div>
       <div class="step-item">
         <span class="step-num">03</span>
         <div class="step-content">
-          <p class="step-title">Voce e lembrado na hora certa</p>
+          <p class="step-title">Você é lembrado na hora certa</p>
           <p class="step-desc">No WhatsApp. Sem precisar checar nada. Sem abrir nenhum app.</p>
         </div>
       </div>
     </div>
 
-    <p class="how-closer reveal">E isso. Tres passos. Uma mudanca permanente.</p>
+    <p class="how-closer reveal">É isso. Três passos. Uma mudança permanente.</p>
   </div>
 </div>
 
 <!-- ── SEÇÃO 3: USE CASES ──────────────────────────────── -->
 <div id="cases" class="cases-wrap sec-wrap">
   <div class="section">
-    <p class="section-tag reveal">Situacoes reais</p>
+    <p class="section-tag reveal">Situações reais</p>
 
-    <!-- Mobile: acordeão | Desktop: grid 2x2 -->
     <div class="accordion reveal" id="cases-accordion">
 
       <div class="acc-item" data-idx="0">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
             <p class="acc-title">Grupo de escola</p>
-            <p class="acc-teaser">A mae que nao pode errar</p>
+            <p class="acc-teaser">A mãe que não pode errar</p>
           </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body">
           <div class="acc-inner">
-            <p class="acc-before">Voce acompanha os comunicados da turma da Olivia. Datas, uniformes, eventos, arrecadacoes. Chegam em momentos aleatorios. Voce tenta guardar na cabeca. As vezes consegue. As vezes nao.</p>
+            <p class="acc-before">Você acompanha os comunicados da turma da Olivia. Datas, uniformes, eventos, arrecadações. Chegam em momentos aleatórios. Você tenta guardar na cabeça. Às vezes consegue. Às vezes não.</p>
             <div class="acc-divider"></div>
-            <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, trajar caipira, levar R$15." Semana que vem: lembrete automatico. Voce aparece na festa. <em>Olivia sorri.</em></p>
+            <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, trajar caipira, levar R$15." Semana que vem: lembrete automático. Você aparece na festa. <em>Olivia sorri.</em></p>
           </div>
         </div>
       </div>
@@ -399,16 +408,16 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       <div class="acc-item" data-idx="1">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
-            <p class="acc-title">Reuniao com 5 tarefas</p>
+            <p class="acc-title">Reunião com 5 tarefas</p>
             <p class="acc-teaser">O profissional com agenda cheia</p>
           </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body">
           <div class="acc-inner">
-            <p class="acc-before">Reuniao termina. Voce abriu o bloco de notas? Nao. Vai anotar depois? Vai. Anotou? Nao. Na sexta o gestor pergunta pelo entregavel.</p>
+            <p class="acc-before">Reunião termina. Você abriu o bloco de notas? Não. Vai anotar depois? Vai. Anotou? Não. Na sexta o gestor pergunta pelo entregável.</p>
             <div class="acc-divider"></div>
-            <p class="acc-after">Mandou o audio da reuniao pro Jarvis. Em minutos: lista de tarefas, responsaveis, prazos. <em>Voce entrega antes do prazo. Parece que tem superpoder.</em></p>
+            <p class="acc-after">Mandou o áudio da reunião pro Jarvis. Em minutos: lista de tarefas, responsáveis, prazos. <em>Você entrega antes do prazo. Parece que tem superpoder.</em></p>
           </div>
         </div>
       </div>
@@ -416,16 +425,16 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       <div class="acc-item" data-idx="2">
         <button class="acc-trigger" onclick="toggleAcc(this)">
           <div class="acc-trigger-text">
-            <p class="acc-title">Audio de 3 minutos</p>
-            <p class="acc-teaser">O audio que "vou ouvir depois"</p>
+            <p class="acc-title">Áudio de 3 minutos</p>
+            <p class="acc-teaser">O áudio que "vou ouvir depois"</p>
           </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body">
           <div class="acc-inner">
-            <p class="acc-before">Seu parceiro mandou um audio longo com um recado importante. Voce estava dirigindo. Marcou pra ouvir depois. Esqueceu. Recado perdido.</p>
+            <p class="acc-before">Seu parceiro mandou um áudio longo com um recado importante. Você estava dirigindo. Marcou pra ouvir depois. Esqueceu. Recado perdido.</p>
             <div class="acc-divider"></div>
-            <p class="acc-after">Encaminhou o audio pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado e programou o lembrete. <em>Quando chegou em casa, voce ja sabia de tudo.</em></p>
+            <p class="acc-after">Encaminhou o áudio pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado e programou o lembrete. <em>Quando chegou em casa, você já sabia de tudo.</em></p>
           </div>
         </div>
       </div>
@@ -440,9 +449,9 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         </button>
         <div class="acc-body">
           <div class="acc-inner">
-            <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovacao. PDF da proposta com validade de 10 dias. Voce salva. Esquece onde salvou. O prazo passa.</p>
+            <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovação. PDF da proposta com validade de 10 dias. Você salva. Esquece onde salvou. O prazo passa.</p>
             <div class="acc-divider"></div>
-            <p class="acc-after">Encaminhou pro Jarvis. Ele leu, extraiu a data, criou o lembrete automatico. Dois dias antes: "Atencao — prazo amanha." <em>Voce age a tempo. Sempre.</em></p>
+            <p class="acc-after">Encaminhou pro Jarvis. Ele leu, extraiu a data, criou o lembrete automático. Dois dias antes: "Atenção — prazo amanhã." <em>Você age a tempo. Sempre.</em></p>
           </div>
         </div>
       </div>
@@ -458,17 +467,17 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 
     <div class="testi-list reveal">
       <div class="testi-card">
-        <p class="testi-text">"Eu acompanhava comunicados de 6 turmas ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a nao perder data. Nao e exagero: reduziu minha ansiedade de domingo a noite."</p>
+        <p class="testi-text">"Eu acompanhava comunicados de 6 turmas ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a não perder data. Não é exagero: reduziu minha ansiedade de domingo à noite."</p>
         <div class="testi-author">
           <div class="testi-initials">FR</div>
           <div>
             <p class="testi-name">Fernanda R., 38 anos</p>
-            <p class="testi-role">Mae do Bento e da Luisa — Sao Paulo</p>
+            <p class="testi-role">Mãe do Bento e da Luísa — São Paulo</p>
           </div>
         </div>
       </div>
       <div class="testi-card">
-        <p class="testi-text">"Minha rotina e reuniao atras de reuniao. Eu mandava o audio das reunioes pro Jarvis e chegava na proxima ja com o resumo das tarefas pendentes. Meu gestor perguntou o que tinha mudado."</p>
+        <p class="testi-text">"Minha rotina é reunião atrás de reunião. Eu mandava o áudio das reuniões pro Jarvis e chegava na próxima já com o resumo das tarefas pendentes. Meu gestor perguntou o que tinha mudado."</p>
         <div class="testi-author">
           <div class="testi-initials">RM</div>
           <div>
@@ -478,7 +487,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
         </div>
       </div>
       <div class="testi-card">
-        <p class="testi-text">"Tres meses usando e ainda nao cancelei — e ja testei tudo que existe no mercado. O Jarvis e o unico que funciona do jeito que a minha cabeca funciona."</p>
+        <p class="testi-text">"Três meses usando e ainda não cancelei — e já testei tudo que existe no mercado. O Jarvis é o único que funciona do jeito que a minha cabeça funciona."</p>
         <div class="testi-author">
           <div class="testi-initials">MT</div>
           <div>
@@ -492,35 +501,35 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 </div>
 
 <!-- ── SEÇÃO 5: PRICING ────────────────────────────────── -->
-<div id="pricing" class="pricing-wrap sec-wrap" style="border-top:1px solid var(--border);">
+<div id="pricing" class="pricing-wrap sec-wrap">
   <div class="section pricing-section">
-    <p class="section-tag reveal" style="justify-content:center;">Preco</p>
+    <p class="section-tag reveal" style="justify-content:center;">Preço</p>
 
-    <p class="pricing-pre reveal">Organize sua vida por menos do que um cafe por semana.</p>
+    <p class="pricing-pre reveal">Organize sua vida por menos do que um café por semana.</p>
 
     <div class="pricing-amount reveal">
       <span class="pricing-currency">R$</span>
       <span class="pricing-number">19</span>
       <span class="pricing-cents">,90</span>
     </div>
-    <p class="pricing-period reveal">/mes</p>
-    <p class="pricing-trial reveal">3 dias gratis &mdash; cancela quando quiser</p>
+    <p class="pricing-period reveal">/mês</p>
+    <p class="pricing-trial reveal">3 dias grátis &mdash; cancela quando quiser</p>
 
-    <button class="btn-primary pricing-btn reveal" onclick="openModal()">Quero testar gratis <span>&#8594;</span></button>
+    <button class="btn-primary pricing-btn reveal" onclick="openModal()">Quero testar grátis <span>&#8594;</span></button>
 
-    <p class="pricing-note reveal">Sem contrato. Sem anuidade. Sem pegadinha.<br>Comeca gratis. Continua porque faz sentido.</p>
+    <p class="pricing-note reveal">Sem contrato. Sem anuidade. Sem pegadinha.<br>Começa grátis. Continua porque faz sentido.</p>
   </div>
 </div>
 
 <!-- ── SEÇÃO 6: CTA FINAL ──────────────────────────────── -->
-<div class="cta-wrap sec-wrap" style="border-top:1px solid var(--border);">
+<div class="cta-wrap sec-wrap">
   <div class="section">
     <h2 class="cta-headline reveal">
-      VOCE JA<br>ENCAMINHA<br><span>MENSAGENS</span><br>TODO DIA.
+      Você já<br>encaminha<br><span>mensagens</span><br>todo dia.
     </h2>
-    <p class="sub reveal" style="margin-bottom:28px;">Agora elas trabalham por voce.</p>
-    <button class="btn-primary reveal" style="opacity:1;animation:none;" onclick="openModal()">Comecar gratis agora <span>&#8594;</span></button>
-    <p class="cta-sub reveal">Sem cadastro complicado. So o WhatsApp que voce ja tem.</p>
+    <p class="sub reveal" style="margin-bottom:28px;">Agora elas trabalham por você.</p>
+    <button class="btn-primary reveal" style="opacity:1;animation:none;background:var(--bg);color:var(--text);" onclick="openModal()">Começar grátis agora <span>&#8594;</span></button>
+    <p class="cta-sub reveal">Sem cadastro complicado. Só o WhatsApp que você já tem.</p>
   </div>
 </div>
 
@@ -538,13 +547,13 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     <div class="modal-handle"></div>
     <button class="modal-close" onclick="closeModal()">&times;</button>
     <p class="modal-tag">Ativar agora</p>
-    <h3 class="modal-title">COMECAR GRATIS</h3>
-    <p class="modal-sub">3 dias gratis, sem cartao. Voce recebe uma mensagem no WhatsApp em segundos.</p>
+    <h3 class="modal-title">Começar grátis</h3>
+    <p class="modal-sub">3 dias grátis, sem cartão. Você recebe uma mensagem no WhatsApp em segundos.</p>
     <form id="reg-form" onsubmit="submitForm(event)">
       <div class="field"><input id="f-name" type="text" placeholder="Nome" autocomplete="name" required></div>
       <div class="field"><input id="f-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
       <button class="modal-submit" type="submit" id="submit-btn">Criar minha conta <span>&#8594;</span></button>
-      <p class="modal-note">Voce recebera uma mensagem do Jarvis em instantes.</p>
+      <p class="modal-note">Você receberá uma mensagem do Jarvis em instantes.</p>
       <p class="modal-msg" id="form-msg"></p>
     </form>
   </div>
@@ -567,24 +576,25 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   font-size: 9px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(244,241,234,0.25);
+  color: var(--text-3);
   font-weight: 500;
   margin-bottom: 32px;
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: 'DM Sans', sans-serif;
 }
 .section-tag::before {
   content: '';
   display: block;
   width: 16px;
   height: 1px;
-  background: rgba(244,241,234,0.25);
+  background: var(--text-3);
   flex-shrink: 0;
 }
 
 /* ─── THE PROBLEM ─────────────────────────────────────────── */
-.problem-wrap { background: #0d0d0d; }
+.problem-wrap { background: var(--bg-subtle); }
 
 .problem-grid {
   display: grid;
@@ -593,100 +603,101 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   background: var(--border);
   margin-bottom: 40px;
 }
-.problem-card { background: #0d0d0d; padding: 22px 18px; }
-.problem-card-title { font-size: 12px; font-weight: 500; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
-.problem-card-body { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.45); line-height: 1.6; }
+.problem-card { background: var(--bg-card); padding: 22px 18px; }
+.problem-card-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 8px; line-height: 1.4; font-family: 'DM Sans', sans-serif; }
+.problem-card-body { font-size: 13px; font-weight: 300; color: var(--text-2); line-height: 1.6; font-family: 'DM Sans', sans-serif; }
 
 .problem-transition { border-top: 1px solid var(--border); padding-top: 32px; }
-.problem-transition p { font-size: 15px; font-weight: 300; color: rgba(244,241,234,0.5); line-height: 1.7; }
-.problem-transition p strong { color: var(--white); font-weight: 400; display: block; margin-bottom: 4px; }
+.problem-transition p { font-size: 15px; font-weight: 300; color: var(--text-2); line-height: 1.7; font-family: 'DM Sans', sans-serif; }
+.problem-transition p strong { color: var(--text); font-weight: 400; display: block; margin-bottom: 4px; }
 
 /* ─── HOW IT WORKS ────────────────────────────────────────── */
-.how-wrap { background: var(--white); }
-.how-wrap .section-tag { color: rgba(6,6,6,0.3); }
-.how-wrap .section-tag::before { background: rgba(6,6,6,0.2); }
+.how-wrap { background: var(--text); }
+.how-wrap .section-tag { color: rgba(250,248,244,0.3); }
+.how-wrap .section-tag::before { background: rgba(250,248,244,0.3); }
 
 .steps { display: flex; flex-direction: column; }
-.step-item { padding: 24px 0; border-bottom: 1px solid rgba(6,6,6,0.08); display: flex; gap: 20px; align-items: flex-start; }
+.step-item { padding: 24px 0; border-bottom: 1px solid rgba(250,248,244,0.08); display: flex; gap: 20px; align-items: flex-start; }
 .step-item:last-child { border-bottom: none; }
-.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: rgba(6,6,6,0.25); letter-spacing: 1px; flex-shrink: 0; padding-top: 2px; width: 24px; }
-.step-title { font-size: 16px; font-weight: 500; color: #060606; margin-bottom: 6px; line-height: 1.3; }
-.step-desc { font-size: 13px; font-weight: 300; color: rgba(6,6,6,0.55); line-height: 1.65; }
-.how-closer { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(6,6,6,0.08); font-size: 14px; font-weight: 400; color: rgba(6,6,6,0.45); font-style: italic; }
+.step-num { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(250,248,244,0.25); letter-spacing: 1px; flex-shrink: 0; padding-top: 2px; width: 24px; }
+.step-title { font-size: 16px; font-weight: 500; color: var(--bg); margin-bottom: 6px; line-height: 1.3; font-family: 'DM Sans', sans-serif; }
+.step-desc { font-size: 13px; font-weight: 300; color: rgba(250,248,244,0.55); line-height: 1.65; font-family: 'DM Sans', sans-serif; }
+.how-closer { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(250,248,244,0.08); font-size: 14px; font-weight: 300; color: rgba(250,248,244,0.45); font-style: italic; font-family: 'DM Sans', sans-serif; }
 
 /* ─── USE CASES ───────────────────────────────────────────── */
-.cases-wrap { background: var(--black); }
+.cases-wrap { background: var(--bg); }
 .accordion { display: flex; flex-direction: column; }
 .acc-item { border-bottom: 1px solid var(--border); }
 .acc-trigger { width: 100%; background: none; border: none; padding: 20px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; cursor: pointer; text-align: left; }
-.acc-title { font-size: 15px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
-.acc-teaser { font-size: 12px; font-weight: 300; color: rgba(244,241,234,0.3); }
-.acc-icon { font-size: 18px; color: rgba(244,241,234,0.25); flex-shrink: 0; transition: transform 0.25s ease; margin-top: 2px; }
+.acc-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; font-family: 'DM Sans', sans-serif; }
+.acc-teaser { font-size: 12px; font-weight: 300; color: var(--text-3); font-family: 'DM Sans', sans-serif; }
+.acc-icon { font-size: 18px; color: var(--text-3); flex-shrink: 0; transition: transform 0.25s ease; margin-top: 2px; font-family: 'DM Sans', sans-serif; }
 .acc-item.open .acc-icon { transform: rotate(45deg); }
 .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
 .acc-item.open .acc-body { max-height: 400px; }
 .acc-inner { padding-bottom: 24px; }
-.acc-before { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.4); line-height: 1.65; margin-bottom: 16px; }
+.acc-before { font-size: 13px; font-weight: 300; color: var(--text-2); line-height: 1.65; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
 .acc-divider { height: 1px; background: var(--border); margin-bottom: 16px; }
-.acc-after { font-size: 13px; font-weight: 400; color: rgba(244,241,234,0.85); line-height: 1.65; }
+.acc-after { font-size: 13px; font-weight: 400; color: var(--text); line-height: 1.65; font-family: 'DM Sans', sans-serif; }
 .acc-after em { color: var(--accent); font-style: normal; }
 
 /* ─── DEPOIMENTOS ─────────────────────────────────────────── */
-.testi-wrap { background: #0d0d0d; }
+.testi-wrap { background: var(--bg-subtle); }
 .testi-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
-.testi-card { background: #0d0d0d; padding: 24px 20px; }
-.testi-text { font-size: 14px; font-weight: 300; color: rgba(244,241,234,0.6); line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+.testi-card { background: var(--bg-card); padding: 24px 20px; }
+.testi-text { font-size: 14px; font-weight: 300; color: var(--text-2); line-height: 1.7; margin-bottom: 18px; font-style: italic; font-family: 'DM Sans', sans-serif; }
 .testi-author { display: flex; align-items: center; gap: 12px; }
-.testi-initials { width: 32px; height: 32px; border-radius: 50%; background: #222; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: rgba(244,241,234,0.4); flex-shrink: 0; }
-.testi-name { font-size: 13px; font-weight: 500; color: var(--white); line-height: 1.3; }
-.testi-role { font-size: 11px; color: rgba(244,241,234,0.3); font-weight: 300; }
+.testi-initials { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--text-3); flex-shrink: 0; font-family: 'DM Sans', sans-serif; }
+.testi-name { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; font-family: 'DM Sans', sans-serif; }
+.testi-role { font-size: 11px; color: var(--text-3); font-weight: 300; font-family: 'DM Sans', sans-serif; }
 
 /* ─── PRICING ─────────────────────────────────────────────── */
-.pricing-wrap { background: var(--black); }
+.pricing-wrap { background: var(--bg-subtle); }
 .pricing-section { text-align: center; }
-.pricing-pre { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.4); margin-bottom: 28px; line-height: 1.6; }
+.pricing-pre { font-size: 13px; font-weight: 300; color: var(--text-2); margin-bottom: 28px; line-height: 1.6; font-family: 'DM Sans', sans-serif; }
 .pricing-amount { display: flex; align-items: flex-start; justify-content: center; gap: 2px; margin-bottom: 8px; }
-.pricing-currency { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 400; color: var(--white); margin-top: 8px; }
-.pricing-number { font-family: 'Bebas Neue', sans-serif; font-size: 72px; line-height: 1; color: var(--white); letter-spacing: -1px; }
-.pricing-cents { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 300; color: rgba(244,241,234,0.5); margin-top: 8px; }
-.pricing-period { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.3); letter-spacing: 1px; margin-bottom: 6px; }
-.pricing-trial { font-size: 12px; color: var(--accent); font-weight: 400; margin-bottom: 32px; letter-spacing: 0.5px; }
+.pricing-currency { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 300; color: var(--text-2); margin-top: 8px; }
+.pricing-number { font-family: 'Cormorant Garamond', serif; font-size: 72px; line-height: 1; color: var(--text); letter-spacing: -1px; }
+.pricing-cents { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 300; color: var(--text-2); margin-top: 8px; }
+.pricing-period { font-size: 13px; font-weight: 300; color: var(--text-3); letter-spacing: 1px; margin-bottom: 6px; font-family: 'DM Sans', sans-serif; }
+.pricing-trial { font-size: 12px; color: var(--accent); font-weight: 400; margin-bottom: 32px; letter-spacing: 0.5px; font-family: 'DM Sans', sans-serif; }
 .pricing-btn { display: flex; width: 100%; justify-content: space-between; margin-top: 0; }
-.pricing-note { font-size: 12px; color: rgba(244,241,234,0.25); font-weight: 300; margin-top: 16px; line-height: 1.6; }
+.pricing-note { font-size: 12px; color: var(--text-3); font-weight: 300; margin-top: 16px; line-height: 1.6; font-family: 'DM Sans', sans-serif; }
 
 /* ─── CTA FINAL ───────────────────────────────────────────── */
-.cta-wrap { background: var(--black); }
-.cta-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 12vw, 64px); line-height: 0.92; letter-spacing: -0.5px; color: var(--white); margin-bottom: 24px; }
+.cta-wrap { background: var(--text); }
+.cta-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px, 10vw, 72px); line-height: 0.95; color: var(--bg); margin-bottom: 24px; font-weight: 400; }
 .cta-headline span { color: var(--accent); }
-.cta-sub { margin-top: 16px; font-size: 12px; font-weight: 300; color: rgba(244,241,234,0.25); letter-spacing: 0.5px; }
+.cta-wrap .sub { color: rgba(250,248,244,0.5); }
+.cta-sub { margin-top: 16px; font-size: 12px; font-weight: 300; color: rgba(250,248,244,0.25); letter-spacing: 0.5px; font-family: 'DM Sans', sans-serif; }
 
 /* ─── FOOTER ──────────────────────────────────────────────── */
-.footer-wrap { background: var(--black); border-top: 1px solid var(--border); }
+.footer-wrap { background: var(--text); border-top: 1px solid rgba(250,248,244,0.08); }
 .footer-inner { padding: 28px 24px; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 4px; color: rgba(244,241,234,0.3); }
-.footer-copy { font-size: 11px; color: rgba(244,241,234,0.2); font-weight: 300; }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 4px; color: rgba(250,248,244,0.3); }
+.footer-copy { font-size: 11px; color: rgba(250,248,244,0.2); font-weight: 300; font-family: 'DM Sans', sans-serif; }
 
 /* ─── MODAL ───────────────────────────────────────────────── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 300; align-items: flex-end; justify-content: center; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28,26,24,0.85); z-index: 300; align-items: flex-end; justify-content: center; }
 .modal-overlay.active { display: flex; }
-.modal-card { background: #0d0d0d; border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 420px; padding: 32px 24px 40px; position: relative; }
-.modal-handle { width: 36px; height: 3px; background: rgba(244,241,234,0.15); border-radius: 2px; margin: 0 auto 28px; }
-.modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: rgba(244,241,234,0.25); font-size: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; line-height: 1; transition: color 0.15s; display: none; }
-.modal-tag { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 10px; }
-.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: var(--white); margin-bottom: 6px; }
-.modal-sub { font-size: 13px; font-weight: 300; color: rgba(244,241,234,0.4); margin-bottom: 28px; line-height: 1.55; }
+.modal-card { background: var(--bg); border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 420px; padding: 32px 24px 40px; position: relative; }
+.modal-handle { width: 36px; height: 3px; background: rgba(28,26,24,0.16); border-radius: 2px; margin: 0 auto 28px; }
+.modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-3); font-size: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; line-height: 1; transition: color 0.15s; display: none; }
+.modal-tag { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; color: var(--text); margin-bottom: 6px; font-weight: 400; }
+.modal-sub { font-size: 13px; font-weight: 300; color: var(--text-2); margin-bottom: 28px; line-height: 1.55; font-family: 'DM Sans', sans-serif; }
 .field { border-bottom: 1px solid var(--border); }
-.field input { width: 100%; background: transparent; border: none; outline: none; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 16px 0; }
-.field input::placeholder { color: rgba(244,241,234,0.2); }
-.field:focus-within { border-bottom-color: rgba(244,241,234,0.3); }
-.modal-submit { width: 100%; background: var(--accent); color: var(--black); border: none; padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 24px; transition: background 0.2s, transform 0.15s; }
-.modal-submit:hover { background: #d4ff1a; }
+.field input { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 16px 0; }
+.field input::placeholder { color: var(--text-3); }
+.field:focus-within { border-bottom-color: rgba(28,26,24,0.3); }
+.modal-submit { width: 100%; background: var(--btn-bg); color: var(--btn-text); border: none; padding: 16px 28px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: 24px; transition: background 0.2s, transform 0.15s; border-radius: 0; }
+.modal-submit:hover { background: #2a2825; }
 .modal-submit:active { transform: scale(0.98); }
 .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.modal-note { font-size: 11px; color: rgba(244,241,234,0.2); text-align: center; margin-top: 14px; font-weight: 300; letter-spacing: 0.3px; }
-.modal-msg { font-size: 13px; text-align: center; margin-top: 14px; min-height: 18px; line-height: 1.5; }
+.modal-note { font-size: 11px; color: var(--text-3); text-align: center; margin-top: 14px; font-weight: 300; letter-spacing: 0.3px; font-family: 'DM Sans', sans-serif; }
+.modal-msg { font-size: 13px; text-align: center; margin-top: 14px; min-height: 18px; line-height: 1.5; font-family: 'DM Sans', sans-serif; }
 .modal-msg.success { color: var(--accent); }
-.modal-msg.error { color: rgba(255,80,70,0.9); }
+.modal-msg.error { color: rgba(184,92,58,0.9); }
 
 /* ─── SCROLL REVEAL ───────────────────────────────────────── */
 .reveal { opacity: 1; transform: none; transition: opacity 0.5s ease, transform 0.5s ease; }
@@ -710,7 +721,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     gap: 12px;
     padding: 0 32px 0 0;
     border-bottom: none;
-    border-right: 1px solid rgba(6,6,6,0.08);
+    border-right: 1px solid rgba(250,248,244,0.08);
     margin-right: 32px;
   }
   .step-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
@@ -718,8 +729,8 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
   .step-title { font-size: 15px; }
 
   /* Use cases: grid 2x2, sem acordeão */
-  .accordion { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(244,241,234,0.06); }
-  .acc-item { background: var(--black); padding: 28px 24px; border-bottom: none; }
+  .accordion { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+  .acc-item { background: var(--bg); padding: 28px 24px; border-bottom: none; }
   .acc-trigger { cursor: default; pointer-events: none; padding: 0 0 12px 0; }
   .acc-icon { display: none; }
   .acc-body { max-height: none !important; overflow: visible; }
@@ -786,17 +797,17 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
     [
       { side: 'user', text: '[audio 0:42]', delay: 400 },
       { side: 'jarvis', text: 'Processando...', delay: 1200, temp: true },
-      { side: 'jarvis', text: 'Salvo.\n\nReuniao com Alberto — amanha, 15h.\nPagar fornecedor — sexta, R$2.400.\nBuscar Filippo — quinta, 17h.', delay: 2800 },
+      { side: 'jarvis', text: 'Salvo.\n\nReunião com Alberto — amanhã, 15h.\nPagar fornecedor — sexta, R$2.400.\nBuscar Filippo — quinta, 17h.', delay: 2800 },
     ],
     [
       { side: 'user', text: 'Festa junina da Olivia — 21 de junho, trajar caipira, levar R$15', delay: 400 },
       { side: 'jarvis', text: 'Processando...', delay: 1100, temp: true },
-      { side: 'jarvis', text: 'Salvo. Festa junina Olivia — 21/06, R$15.\n\nLembro voce 2 dias antes.', delay: 2400 },
+      { side: 'jarvis', text: 'Salvo. Festa junina Olivia — 21/06, R$15.\n\nLembro você 2 dias antes.', delay: 2400 },
     ],
     [
       { side: 'user', text: '[imagem: boleto.jpg]', delay: 400 },
       { side: 'jarvis', text: 'Processando...', delay: 1300, temp: true },
-      { side: 'jarvis', text: 'Salvo. Vencimento — 15/03, R$890.\n\nLembro voce 1 dia antes.', delay: 3000 },
+      { side: 'jarvis', text: 'Salvo. Vencimento — 15/03, R$890.\n\nLembro você 1 dia antes.', delay: 3000 },
     ],
   ];
 
@@ -890,7 +901,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 
     if (phone.length < 12 || phone.length > 13) {
       msg.className = 'modal-msg error';
-      msg.textContent = 'Numero invalido. Use: 11 99999-9999';
+      msg.textContent = 'Número inválido. Use: 11 99999-9999';
       return;
     }
 
@@ -910,13 +921,13 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       if (res.ok) {
         document.getElementById('reg-form').innerHTML =
           '<div style="padding:20px 0;text-align:center;">' +
-          '<p style="font-family:\'Bebas Neue\',sans-serif;font-size:40px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">PRONTO.</p>' +
-          '<p style="font-size:14px;font-weight:300;color:rgba(244,241,234,0.5);line-height:1.6;">Em segundos voce recebe uma mensagem no WhatsApp.</p>' +
+          '<p style="font-family:\'Cormorant Garamond\',serif;font-size:40px;color:var(--accent);margin-bottom:10px;font-weight:400;">Pronto.</p>' +
+          '<p style="font-size:14px;font-weight:300;color:var(--text-2);line-height:1.6;">Em segundos você recebe uma mensagem no WhatsApp.</p>' +
           '</div>';
         setTimeout(closeModal, 2200);
       } else if (res.status === 409) {
         msg.className = 'modal-msg error';
-        msg.textContent = 'Esse numero ja tem conta.';
+        msg.textContent = 'Esse número já tem conta.';
         btn.childNodes[0].textContent = 'Criar minha conta';
         btn.querySelector('span').textContent = '→';
         btn.disabled = false;
@@ -929,7 +940,7 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
       }
     } catch {
       msg.className = 'modal-msg error';
-      msg.textContent = 'Erro de conexao. Tente novamente.';
+      msg.textContent = 'Erro de conexão. Tente novamente.';
       btn.childNodes[0].textContent = 'Criar minha conta';
       btn.querySelector('span').textContent = '→';
       btn.disabled = false;
