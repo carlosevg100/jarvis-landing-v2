@@ -1014,6 +1014,13 @@ h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); 
 
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
+  // Fallback: se IntersectionObserver não disparar em 2s, mostra tudo
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible), .step-item:not(.visible)').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 2000);
+
   // ── Step items reveal (staggered) ──────────────────────────
   const stepObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
