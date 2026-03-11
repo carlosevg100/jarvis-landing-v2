@@ -235,6 +235,101 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .modal-msg { font-size:13px; text-align:center; margin-top:12px; min-height:18px; line-height:1.5; font-family:'DM Sans',sans-serif; }
 .modal-msg.error { color:var(--accent); }
 
+/* ─── TRIAL STAMP ──────────────────────────────────────── */
+.trial-stamp { display:inline-block; background:var(--accent); color:var(--white); padding:10px 18px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; transform:rotate(-1.5deg); margin-bottom:28px; margin-top:4px; box-shadow:3px 4px 0 rgba(26,23,20,0.18); opacity:0; animation:fadeUp .6s 1.7s forwards; position:relative; }
+.trial-stamp::after { content:''; position:absolute; inset:3px; border:1px solid rgba(253,250,245,0.35); pointer-events:none; }
+.trial-stamp-sub { display:block; font-size:9px; letter-spacing:1.5px; font-weight:400; margin-top:4px; opacity:0.85; text-transform:none; font-style:italic; }
+.web-trial-stamp { display:inline-block; background:var(--accent); color:var(--white); padding:10px 22px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; transform:rotate(-1.5deg); margin-bottom:36px; margin-top:4px; box-shadow:3px 4px 0 rgba(26,23,20,0.18); opacity:0; animation:fadeUp .6s 1.75s forwards; position:relative; }
+.web-trial-stamp::after { content:''; position:absolute; inset:3px; border:1px solid rgba(253,250,245,0.35); pointer-events:none; }
+.web-trial-stamp-sub { display:block; font-size:9px; letter-spacing:1.5px; font-weight:400; margin-top:4px; opacity:0.85; text-transform:none; font-style:italic; }
+
+/* ─── PRICING CARD ─────────────────────────────────────── */
+.pricing-card { background:var(--bg-card); border:1px solid var(--border); max-width:500px; margin:0 auto; padding:48px 40px 52px; }
+@media(max-width:600px){ .pricing-card { padding:36px 24px 40px; } }
+.pricing-card-trial { display:inline-block; background:var(--accent); color:var(--white); padding:5px 14px; font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; font-family:'DM Sans',sans-serif; margin-bottom:20px; }
+.pricing-card-tagline { font-size:13px; font-weight:300; color:var(--muted); font-family:'DM Sans',sans-serif; margin-bottom:20px; line-height:1.6; }
+.pricing-card-amount { display:flex; align-items:flex-start; gap:2px; margin-bottom:6px; }
+.pricing-card-cur { font-family:'DM Sans',sans-serif; font-size:18px; font-weight:300; color:var(--ink2); margin-top:8px; }
+.pricing-card-num { font-family:'Cormorant Garamond',serif; font-size:72px; line-height:1; color:var(--ink); font-weight:400; }
+.pricing-card-cents { font-family:'DM Sans',sans-serif; font-size:18px; font-weight:300; color:var(--muted); margin-top:8px; }
+.pricing-card-period { font-size:12px; letter-spacing:1.5px; color:var(--muted); font-family:'DM Sans',sans-serif; margin-bottom:28px; }
+.pricing-card-divider { height:1px; background:var(--border); margin:24px 0; }
+.pricing-card-features { list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+.pricing-card-features li { font-size:13px; font-weight:300; color:var(--ink2); font-family:'DM Sans',sans-serif; display:flex; align-items:flex-start; gap:10px; line-height:1.55; }
+.pricing-card-features li::before { content:'✓'; color:var(--accent); font-size:11px; font-weight:700; flex-shrink:0; margin-top:2px; }
+.pricing-card-btn { width:100%; background:var(--ink); color:var(--white); border:none; padding:18px 24px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:background .2s; }
+.pricing-card-btn:hover { background:var(--ink2); }
+.pricing-card-note { font-size:11px; color:var(--muted); text-align:center; margin-top:14px; font-weight:300; font-family:'DM Sans',sans-serif; line-height:1.6; }
+
+/* ─── SOBRE NÓS ─────────────────────────────────────────── */
+.sobre-wrap { background:var(--bg-subtle); border-top:1px solid var(--border); }
+.sobre-inner { max-width:680px; }
+.sobre-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(34px,7vw,54px); font-weight:400; font-style:italic; color:var(--ink); line-height:1.1; margin-bottom:40px; letter-spacing:-0.5px; }
+.sobre-body { display:flex; flex-direction:column; gap:22px; }
+.sobre-body p { font-size:15px; font-weight:300; color:var(--ink2); line-height:1.85; font-family:'DM Sans',sans-serif; }
+.sobre-body p strong { color:var(--ink); font-weight:500; }
+.sobre-sig { margin-top:32px; padding-top:24px; border-top:1px solid var(--border); font-size:12px; color:var(--muted); font-weight:300; font-family:'DM Sans',sans-serif; letter-spacing:0.5px; }
+
+/* ─── FAQ ───────────────────────────────────────────────── */
+.faq-wrap { background:var(--bg); border-top:1px solid var(--border); }
+.faq-list { display:flex; flex-direction:column; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-trigger { width:100%; background:none; border:none; padding:24px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:20px; cursor:pointer; text-align:left; -webkit-tap-highlight-color:transparent; }
+.faq-question { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:400; color:var(--ink); line-height:1.3; letter-spacing:-0.2px; }
+.faq-icon { font-size:20px; color:var(--muted); flex-shrink:0; transition:transform .25s; margin-top:2px; line-height:1; }
+.faq-item.faq-open .faq-icon { transform:rotate(45deg); color:var(--accent); }
+.faq-body { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1); }
+.faq-item.faq-open .faq-body { max-height:280px; }
+.faq-answer { font-size:14px; font-weight:300; color:var(--muted); line-height:1.75; padding-bottom:24px; font-family:'DM Sans',sans-serif; }
+.faq-answer a { color:var(--accent); text-decoration:none; }
+.faq-answer a:hover { text-decoration:underline; }
+@media(min-width:768px){ .faq-list { display:grid; grid-template-columns:1fr 1fr; gap:0 48px; } .faq-item { border-bottom:1px solid var(--border); } }
+
+/* ─── SUPORTE ───────────────────────────────────────────── */
+.suporte-wrap { background:var(--bg-subtle); border-top:1px solid var(--border); }
+.suporte-inner { max-width:560px; }
+.suporte-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,6vw,46px); font-weight:400; font-style:italic; color:var(--ink); margin-bottom:36px; line-height:1.1; }
+.suporte-grid { display:flex; flex-direction:column; gap:24px; }
+.suporte-item { display:flex; gap:16px; align-items:flex-start; }
+.suporte-icon { width:38px; height:38px; background:var(--bg-card); border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.suporte-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:4px; font-family:'DM Sans',sans-serif; }
+.suporte-value { font-size:15px; font-weight:400; color:var(--ink); font-family:'DM Sans',sans-serif; }
+.suporte-value a { color:var(--ink); text-decoration:none; }
+.suporte-value a:hover { color:var(--accent); }
+.suporte-hours { font-size:12px; color:var(--muted); font-weight:300; font-family:'DM Sans',sans-serif; margin-top:2px; }
+.suporte-note { margin-top:32px; padding-top:24px; border-top:1px solid var(--border); font-size:14px; font-weight:300; color:var(--ink2); font-family:'DM Sans',sans-serif; line-height:1.75; font-style:italic; }
+
+/* ─── FOOTER LINKS ──────────────────────────────────────── */
+.footer-inner { flex-direction:column; gap:14px; text-align:center; }
+@media(min-width:768px){ .footer-inner { flex-direction:row; } }
+.footer-links { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.footer-links a { font-size:11px; color:rgba(253,250,245,0.3); font-weight:300; font-family:'DM Sans',sans-serif; text-decoration:none; transition:color .2s; letter-spacing:0.5px; }
+.footer-links a:hover { color:rgba(253,250,245,0.65); }
+
+/* ─── LEGAL MODALS ──────────────────────────────────────── */
+.legal-overlay { display:none; position:fixed; inset:0; background:rgba(26,23,20,0.82); z-index:300; justify-content:center; padding:24px 16px; overflow-y:auto; }
+.legal-overlay.open { display:flex; }
+.legal-card { background:var(--bg); width:100%; max-width:640px; padding:52px 44px 56px; position:relative; border:1px solid var(--border); margin:auto; }
+@media(max-width:600px){ .legal-card { padding:36px 24px 44px; } }
+.legal-close { position:absolute; top:18px; right:18px; background:none; border:none; font-size:22px; color:var(--muted); cursor:pointer; line-height:1; transition:color .15s; }
+.legal-close:hover { color:var(--ink); }
+.legal-tag { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:10px; font-family:'DM Sans',sans-serif; }
+.legal-title { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:400; color:var(--ink); margin-bottom:28px; }
+.legal-body { font-size:13px; font-weight:300; color:var(--muted); line-height:1.8; font-family:'DM Sans',sans-serif; }
+.legal-body h3 { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--ink2); margin-top:24px; margin-bottom:8px; }
+.legal-body p { margin-bottom:10px; }
+.legal-body ul { padding-left:18px; margin-bottom:12px; }
+.legal-body ul li { margin-bottom:6px; }
+.legal-body a { color:var(--accent); text-decoration:none; }
+.legal-body a:hover { text-decoration:underline; }
+
+/* ─── CAPTCHA & FORM HINT ───────────────────────────────── */
+.captcha-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); margin-bottom:4px; }
+.captcha-question { font-size:13px; color:var(--ink2); font-family:'DM Sans',sans-serif; font-weight:300; flex:1; }
+.captcha-input { width:60px; border:none; border-bottom:1px solid rgba(26,23,20,0.2); background:transparent; padding:4px 0; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; text-align:center; }
+.captcha-input:focus { border-bottom-color:rgba(26,23,20,0.4); }
+.form-hint { font-size:11px; color:var(--muted); font-family:'DM Sans',sans-serif; font-weight:300; margin-top:8px; line-height:1.55; }
+
 /* Scroll reveal */
 .reveal { opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease; }
 .reveal.anim { opacity:0; transform:translateY(16px); }
@@ -265,6 +360,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   <div class="rule"></div>
   <div class="signoff">Prazer, <span>Jarvis.</span></div>
   <div class="wa-badge"><div class="wa-icon">&#10003;</div>Direto no WhatsApp. Sem app.</div>
+  <div class="trial-stamp">✦ TESTE TUDO POR 7 DIAS GRÁTIS ✦<span class="trial-stamp-sub">Sua vida nunca mais será a mesma.</span></div>
   <div class="phone-wrap">
     <div class="phone">
       <div class="phone-notch"><div class="notch-speaker"></div><div class="notch-cam"></div></div>
@@ -307,6 +403,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <div class="web-rule"></div>
     <div class="web-signoff">Prazer, <span>Jarvis.</span></div>
     <div class="web-wa-badge"><div class="web-wa-icon">&#10003;</div>Direto no WhatsApp. Zero instalação.</div>
+    <div class="web-trial-stamp">✦ TESTE TUDO POR 7 DIAS GRÁTIS ✦<span class="web-trial-stamp-sub">Sua vida nunca mais será a mesma.</span></div>
     <div class="web-ctas">
       <button class="web-btn-primary" onclick="openModal()">Ativar o Jarvis &#8594;</button>
       <button class="web-btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
@@ -502,18 +599,137 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 
 <!-- ── PRICING ─────────────────────────────────────────── -->
 <div id="pricing" class="pricing-wrap sec-wrap">
-  <div class="section pricing-inner">
+  <div class="section">
     <p class="sec-tag reveal" style="justify-content:center;">Preço</p>
-    <p class="pricing-pre reveal">Organize sua vida por menos do que um café por semana.</p>
-    <div class="pricing-amount reveal">
-      <span class="pricing-cur">R$</span>
-      <span class="pricing-num">19</span>
-      <span class="pricing-cents">,90</span>
+    <div class="pricing-card reveal">
+      <p class="pricing-card-tag" style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-family:'DM Sans',sans-serif;"><span style="display:block;width:16px;height:1px;background:var(--accent);flex-shrink:0;"></span>Plano único — tudo incluso</p>
+      <div class="pricing-card-trial">7 dias grátis</div>
+      <p class="pricing-card-tagline">Experimente sem compromisso. Depois, apenas:</p>
+      <div class="pricing-card-amount">
+        <span class="pricing-card-cur">R$</span>
+        <span class="pricing-card-num">19</span>
+        <span class="pricing-card-cents">,90</span>
+      </div>
+      <p class="pricing-card-period">/mês</p>
+      <div class="pricing-card-divider"></div>
+      <ul class="pricing-card-features">
+        <li>Organização de tarefas e compromissos via WhatsApp</li>
+        <li>Lembretes automáticos no momento certo</li>
+        <li>Transcrição e análise de áudios e documentos</li>
+        <li>Memória de contexto — o Jarvis lembra de tudo</li>
+        <li>Disponível 24h por dia, 7 dias por semana</li>
+        <li>Sem instalação. Sem app. Só WhatsApp.</li>
+        <li>Cancele quando quiser, sem taxa ou burocracia</li>
+      </ul>
+      <button class="pricing-card-btn" onclick="openModal()">Começar grátis <span>&#8594;</span></button>
+      <p class="pricing-card-note">Sem cartão de crédito para o teste. Sem contrato. Sem anuidade.</p>
     </div>
-    <p class="pricing-period reveal">/mês</p>
-    <p class="pricing-trial reveal">3 dias grátis &mdash; cancela quando quiser</p>
-    <button class="pricing-btn reveal" onclick="openModal()">Quero testar grátis &#8594;</button>
-    <p class="pricing-note reveal">Sem contrato. Sem anuidade. Comece grátis. Continue porque faz sentido.</p>
+  </div>
+</div>
+
+<!-- ── SOBRE NÓS ──────────────────────────────────────── -->
+<div id="sobre" class="sobre-wrap sec-wrap">
+  <div class="section sobre-inner">
+    <p class="sec-tag reveal">Sobre nós</p>
+    <h2 class="sobre-headline reveal">Uma equipe pequena,<br>obcecada com uma<br><em>ideia simples.</em></h2>
+    <div class="sobre-body reveal">
+      <p>A vida moderna é um acúmulo de coisas para lembrar. Reuniões que viram áudios. Áudios que viram lembretes esquecidos. Comunicados enterrados em grupos de WhatsApp. Prazos que chegam sem aviso. Não é falta de organização — é excesso de tudo. <strong>E ninguém nasceu com capacidade para processar isso sozinho.</strong></p>
+      <p>Construímos o Jarvis porque acreditamos que assistentes pessoais não deveriam ser privilégio de executivos e presidentes. Toda mãe que acompanha três grupos de escola merece uma ajuda. Todo profissional com agenda cheia merece um segundo cérebro. <strong>Toda pessoa que se esforça para estar presente merece uma ferramenta que trabalha por ela — não uma que exige mais trabalho.</strong></p>
+      <p>Somos um time pequeno, apaixonado por simplicidade e pela dignidade do tempo humano. Não construímos mais um aplicativo para você gerenciar. Construímos alguém para conversar — <strong>no canal que você já usa todo dia.</strong> A tecnologia deve se adaptar aos humanos, não o contrário.</p>
+    </div>
+    <p class="sobre-sig reveal">— Equipe Jarvis &nbsp;·&nbsp; São Paulo, Brasil</p>
+  </div>
+</div>
+
+<!-- ── FAQ ────────────────────────────────────────────── -->
+<div id="faq" class="faq-wrap sec-wrap">
+  <div class="section">
+    <p class="sec-tag reveal">Dúvidas frequentes</p>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Como funciona o período de teste gratuito?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Ao se cadastrar, você tem 7 dias completos para usar o Jarvis sem pagar nada e sem precisar inserir dados de cartão. Se gostar — e acreditamos que vai gostar — a assinatura é ativada por R$19,90/mês. Se não quiser continuar, basta cancelar antes do prazo. Sem burocracia, sem cobranças inesperadas.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Preciso baixar algum aplicativo?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Não. O Jarvis funciona inteiramente pelo WhatsApp — o mesmo app que você já usa no dia a dia. Não há nada para instalar, configurar ou aprender. Basta conversar como você já faz com qualquer contato.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Meus dados estão seguros?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Sim. Suas mensagens são processadas com segurança e nunca compartilhadas com terceiros. Utilizamos criptografia em trânsito e em repouso. O Jarvis acessa apenas o que você encaminha diretamente para ele — nada mais. Sua privacidade está em conformidade com a LGPD.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Como cancelo minha assinatura?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Para cancelar, basta me enviar uma mensagem no WhatsApp com a palavra <strong>cancelar</strong>, ou escrever para <a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a>. Respondemos em até 24h. Não há multa, não há carência, não há questionário de saída. Você vai embora quando quiser.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">O Jarvis funciona em qualquer celular?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Sim. Qualquer celular com WhatsApp instalado — Android ou iPhone — funciona perfeitamente. Não há requisito de versão específica de sistema operacional. Se você usa WhatsApp, você usa Jarvis.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Posso usar o Jarvis para toda a família?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Cada assinatura está vinculada a um número de WhatsApp. Para outros membros da família usarem, eles precisariam de sua própria assinatura. Mas uma conta já faz uma diferença enorme — muitos usuários relatam que organizam não só a si mesmos, mas a rotina de toda a família.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Quais tipos de compromissos o Jarvis organiza?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Praticamente tudo: reuniões, consultas médicas, datas escolares, prazos de trabalho, aniversários, vencimentos de contas, compromissos pessoais. Você encaminha um áudio, uma imagem, um PDF ou um texto — o Jarvis extrai o que importa e cria o lembrete automaticamente.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="faqToggle(this)">
+          <span class="faq-question">Como entro em contato com o suporte?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body"><p class="faq-answer">Escreva para <a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a> ou mande uma mensagem diretamente para o Jarvis no WhatsApp. Nosso horário de atendimento humano é de segunda a sexta, das 9h às 18h, mas o Jarvis responde qualquer dúvida a qualquer hora.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUPORTE ─────────────────────────────────────────── -->
+<div id="suporte" class="suporte-wrap sec-wrap">
+  <div class="section suporte-inner">
+    <p class="sec-tag reveal">Suporte</p>
+    <h2 class="suporte-headline reveal">Estamos aqui<br>para ajudar.</h2>
+    <div class="suporte-grid reveal">
+      <div class="suporte-item">
+        <div class="suporte-icon">✉</div>
+        <div>
+          <p class="suporte-label">E-mail</p>
+          <p class="suporte-value"><a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a></p>
+          <p class="suporte-hours">Seg–Sex, 9h–18h</p>
+        </div>
+      </div>
+      <div class="suporte-item">
+        <div class="suporte-icon">💬</div>
+        <div>
+          <p class="suporte-label">WhatsApp</p>
+          <p class="suporte-value">Fale diretamente com o Jarvis</p>
+          <p class="suporte-hours">Disponível 24h por dia</p>
+        </div>
+      </div>
+    </div>
+    <p class="suporte-note reveal">Ou me mande uma mensagem diretamente no WhatsApp e respondo em instantes.</p>
   </div>
 </div>
 
@@ -531,7 +747,12 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 <div class="footer-wrap">
   <div class="footer-inner">
     <span class="footer-logo">Jarvis</span>
-    <span class="footer-copy">&copy; 2026 Jarvis / OLpi Technologies</span>
+    <div class="footer-links">
+      <a href="#" onclick="openLegal('terms');return false;">Termos de Uso</a>
+      <a href="#" onclick="openLegal('privacy');return false;">Política de Privacidade</a>
+      <a href="#suporte" onclick="document.getElementById('suporte').scrollIntoView({behavior:'smooth'});return false;">Suporte</a>
+    </div>
+    <span class="footer-copy">&copy; 2026 Jarvis. Todos os direitos reservados.</span>
   </div>
 </div>
 
@@ -542,13 +763,82 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <button class="modal-close" onclick="closeModal()">&times;</button>
     <p class="modal-tag">Ativar agora</p>
     <h3 class="modal-title">Começar grátis</h3>
-    <p class="modal-sub">3 dias grátis, sem cartão. Você recebe uma mensagem no WhatsApp em segundos.</p>
+    <p class="modal-sub">7 dias grátis, sem cartão. Você recebe uma mensagem no WhatsApp em segundos.</p>
     <div id="reg-form">
-      <div class="modal-field"><input id="reg-name" type="text" placeholder="Nome" autocomplete="name" required></div>
+      <div class="modal-field"><input id="reg-name" type="text" placeholder="Seu nome" autocomplete="name" required></div>
       <div class="modal-field"><input id="reg-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
+      <div class="captcha-row"><span class="captcha-question" id="captcha-question">Carregando...</span><input class="captcha-input" id="captcha-answer" type="number" placeholder="?" autocomplete="off" min="1" max="20"></div>
+      <p class="form-hint">Verifique seu número antes de continuar. Enviamos a primeira mensagem em instantes.</p>
       <button class="modal-submit" id="modal-submit" onclick="register()">Criar minha conta <span>&#8594;</span></button>
-      <p class="modal-note">Você receberá uma mensagem do Jarvis em instantes.</p>
+      <p class="modal-note">Sem compromisso. Cancele quando quiser.</p>
       <p class="modal-msg" id="reg-msg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TERMOS DE USO -->
+<div class="legal-overlay" id="modal-terms" onclick="handleLegalOverlay(event,'terms')">
+  <div class="legal-card">
+    <button class="legal-close" onclick="closeLegal('terms')">&times;</button>
+    <p class="legal-tag">Documento legal</p>
+    <h2 class="legal-title">Termos de Uso</h2>
+    <div class="legal-body">
+      <p>Última atualização: março de 2026.</p>
+      <h3>1. Descrição do Serviço</h3>
+      <p>O Jarvis é um assistente pessoal de inteligência artificial acessível via WhatsApp, desenvolvido pela Olpi Technologies. O serviço organiza tarefas, compromissos e lembretes com base nas mensagens enviadas pelo usuário.</p>
+      <h3>2. Período de Teste Gratuito</h3>
+      <p>Novos usuários têm acesso a 7 (sete) dias de teste gratuito, sem necessidade de dados de pagamento. Ao término do período de teste, a assinatura mensal de R$19,90 é ativada automaticamente, caso o usuário não tenha cancelado.</p>
+      <h3>3. Assinatura e Pagamento</h3>
+      <p>A assinatura é cobrada mensalmente no valor de R$19,90. O valor pode ser reajustado com aviso prévio de 30 dias. Não há contratos de fidelidade nem taxas de adesão ou cancelamento.</p>
+      <h3>4. Cancelamento</h3>
+      <p>O usuário pode cancelar a qualquer momento, sem multa, enviando a palavra "cancelar" via WhatsApp ou por e-mail para <a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a>. O acesso permanece ativo até o fim do período pago corrente.</p>
+      <h3>5. Uso Adequado</h3>
+      <p>É vedado o uso do Jarvis para fins ilícitos, envio de conteúdo ofensivo, manipulação do sistema ou qualquer atividade contrária à legislação brasileira.</p>
+      <h3>6. Disponibilidade</h3>
+      <p>Nos esforçamos para manter o serviço disponível 24 horas por dia. Manutenções podem ocorrer com aviso prévio sempre que possível.</p>
+      <h3>7. Limitação de Responsabilidade</h3>
+      <p>O Jarvis é uma ferramenta de auxílio e organização. Não nos responsabilizamos por perdas decorrentes de lembretes não recebidos, erros de interpretação ou falhas de conectividade. O usuário é responsável por verificar informações críticas.</p>
+      <h3>8. Alterações nos Termos</h3>
+      <p>Podemos atualizar estes termos a qualquer momento. Mudanças significativas serão comunicadas com antecedência via WhatsApp ou e-mail.</p>
+      <h3>9. Contato</h3>
+      <p><a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POLÍTICA DE PRIVACIDADE -->
+<div class="legal-overlay" id="modal-privacy" onclick="handleLegalOverlay(event,'privacy')">
+  <div class="legal-card">
+    <button class="legal-close" onclick="closeLegal('privacy')">&times;</button>
+    <p class="legal-tag">Documento legal</p>
+    <h2 class="legal-title">Política de Privacidade</h2>
+    <div class="legal-body">
+      <p>Última atualização: março de 2026. Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
+      <h3>1. Dados que Coletamos</h3>
+      <ul>
+        <li><strong>Nome e número de WhatsApp</strong>: fornecidos no cadastro, necessários para criação da conta.</li>
+        <li><strong>Mensagens enviadas ao Jarvis</strong>: textos, áudios, imagens e documentos que você encaminha para processamento.</li>
+        <li><strong>Dados de uso</strong>: horários de interação e frequência de uso (sem leitura de conversas de terceiros).</li>
+      </ul>
+      <h3>2. Como Usamos seus Dados</h3>
+      <ul>
+        <li>Processamento por IA para extração de tarefas e lembretes.</li>
+        <li>Envio de notificações e lembretes via WhatsApp.</li>
+        <li>Melhoria contínua do serviço (dados anonimizados).</li>
+        <li>Comunicação sobre atualizações e cobrança.</li>
+      </ul>
+      <h3>3. Compartilhamento de Dados</h3>
+      <p>Não vendemos seus dados. Compartilhamos apenas com prestadores de serviço técnico essenciais (provedores de IA e infraestrutura de nuvem), mediante contrato de confidencialidade. Não há compartilhamento com fins publicitários.</p>
+      <h3>4. Retenção de Dados</h3>
+      <p>Seus dados são mantidos enquanto sua conta estiver ativa. Após o cancelamento, dados pessoais são excluídos em até 90 dias, salvo obrigação legal. Você pode solicitar exclusão antecipada a qualquer momento.</p>
+      <h3>5. Seus Direitos (LGPD)</h3>
+      <p>Você tem direito a: confirmar o tratamento, acessar seus dados, corrigir dados incorretos, solicitar exclusão, revogar consentimento e obter informações sobre compartilhamento. Para exercer esses direitos: <a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a>.</p>
+      <h3>6. Segurança</h3>
+      <p>Utilizamos criptografia em trânsito (TLS) e em repouso, controles de acesso restrito e monitoramento de segurança. Em caso de incidente, notificaremos os usuários afetados dentro dos prazos exigidos pela LGPD.</p>
+      <h3>7. Cookies</h3>
+      <p>Este site utiliza apenas cookies estritamente necessários para funcionamento básico. Não utilizamos cookies de rastreamento ou publicidade comportamental.</p>
+      <h3>8. Encarregado de Dados (DPO)</h3>
+      <p><a href="mailto:suporte@jarvis-br.com">suporte@jarvis-br.com</a></p>
     </div>
   </div>
 </div>
@@ -679,13 +969,21 @@ function startChat(id) {
 startChat('msgs-mobile');
 startChat('msgs-web');
 
-// ── Accordion ───────────────────────────────────────────
+// ── Use-cases Accordion ─────────────────────────────────
 function toggleAcc(btn) {
   if (window.innerWidth >= 768) return;
   const item = btn.closest('.acc-item');
   const isOpen = item.classList.contains('open');
   document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
   if (!isOpen) item.classList.add('open');
+}
+
+// ── FAQ Accordion ────────────────────────────────────────
+function faqToggle(btn) {
+  var item = btn.closest('.faq-item');
+  var isOpen = item.classList.contains('faq-open');
+  document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('faq-open'); });
+  if (!isOpen) item.classList.add('faq-open');
 }
 
 // ── Scroll reveal ────────────────────────────────────────
@@ -705,10 +1003,23 @@ document.getElementById('reg-phone').addEventListener('input', function() {
   this.value = v;
 });
 
-// ── Modal ────────────────────────────────────────────────
+// ── Captcha ──────────────────────────────────────────────
+var _captchaAnswer = 0;
+function genCaptcha() {
+  var a = Math.floor(Math.random() * 9) + 1;
+  var b = Math.floor(Math.random() * 9) + 1;
+  _captchaAnswer = a + b;
+  var el = document.getElementById('captcha-question');
+  if (el) el.textContent = 'Quanto é ' + a + ' + ' + b + '?';
+  var inp = document.getElementById('captcha-answer');
+  if (inp) inp.value = '';
+}
+
+// ── Signup Modal ─────────────────────────────────────────
 function openModal() {
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  genCaptcha();
   setTimeout(() => document.getElementById('reg-name').focus(), 100);
 }
 
@@ -721,7 +1032,28 @@ function handleOverlay(e) {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+// ── Legal Modals ─────────────────────────────────────────
+function openLegal(id) {
+  document.getElementById('modal-' + id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLegal(id) {
+  document.getElementById('modal-' + id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleLegalOverlay(e, id) {
+  if (e.target === document.getElementById('modal-' + id)) closeLegal(id);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeLegal('terms');
+    closeLegal('privacy');
+  }
+});
 
 // ── Register ─────────────────────────────────────────────
 async function register() {
@@ -730,13 +1062,22 @@ async function register() {
   const phone = phoneRaw.startsWith('55') ? phoneRaw : '55' + phoneRaw;
   const msgEl = document.getElementById('reg-msg');
   const btn = document.getElementById('modal-submit');
+  const captchaVal = parseInt(document.getElementById('captcha-answer').value, 10);
 
-  if (!name || phoneRaw.length < 10) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Preencha nome e WhatsApp.'; return; }
-  if (phone.length < 12 || phone.length > 13) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Número inválido. Use: (11) 99999-9999'; return; }
+  msgEl.textContent = '';
+  msgEl.className = 'modal-msg';
+
+  if (!name) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Por favor, informe seu nome.'; return; }
+  if (phoneRaw.length !== 11) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'WhatsApp deve ter 11 dígitos — ex: (11) 99999-9999'; return; }
+  if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
+    msgEl.className = 'modal-msg error';
+    msgEl.textContent = 'Resposta incorreta. Tente novamente.';
+    genCaptcha();
+    return;
+  }
 
   btn.disabled = true;
   btn.childNodes[0].textContent = 'Aguarde...';
-  msgEl.textContent = '';
 
   try {
     const res = await fetch('https://jarvis-backend-six.vercel.app/api/users/register', {
@@ -763,12 +1104,14 @@ async function register() {
       msgEl.textContent = data.error || 'Erro ao criar conta. Tente novamente.';
       btn.disabled = false;
       btn.childNodes[0].textContent = 'Criar minha conta';
+      genCaptcha();
     }
   } catch {
     msgEl.className = 'modal-msg error';
     msgEl.textContent = 'Erro de conexão. Tente novamente.';
     btn.disabled = false;
     btn.childNodes[0].textContent = 'Criar minha conta';
+    genCaptcha();
   }
 }
 </script>
