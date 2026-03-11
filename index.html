@@ -739,19 +739,13 @@ async function register() {
   msgEl.textContent = '';
 
   try {
-    const res = await fetch('https://jarvis-backend-six.vercel.app/api/users', {
+    const res = await fetch('https://jarvis-backend-six.vercel.app/api/users/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
+      body: JSON.stringify({ name, whatsapp_number: phone })
     });
 
     if (res.ok) {
-      // Send welcome WhatsApp message
-      fetch('https://jarvis-welcome-api.vercel.app/api/welcome', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, name })
-      }).catch(() => {}); // fire and forget
       document.getElementById('reg-form').innerHTML =
         '<div style="padding:24px 0;text-align:center;">' +
         '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
