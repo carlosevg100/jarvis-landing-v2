@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F0E8;--ink:#1A1714;--ink2:#3A3430;
+  --muted:rgba(26,23,20,0.42);--accent:#A8522A;
+  --border:rgba(26,23,20,0.12);--white:#FDFAF5;
+  --bg-subtle:#EDE8DF;--bg-card:#E5DFD4;--green:#25D366;
+}
+html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;mix-blend-mode:multiply}
+
+/* States */
+#loading,#not-found{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px}
+#loading{display:flex}
+#not-found{display:none}
+#app{display:none}
+
+.spinner{width:32px;height:32px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.not-found-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;color:var(--ink)}
+.not-found-sub{font-size:13px;color:var(--muted)}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;background:linear-gradient(to bottom,var(--bg) 70%,transparent);padding:20px 24px 12px;display:flex;justify-content:space-between;align-items:flex-start}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:7px;text-transform:uppercase;color:var(--ink)}
+.logo-sub{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.nav-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.live-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.trial-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink2)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:0 24px 20px;background:var(--border);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.stat{background:var(--bg-card);padding:16px 12px;text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--ink);line-height:1}
+.stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* Filters */
+.filters{padding:0 24px 16px;display:flex;flex-direction:column;gap:10px}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{background:transparent;border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--ink2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;line-height:1.4}
+.pill:hover{background:var(--bg-subtle)}
+.pill.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.pill.active-cat{color:var(--white);border-color:transparent}
+.view-toggle{display:flex;gap:4px;margin-left:auto}
+.view-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.view-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.search{width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:100px;padding:8px 16px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none}
+.search:focus{border-color:var(--accent)}
+
+/* List */
+#list-view,#cal-view{display:block}
+.list{padding:0 24px 64px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all .25s}
+.card:hover{background:var(--bg-subtle);box-shadow:0 4px 20px rgba(26,23,20,.07);transform:translateY(-1px)}
+.card.done{opacity:.4}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+.cat-pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:100px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;white-space:nowrap}
+.card-date{font-size:11px;color:var(--muted);white-space:nowrap}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--ink);line-height:1.3;margin-bottom:10px}
+.card.done .card-title{text-decoration:line-through}
+.card-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.card-participants{font-size:11px;color:var(--muted)}
+.card-amount{font-size:12px;font-weight:500;color:var(--accent)}
+.check-btn{margin-left:auto;background:transparent;border:1.5px solid var(--border);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0;font-size:12px;color:transparent}
+.check-btn:hover{border-color:var(--accent);background:var(--accent);color:#fff}
+.check-btn.checked{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* Empty */
+.empty{text-align:center;padding:80px 24px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.empty-rule{width:32px;height:2px;background:var(--accent);border-radius:2px}
+.empty-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--ink)}
+.empty-sub{font-size:13px;color:var(--muted);line-height:1.7;max-width:280px}
+.empty-hint{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+
+/* Calendar */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px 16px}
+.cal-month-label{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink)}
+.cal-arrow{background:transparent;border:1px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:var(--ink2);display:flex;align-items:center;justify-content:center}
+.cal-arrow:hover{background:var(--bg-card)}
+.cal-grid-wrap{padding:0 24px 64px}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.cal-wd{text-align:center;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:4px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:6px;min-height:60px}
+.cal-cell.today{border-color:var(--accent);border-width:2px}
+.cal-cell.empty-cell{background:transparent;border-color:transparent;min-height:0}
+.cal-day-num{font-size:11px;font-weight:500;color:var(--ink2);margin-bottom:3px}
+.cal-cell.today .cal-day-num{color:var(--accent);font-weight:700}
+.cal-item-dot{font-size:9px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;line-height:1.3}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div class="loading-txt">carregando</div>
+</div>
+
+<div id="not-found">
+  <div class="not-found-title">Link inválido.</div>
+  <div class="not-found-sub">Verifique o link enviado pelo Jarvis no WhatsApp.</div>
+</div>
+
+<div id="app">
+  <nav class="nav">
+    <div>
+      <div class="logo">Jarvis</div>
+      <div class="logo-sub">dashboard</div>
+    </div>
+    <div class="nav-right">
+      <div class="live-badge"><span class="live-dot"></span> ao vivo</div>
+      <div class="trial-pill" id="user-pill">...</div>
+    </div>
+  </nav>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="stat-open">0</div><div class="stat-label">em aberto</div></div>
+    <div class="stat"><div class="stat-num" id="stat-timed">0</div><div class="stat-label">com prazo</div></div>
+    <div class="stat"><div class="stat-num" id="stat-done">0</div><div class="stat-label">concluídos</div></div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-row">
+      <button class="pill active" data-date="all">Todos</button>
+      <button class="pill" data-date="today">Hoje</button>
+      <button class="pill" data-date="week">Semana</button>
+      <button class="pill" data-date="month">Mês</button>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-list">Lista</button>
+        <button class="view-btn" id="btn-cal">Cal</button>
+      </div>
+    </div>
+    <div class="filter-row" id="cat-filters">
+      <button class="pill active" data-cat="all">Tudo</button>
+    </div>
+    <input class="search" id="search" placeholder="Buscar...">
+  </div>
+
+  <div id="list-view">
+    <div class="list" id="cards"></div>
+  </div>
+
+  <div id="cal-view" style="display:none">
+    <div class="cal-nav">
+      <button class="cal-arrow" id="cal-prev">‹</button>
+      <div class="cal-month-label" id="cal-month-label"></div>
+      <button class="cal-arrow" id="cal-next">›</button>
+    </div>
+    <div class="cal-grid-wrap">
+      <div class="cal-weekdays">
+        <div class="cal-wd">Dom</div><div class="cal-wd">Seg</div><div class="cal-wd">Ter</div>
+        <div class="cal-wd">Qua</div><div class="cal-wd">Qui</div><div class="cal-wd">Sex</div><div class="cal-wd">Sáb</div>
+      </div>
+      <div class="cal-days" id="cal-days"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL = 'https://fbgqzouxbagmmlzibyhl.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZiZ3F6b3V4YmFnbW1semlieWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NzYxNTEsImV4cCI6MjA4ODA1MjE1MX0.o4SCzzeLf2IkXIhMyGRq9DuzOZWbg4w-uxdCTTHaY_E';
+const H = { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON };
+
+const CAT_LABELS = { familia:'Família',escola:'Escola',trabalho:'Trabalho',saude:'Saúde',financeiro:'Financeiro',social:'Social',compras:'Compras',viagem:'Viagem',outros:'Outros' };
+const CAT_COLORS = { familia:'#A8522A',escola:'#5B7FA6',trabalho:'#4A7C5F',saude:'#7B5EA7',financeiro:'#B8860B',social:'#C4763A',compras:'#7A6652',viagem:'#4682B4',outros:'#8A7F78' };
+const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+const token = location.pathname.split('/d/')[1] || location.pathname.split('/').pop();
+let allItems = [], user = null;
+let filterDate = 'all', filterCat = 'all', searchVal = '';
+let calMonth = new Date(); calMonth.setDate(1);
+let view = 'list';
+
+async function fetchData() {
+  const uRes = await fetch(`${SUPA_URL}/rest/v1/jarvis_users?dashboard_token=eq.${token}&select=*&limit=1`, { headers: H });
+  const users = await uRes.json();
+  if (!users || !users.length) { show('not-found'); return; }
+  user = users[0];
+  const days = Math.ceil((new Date(user.trial_ends_at) - Date.now()) / 86400000);
+  document.getElementById('user-pill').textContent = user.name.split(' ')[0] + (days > 0 ? ' · ' + days + 'd' : '');
+
+  const iRes = await fetch(`${SUPA_URL}/rest/v1/jarvis_items?user_id=eq.${user.id}&order=scheduled_time.asc.nullslast&limit=200`, { headers: H });
+  allItems = await iRes.json() || [];
+  buildCatFilters();
+  updateStats();
+  render();
+  show('app');
+}
+
+function show(id) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('not-found').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById(id).style.display = 'flex';
+  if (id === 'app') document.getElementById('app').style.display = 'block';
+}
+
+function buildCatFilters() {
+  const cats = [...new Set(allItems.map(i => i.auto_category).filter(Boolean))];
+  const row = document.getElementById('cat-filters');
+  row.innerHTML = '<button class="pill active" data-cat="all">Tudo</button>';
+  cats.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'pill';
+    b.dataset.cat = c;
+    b.textContent = CAT_LABELS[c] || c;
+    row.appendChild(b);
+  });
+  row.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => {
+    filterCat = b.dataset.cat;
+    row.querySelectorAll('[data-cat]').forEach(x => { x.className = 'pill'; x.style.background = ''; x.style.color = ''; });
+    b.className = 'pill active-cat';
+    if (filterCat !== 'all') { b.style.background = CAT_COLORS[filterCat] || '#A8522A'; b.style.color = '#fff'; }
+    else { b.className = 'pill active'; }
+    render();
+  }));
+}
+
+function updateStats() {
+  document.getElementById('stat-open').textContent = allItems.filter(i => !i.done).length;
+  document.getElementById('stat-timed').textContent = allItems.filter(i => !i.done && i.scheduled_time).length;
+  document.getElementById('stat-done').textContent = allItems.filter(i => i.done).length;
+}
+
+function getFiltered() {
+  const now = new Date();
+  const ts = new Date(now); ts.setHours(0,0,0,0);
+  const te = new Date(now); te.setHours(23,59,59,999);
+  const tw = new Date(ts); tw.setDate(tw.getDate()+7);
+  const tm = new Date(ts); tm.setDate(tm.getDate()+30);
+  return allItems.filter(i => {
+    if (searchVal && !i.task.toLowerCase().includes(searchVal.toLowerCase())) return false;
+    if (filterCat !== 'all' && i.auto_category !== filterCat) return false;
+    if (filterDate !== 'all' && i.scheduled_time) {
+      const d = new Date(i.scheduled_time);
+      if (filterDate === 'today' && (d < ts || d > te)) return false;
+      if (filterDate === 'week' && (d < ts || d > tw)) return false;
+      if (filterDate === 'month' && (d < ts || d > tm)) return false;
+    }
+    return true;
+  });
+}
+
+function fmt(iso) {
+  return new Date(iso).toLocaleString('pt-BR', { weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' });
+}
+
+function render() {
+  if (view === 'list') renderList();
+  else renderCal();
+}
+
+function renderList() {
+  const items = getFiltered();
+  const el = document.getElementById('cards');
+  if (!items.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-rule"></div><div class="empty-title">Seu Jarvis está pronto.</div><div class="empty-sub">Ainda não tem nada aqui.<br><br>Me encaminha qualquer compromisso, tarefa ou lembrete no WhatsApp — vai aparecer aqui em segundos, organizado automaticamente.</div><div class="empty-hint">aguardando sua primeira mensagem</div></div>`;
+    return;
+  }
+  el.innerHTML = items.map(i => {
+    const cat = i.auto_category || 'outros';
+    const color = CAT_COLORS[cat] || '#8A7F78';
+    const label = CAT_LABELS[cat] || cat;
+    const parts = i.participants && i.participants.length ? `<span class="card-participants">${i.participants.join(', ')}</span>` : '';
+    const amount = i.amount ? `<span class="card-amount">R$ ${Number(i.amount).toFixed(2)}</span>` : '';
+    const date = i.scheduled_time ? `<span class="card-date">${fmt(i.scheduled_time)}</span>` : '';
+    return `<div class="card${i.done?' done':''}" data-id="${i.id}">
+      <div class="card-top"><span class="cat-pill" style="background:${color}">${label}</span>${date}</div>
+      <div class="card-title">${i.task}</div>
+      <div class="card-meta">${parts}${amount}<button class="check-btn${i.done?' checked':''}" data-id="${i.id}" data-done="${i.done?'1':'0'}" title="Marcar">✓</button></div>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.check-btn').forEach(b => b.addEventListener('click', async e => {
+    e.stopPropagation();
+    const id = b.dataset.id, done = b.dataset.done !== '1';
+    await fetch(`${SUPA_URL}/rest/v1/jarvis_items?id=eq.${id}`, { method:'PATCH', headers:{...H,'Content-Type':'application/json','Prefer':'return=minimal'}, body: JSON.stringify({done}) });
+    const idx = allItems.findIndex(x => x.id === id);
+    if (idx >= 0) allItems[idx].done = done;
+    updateStats(); render();
+  }));
+}
+
+function renderCal() {
+  const y = calMonth.getFullYear(), m = calMonth.getMonth();
+  document.getElementById('cal-month-label').textContent = MONTHS[m] + ' ' + y;
+  const map = {};
+  allItems.forEach(i => {
+    if (!i.scheduled_time) return;
+    const k = new Date(i.scheduled_time).toISOString().slice(0,10);
+    (map[k] = map[k] || []).push(i);
+  });
+  const first = new Date(y,m,1).getDay();
+  const total = new Date(y,m+1,0).getDate();
+  const today = new Date();
+  let html = '';
+  for (let i=0;i<first;i++) html += '<div class="cal-cell empty-cell"></div>';
+  for (let d=1;d<=total;d++) {
+    const isToday = d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+    const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dis = map[key]||[];
+    html += `<div class="cal-cell${isToday?' today':''}"><div class="cal-day-num">${d}</div>`;
+    dis.slice(0,2).forEach(it => {
+      html += `<div class="cal-item-dot" style="color:${CAT_COLORS[it.auto_category||'outros']||'var(--muted)'}">· ${it.task}</div>`;
+    });
+    if (dis.length>2) html += `<div class="cal-item-dot" style="color:var(--muted)">+${dis.length-2}</div>`;
+    html += '</div>';
+  }
+  document.getElementById('cal-days').innerHTML = html;
+}
+
+// Date filters
+document.querySelectorAll('[data-date]').forEach(b => b.addEventListener('click', () => {
+  filterDate = b.dataset.date;
+  document.querySelectorAll('[data-date]').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  render();
+}));
+
+// View toggle
+document.getElementById('btn-list').addEventListener('click', () => {
+  view = 'list';
+  document.getElementById('list-view').style.display = 'block';
+  document.getElementById('cal-view').style.display = 'none';
+  document.getElementById('btn-list').classList.add('active');
+  document.getElementById('btn-cal').classList.remove('active');
+  render();
+});
+document.getElementById('btn-cal').addEventListener('click', () => {
+  view = 'calendar';
+  document.getElementById('list-view').style.display = 'none';
+  document.getElementById('cal-view').style.display = 'block';
+  document.getElementById('btn-list').classList.remove('active');
+  document.getElementById('btn-cal').classList.add('active');
+  render();
+});
+
+// Calendar navigation
+document.getElementById('cal-prev').addEventListener('click', () => {
+  calMonth.setMonth(calMonth.getMonth()-1);
+  renderCal();
+});
+document.getElementById('cal-next').addEventListener('click', () => {
+  calMonth.setMonth(calMonth.getMonth()+1);
+  renderCal();
+});
+
+// Search
+document.getElementById('search').addEventListener('input', e => { searchVal = e.target.value; render(); });
+
+// Init
+fetchData().catch(() => show('not-found'));
+
+// Poll every 15s
+setInterval(() => {
+  if (!user) return;
+  fetch(`${SUPA_URL}/rest/v1/jarvis_items?user_id=eq.${user.id}&order=scheduled_time.asc.nullslast&limit=200`, { headers: H })
+    .then(r => r.json()).then(d => { allItems = d||[]; updateStats(); render(); }).catch(()=>{});
+}, 15000);
+</script>
+</body>
+</html>

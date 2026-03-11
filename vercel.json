@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/d/:token",
-      "destination": "https://jarvis-app-flax.vercel.app/d/:token"
+      "destination": "/d.html"
     },
     {
       "source": "/(.*)",
