@@ -73,9 +73,13 @@ nav {
 .spacer { height: 80px; }
 .eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-weight: 400; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s 0.4s forwards; display: flex; align-items: center; gap: 10px; font-family: 'DM Sans', sans-serif; }
 .eyebrow::before { content:''; display:block; width:24px; height:1px; background: var(--accent); flex-shrink: 0; }
-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 12vw, 80px); line-height: 1.0; font-weight: 400; margin-bottom: 28px; color: var(--text); }
-.l1 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-.l2 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
+h1 { font-family: 'Cormorant Garamond', serif; font-size: inherit; line-height: 1.0; font-weight: 400; margin-bottom: 28px; color: var(--text); }
+.h-list { display:block; font-weight:300; font-size:clamp(32px,7vw,56px); color:var(--text-2); line-height:1.05; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+.h-beat { display:block; font-weight:400; font-size:clamp(20px,4vw,28px); color:var(--text-2); margin-top:16px; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
+.h-turn { display:block; font-weight:500; font-size:clamp(24px,5vw,36px); color:var(--text); margin-top:20px; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+.h-name { display:block; font-weight:600; font-size:clamp(28px,6vw,48px); color:var(--text); margin-top:8px; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.95s cubic-bezier(0.16,1,0.3,1) forwards; }
+/* legacy aliases */
+.l1,.l2 { display:block; opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
 .sub { font-size: 16px; font-weight: 300; line-height: 1.7; color: var(--text-2); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.7s 1.0s forwards; }
 .sub strong { color: var(--text); font-weight: 400; }
 .hero-btns { display: flex; flex-direction: column; gap: 12px; }
@@ -266,12 +270,14 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 12vw, 80px
 
     <div class="hero-content" style="display:contents;">
       <div class="spacer"></div>
-      <div class="eyebrow">Assistente pessoal</div>
+      <div class="eyebrow">— Assistente pessoal</div>
       <h1>
-        <span class="l1">Você acabou de</span>
-        <span class="l2">contratar o Jarvis.</span>
+        <span class="h-list">Reunião, mensagem, tarefa,<br>filho, prazo, ideia.</span>
+        <span class="h-beat">Tudo ao mesmo tempo. Todo dia.</span>
+        <span class="h-turn">Alguém precisava cuidar disso por você.</span>
+        <span class="h-name">Prazer, Jarvis.</span>
       </h1>
-      <p class="sub">Manda <strong>áudio, foto ou texto</strong> no WhatsApp.<br>Ele entende, organiza e te avisa na hora certa.<br><strong>Nada se perde. Nada esquece.</strong></p>
+      <p class="sub">Converse com o Jarvis direto no WhatsApp — áudio, foto ou texto.<br>Ele entende, organiza e te lembra na hora certa.<br>Como ter uma assistente pessoal. Só que no app que você já usa.</p>
       <div class="hero-btns">
         <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
         <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
