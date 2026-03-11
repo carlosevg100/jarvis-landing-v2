@@ -332,7 +332,7 @@ async function init() {
 }
 
 async function loadItems() {
-  const items = await supaFetch(`jarvis_items?user_id=eq.${user.id}&select=*&order=scheduled_time.asc.nullslast,created_at.desc`).catch(() => []);
+  const items = await supaFetch(`jarvis_items?user_id=eq.${user.id}&done=eq.false&select=*&order=scheduled_time.asc.nullslast,created_at.desc`).catch(() => []);
   allItems = Array.isArray(items) ? items : [];
   updateStats();
   if (currentView === 'list') renderList();
@@ -382,11 +382,11 @@ function filteredItems() {
 }
 
 function updateStats() {
-  const open = allItems.filter(i => i.status !== 'done');
+  const open = allItems.filter(i => !i.done);
   document.getElementById('stat-aberto').textContent = open.length;
   document.getElementById('stat-hoje').textContent = open.filter(i => getLocalDateStr(i.scheduled_time) === todayStr).length;
   document.getElementById('stat-semana').textContent = open.filter(i => { const d = getLocalDateStr(i.scheduled_time); return d && d >= todayStr && d <= getWeekEndStr(); }).length;
-  document.getElementById('stat-concluido').textContent = allItems.filter(i => i.status === 'done').length;
+  document.getElementById('stat-concluido').textContent = allItems.filter(i => i.done).length;
 }
 
 function renderList() {
@@ -420,7 +420,7 @@ function renderList() {
       const urgency = diff === 0 ? `<span class="event-urgency urgency-today">Hoje</span>` :
         diff === 1 ? `<span class="event-urgency urgency-soon">Amanhã</span>` : '';
       const cat = item.auto_category || 'outros';
-      const done = item.status === 'done';
+      const done = item.done === true;
       const color = catColors[cat] || '#7A7A7A';
       const card = document.createElement('div');
       card.className = `event-card${done ? ' done' : ''}`;
@@ -446,13 +446,13 @@ async function toggleDone(id, ev) {
   ev.stopPropagation();
   const item = allItems.find(i => i.id === id);
   if (!item) return;
-  const newStatus = item.status === 'done' ? 'open' : 'done';
-  item.status = newStatus;
+  const newDone = !item.done;
+  item.done = newDone;
   renderList(); updateStats();
   await fetch(`${SUPA_URL}/rest/v1/jarvis_items?id=eq.${id}`, {
     method: 'PATCH',
     headers: { ...H, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ status: newStatus })
+    body: JSON.stringify({ done: newDone })
   }).catch(() => {});
 }
 
