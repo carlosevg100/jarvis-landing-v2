@@ -306,7 +306,8 @@
       }
     }
 
-    .step { opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .step { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .step.animate-start { opacity: 0; transform: translateY(20px); }
     .step.visible { opacity: 1; transform: translateY(0); }
 
     .step-num {
@@ -1032,7 +1033,10 @@
       });
     }, { threshold: 0.15 });
 
-    document.querySelectorAll('.step').forEach(el => observer.observe(el));
+    document.querySelectorAll('.step').forEach(el => {
+      el.classList.add('animate-start');
+      observer.observe(el);
+    });
 
     // ── Use case accordion ──────────────────────────────────────────────
     function toggleCase(el) {
