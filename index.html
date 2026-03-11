@@ -1,605 +1,1108 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jarvis — Seu assistente pessoal no WhatsApp</title>
-  <meta name="description" content="Manda áudio, foto ou texto no WhatsApp. O Jarvis entende, organiza e te avisa na hora certa.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jarvis</title>
+<meta name="description" content="Manda áudio, foto ou texto no WhatsApp. O Jarvis entende, organiza e te avisa na hora certa.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --black: #060606;
+  --white: #F4F1EA;
+  --accent: #C8FF00;
+  --mid: #141414;
+  --border: rgba(244,241,234,0.08);
+}
+html, body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+  background: linear-gradient(to bottom, var(--black) 0%, transparent 100%);
+}
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 5px; color: var(--white); opacity: 0; animation: fadeUp 0.7s 0.1s forwards; }
+.nav-pill { background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25); color: var(--accent); padding: 7px 16px; font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 100px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; display: flex; align-items: center; gap: 6px; }
+.live-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.8s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 24px 40px; position: relative; overflow: hidden; }
+.bg-letter { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%); font-family: 'Bebas Neue', sans-serif; font-size: 85vw; color: rgba(200,255,0,0.025); pointer-events: none; line-height: 1; user-select: none; opacity: 0; animation: fadeIn 2s 0.5s forwards; }
+.glow { position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(200,255,0,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; animation: glowPulse 5s ease-in-out infinite; }
+@keyframes glowPulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:1; } 50%{ transform: translateX(-50%) scale(1.3); opacity:0.6; } }
+.spacer { height: 80px; }
+.eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s 0.4s forwards; display: flex; align-items: center; gap: 10px; }
+.eyebrow::before { content:''; display:block; width:24px; height:1px; background: var(--accent); flex-shrink: 0; }
+h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 18vw, 96px); line-height: 0.9; letter-spacing: -1px; margin-bottom: 28px; }
+.l1 { display:block; color:var(--white); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+.l2 { display:block; color:var(--accent); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards; }
+.l3 { display:block; color:var(--white); opacity:0; transform:translateY(30px); animation: fadeUp 0.8s 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+.sub { font-size: 15px; font-weight: 300; line-height: 1.65; color: rgba(244,241,234,0.5); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.7s 1.0s forwards; }
+.sub strong { color: var(--white); font-weight: 400; }
+.btn-primary { width: 100%; background: var(--accent); color: var(--black); border: none; padding: 18px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.5px; margin-bottom: 12px; opacity: 0; animation: fadeUp 0.7s 1.15s forwards; display: flex; align-items: center; justify-content: space-between; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s; cursor: pointer; }
+.btn-primary:active { transform: scale(0.98); background: #d4ff1a; }
+.btn-secondary { width: 100%; background: transparent; color: rgba(244,241,234,0.4); border: 1px solid var(--border); padding: 16px 24px; font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.7s 1.25s forwards; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s, color 0.2s; }
+.btn-secondary:active { color: var(--white); border-color: rgba(244,241,234,0.2); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin-top: 40px; opacity: 0; animation: fadeUp 0.7s 1.4s forwards; }
+.stat { background: var(--black); padding: 18px 16px; }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--white); letter-spacing: 1px; display: block; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(244,241,234,0.3); font-weight: 300; line-height: 1.4; }
+.proof { margin-top: 28px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.7s 1.5s forwards; }
+.avatars { display: flex; }
+.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--black); background: var(--mid); margin-left: -7px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: rgba(244,241,234,0.5); }
+.avatar:first-child { margin-left: 0; }
+.proof-text { font-size: 12px; color: rgba(244,241,234,0.4); font-weight: 300; line-height: 1.4; }
+.proof-text strong { color: rgba(244,241,234,0.7); font-weight: 400; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@media (min-width: 480px) { body { display: flex; flex-direction: column; align-items: center; } nav { max-width: 420px; left: 50%; right: auto; width: 420px; transform: translateX(-50%); } .hero { max-width: 420px; width: 100%; } }
 
-    :root {
-      --bg: #0a0a0a;
-      --text: #ffffff;
-      --accent: #CDFF00;
-      --text-2: rgba(255,255,255,0.5);
-      --text-3: rgba(255,255,255,0.25);
-      --text-ghost: rgba(255,255,255,0.15);
-      --border: rgba(255,255,255,0.1);
-      --border-faint: rgba(255,255,255,0.06);
-      --card-bg: #1a1a1a;
-    }
+/* ──────────────────────────────────────────────────────────────
+   SEÇÕES ABAIXO DO HERO
+   Todas usam max-width: 420px centralizado (mesma lógica do hero)
+────────────────────────────────────────────────────────────── */
 
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+.section {
+  width: 100%;
+  padding: 72px 24px;
+}
 
-    /* ─── NAV ─────────────────────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      height: 64px;
-      background: rgba(10,10,10,0.9);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border-faint);
-    }
+@media (min-width: 480px) {
+  .section {
+    max-width: 420px;
+  }
+}
 
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 0.08em;
-      color: var(--text);
-    }
+.section-tag {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(244,241,234,0.25);
+  font-weight: 500;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: rgba(244,241,234,0.25);
+  flex-shrink: 0;
+}
 
-    .nav-cta {
-      background: var(--accent);
-      color: #0a0a0a;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 10px 22px;
-      border: none;
-      border-radius: 2px;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: opacity 0.15s;
-    }
-    .nav-cta:hover { opacity: 0.88; }
+/* ─── THE PROBLEM ─────────────────────────────────────────── */
 
-    @media (max-width: 600px) {
-      nav { padding: 0 20px; }
-      .nav-cta { font-size: 12px; padding: 9px 16px; }
-    }
+.problem-wrap {
+  background: #0d0d0d;
+}
 
-    /* ─── HERO ────────────────────────────────────────────────── */
-    #hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding-top: 64px;
-      overflow: hidden;
-    }
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-bottom: 40px;
+}
 
-    .hero-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 60px 48px 40px;
-      position: relative;
-    }
+.problem-card {
+  background: #0d0d0d;
+  padding: 22px 18px;
+}
 
-    /* Label superior */
-    .hero-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
+.problem-card-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
 
-    /* Headline */
-    .hero-headline {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(64px, 11vw, 148px);
-      line-height: 0.93;
-      letter-spacing: 0.01em;
-      color: var(--text);
-      margin-bottom: 36px;
-    }
+.problem-card-body {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.45);
+  line-height: 1.6;
+}
 
-    .hero-headline .accent { color: var(--accent); }
+.problem-transition {
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
 
-    /* Subheadline */
-    .hero-sub {
-      font-size: clamp(15px, 1.6vw, 18px);
-      font-weight: 300;
-      color: var(--text-2);
-      line-height: 1.7;
-      max-width: 520px;
-      margin-bottom: 40px;
-    }
+.problem-transition p {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.5);
+  line-height: 1.7;
+}
 
-    /* CTAs */
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      flex-wrap: wrap;
-    }
+.problem-transition p strong {
+  color: var(--white);
+  font-weight: 400;
+  display: block;
+  margin-bottom: 4px;
+}
 
-    .btn-primary {
-      background: var(--accent);
-      color: #0a0a0a;
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 500;
-      padding: 14px 32px;
-      border: none;
-      border-radius: 2px;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: opacity 0.15s;
-      white-space: nowrap;
-    }
-    .btn-primary:hover { opacity: 0.88; }
+/* ─── HOW IT WORKS ────────────────────────────────────────── */
 
-    .btn-ghost {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: none;
-      border: none;
-      color: var(--text-2);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      cursor: pointer;
-      transition: color 0.15s;
-      white-space: nowrap;
-    }
-    .btn-ghost:hover { color: var(--text); }
+.how-wrap {
+  background: var(--white);
+}
 
-    .btn-ghost-icon {
-      width: 28px;
-      height: 28px;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-    }
+.how-wrap .section-tag {
+  color: rgba(6,6,6,0.3);
+}
+.how-wrap .section-tag::before {
+  background: rgba(6,6,6,0.2);
+}
 
-    /* Badge flutuante */
-    .badge-live {
-      position: absolute;
-      top: 80px;
-      right: 48px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-width: 200px;
-    }
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
 
-    .badge-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.step-item {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(6,6,6,0.08);
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.step-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.step-item:last-child { border-bottom: none; }
 
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      animation: pulse 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  color: rgba(6,6,6,0.25);
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  padding-top: 2px;
+  width: 24px;
+}
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+.step-content {}
 
-    .badge-label-top {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      color: var(--text-3);
-      text-transform: uppercase;
-    }
+.step-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #060606;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
 
-    .badge-label-main {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text);
-      line-height: 1.4;
-    }
+.step-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(6,6,6,0.55);
+  line-height: 1.65;
+}
 
-    .badge-label-sub {
-      font-size: 11px;
-      color: var(--text-3);
-      font-weight: 300;
-    }
+.how-closer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(6,6,6,0.08);
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(6,6,6,0.45);
+  font-style: italic;
+}
 
-    @media (max-width: 900px) {
-      .badge-live { display: none; }
-    }
+/* ─── USE CASES ───────────────────────────────────────────── */
 
-    /* Texto vertical lateral */
-    .vertical-text {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%) rotate(90deg);
-      transform-origin: center center;
-      display: flex;
-      gap: 40px;
-      align-items: center;
-      white-space: nowrap;
-    }
+.cases-wrap {
+  background: var(--black);
+}
 
-    .vertical-text span {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      color: var(--text-ghost);
-      text-transform: uppercase;
-    }
+.accordion {
+  display: flex;
+  flex-direction: column;
+}
 
-    @media (max-width: 900px) {
-      .vertical-text { display: none; }
-    }
+.acc-item {
+  border-bottom: 1px solid var(--border);
+}
 
-    /* ─── STATS BAR ───────────────────────────────────────────── */
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid var(--border-faint);
-      margin: 0 48px;
-    }
+.acc-trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    @media (max-width: 700px) {
-      .stats-bar {
-        grid-template-columns: repeat(2, 1fr);
-        margin: 0 20px;
-      }
-    }
+.acc-trigger-text {}
 
-    @media (max-width: 400px) {
-      .stats-bar { grid-template-columns: 1fr 1fr; }
-    }
+.acc-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 3px;
+}
 
-    .stat-item {
-      padding: 28px 0;
-      border-right: 1px solid var(--border-faint);
-      padding-left: 24px;
-    }
+.acc-teaser {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.3);
+}
 
-    .stat-item:first-child { padding-left: 0; }
-    .stat-item:last-child { border-right: none; }
+.acc-icon {
+  font-size: 18px;
+  color: rgba(244,241,234,0.25);
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  margin-top: 2px;
+}
 
-    @media (max-width: 700px) {
-      .stat-item:nth-child(2) { border-right: none; }
-      .stat-item:nth-child(3) { padding-left: 0; }
-      .stat-item:nth-child(4) { border-right: none; }
-    }
+.acc-item.open .acc-icon {
+  transform: rotate(45deg);
+}
 
-    .stat-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 44px;
-      line-height: 1;
-      color: var(--text);
-      letter-spacing: 0.02em;
-      margin-bottom: 6px;
-    }
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
 
-    .stat-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      color: var(--text-3);
-      text-transform: uppercase;
-      line-height: 1.4;
-    }
+.acc-item.open .acc-body {
+  max-height: 400px;
+}
 
-    /* ─── MODAL ───────────────────────────────────────────────── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .modal-overlay.active { display: flex; }
+.acc-inner {
+  padding-bottom: 24px;
+}
 
-    .modal-card {
-      background: #141414;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 40px;
-      width: 100%;
-      max-width: 400px;
-      position: relative;
-    }
+.acc-before {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.4);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
 
-    .modal-close {
-      position: absolute;
-      top: 16px; right: 20px;
-      background: none; border: none;
-      color: var(--text-3);
-      font-size: 22px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: color 0.15s;
-    }
-    .modal-close:hover { color: var(--text); }
+.acc-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 16px;
+}
 
-    .modal-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 32px;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
+.acc-after {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(244,241,234,0.85);
+  line-height: 1.65;
+}
 
-    .modal-sub {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--text-2);
-      margin-bottom: 28px;
-      line-height: 1.5;
-    }
+.acc-after em {
+  color: var(--accent);
+  font-style: normal;
+}
 
-    .form-group { margin-bottom: 16px; }
+/* ─── DEPOIMENTOS ─────────────────────────────────────────── */
 
-    .form-label {
-      display: block;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      color: var(--text-3);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
+.testi-wrap {
+  background: #0d0d0d;
+}
 
-    .form-input {
-      width: 100%;
-      background: #0a0a0a;
-      border: 1px solid var(--border-faint);
-      border-radius: 2px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 300;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-input::placeholder { color: var(--text-3); }
-    .form-input:focus { border-color: var(--border); }
+.testi-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+}
 
-    .form-submit {
-      width: 100%;
-      margin-top: 8px;
-      background: var(--accent);
-      color: #0a0a0a;
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 500;
-      padding: 14px;
-      border: none;
-      border-radius: 2px;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: opacity 0.15s;
-    }
-    .form-submit:hover { opacity: 0.88; }
-    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.testi-card {
+  background: #0d0d0d;
+  padding: 24px 20px;
+}
 
-    .form-note {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--text-3);
-      text-align: center;
-      margin-top: 14px;
-    }
+.testi-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.6);
+  line-height: 1.7;
+  margin-bottom: 18px;
+  font-style: italic;
+}
 
-    .form-msg {
-      font-size: 14px;
-      text-align: center;
-      margin-top: 14px;
-      min-height: 20px;
-      line-height: 1.5;
-    }
-    .form-msg.success { color: var(--accent); }
-    .form-msg.error { color: rgba(255,90,80,0.9); }
-  </style>
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testi-initials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #222;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(244,241,234,0.4);
+  flex-shrink: 0;
+}
+
+.testi-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.3;
+}
+
+.testi-role {
+  font-size: 11px;
+  color: rgba(244,241,234,0.3);
+  font-weight: 300;
+}
+
+/* ─── PRICING ─────────────────────────────────────────────── */
+
+.pricing-wrap {
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+
+.pricing-wrap .section {
+  text-align: center;
+}
+
+.pricing-pre {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.4);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.pricing-amount {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.pricing-currency {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--white);
+  margin-top: 8px;
+}
+
+.pricing-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+
+.pricing-cents {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.5);
+  margin-top: 8px;
+}
+
+.pricing-period {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.3);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.pricing-trial {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 400;
+  margin-bottom: 32px;
+  letter-spacing: 0.5px;
+}
+
+.pricing-note {
+  font-size: 12px;
+  color: rgba(244,241,234,0.25);
+  font-weight: 300;
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* ─── CTA FINAL ───────────────────────────────────────────── */
+
+.cta-wrap {
+  background: var(--black);
+}
+
+.cta-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 12vw, 64px);
+  line-height: 0.92;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  margin-bottom: 36px;
+}
+
+.cta-headline span {
+  color: var(--accent);
+}
+
+.cta-sub {
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.25);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* ─── FOOTER ──────────────────────────────────────────────── */
+
+.footer-wrap {
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 480px) {
+  .footer-inner {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+}
+
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 4px;
+  color: rgba(244,241,234,0.3);
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: rgba(244,241,234,0.2);
+  font-weight: 300;
+}
+
+/* ─── MODAL ───────────────────────────────────────────────── */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 300;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.modal-overlay.active { display: flex; }
+
+@media (min-width: 480px) {
+  .modal-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+.modal-card {
+  background: #0d0d0d;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 24px 40px;
+  position: relative;
+}
+
+@media (min-width: 480px) {
+  .modal-card {
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+.modal-handle {
+  width: 36px;
+  height: 3px;
+  background: rgba(244,241,234,0.15);
+  border-radius: 2px;
+  margin: 0 auto 28px;
+}
+
+@media (min-width: 480px) {
+  .modal-handle { display: none; }
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: none; border: none;
+  color: rgba(244,241,234,0.25);
+  font-size: 20px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1;
+  transition: color 0.15s;
+  display: none;
+}
+@media (min-width: 480px) { .modal-close { display: block; } }
+.modal-close:hover { color: var(--white); }
+
+.modal-tag {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.modal-sub {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(244,241,234,0.4);
+  margin-bottom: 28px;
+  line-height: 1.55;
+}
+
+.field {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+  position: relative;
+}
+
+.field input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  padding: 16px 0;
+  transition: border-color 0.15s;
+}
+.field input::placeholder { color: rgba(244,241,234,0.2); }
+.field:focus-within {
+  border-bottom-color: rgba(244,241,234,0.3);
+}
+
+.field + .field { margin-top: 0; }
+
+.modal-submit {
+  width: 100%;
+  background: var(--accent);
+  color: var(--black);
+  border: none;
+  padding: 18px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  transition: background 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.modal-submit:hover { background: #d4ff1a; }
+.modal-submit:active { transform: scale(0.98); }
+.modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.modal-note {
+  font-size: 11px;
+  color: rgba(244,241,234,0.2);
+  text-align: center;
+  margin-top: 14px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+.modal-msg {
+  font-size: 13px;
+  text-align: center;
+  margin-top: 14px;
+  min-height: 18px;
+  line-height: 1.5;
+}
+.modal-msg.success { color: var(--accent); }
+.modal-msg.error { color: rgba(255,80,70,0.9); }
+
+/* Scroll reveal helper */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <span class="nav-logo">JARVIS</span>
-    <button class="nav-cta" onclick="openModal()">Comecar agora</button>
-  </nav>
+<!-- NAV — EXATO DO CADU, sem alterar -->
+<nav>
+  <div class="nav-logo">JARVIS</div>
+  <div class="nav-pill"><span class="live-dot"></span>Beta aberto</div>
+</nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-main">
+<!-- HERO — EXATO DO CADU, sem alterar -->
+<section class="hero">
+  <div class="bg-letter">J</div>
+  <div class="glow"></div>
+  <div class="spacer"></div>
+  <div class="eyebrow">Assistente pessoal</div>
+  <h1>
+    <span class="l1">VOCE</span>
+    <span class="l2">ACABOU DE</span>
+    <span class="l3">CONTRATAR<br>O JARVIS.</span>
+  </h1>
+  <p class="sub">Manda <strong>audio, foto ou texto</strong> no WhatsApp.<br>Ele entende, organiza e te avisa.<br><strong>Nada se perde. Nada esquece.</strong></p>
+  <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
+  <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">0</span><span class="stat-label">Instalacao<br>necessaria</span></div>
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponivel</span></div>
+    <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memoria<br>e contexto</span></div>
+    <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>comecar</span></div>
+  </div>
+  <div class="proof">
+    <div class="avatars">
+      <div class="avatar">C</div><div class="avatar">A</div><div class="avatar">R</div><div class="avatar">M</div>
+    </div>
+    <p class="proof-text"><strong>+2.400 pessoas</strong> ja estao<br>usando o Jarvis hoje</p>
+  </div>
+</section>
 
-      <!-- Label -->
-      <p class="hero-label">— Seu assistente pessoal</p>
+<!-- ── SEÇÃO 1: THE PROBLEM ─────────────────────────────── -->
+<div id="problem" class="problem-wrap" style="display:flex;flex-direction:column;align-items:center;">
+  <div class="section">
+    <p class="section-tag reveal">O problema</p>
 
-      <!-- Headline 3 linhas -->
-      <h1 class="hero-headline">
-        VOCE ACABOU<br>
-        DE <span class="accent">CONTRATAR</span><br>
-        O JARVIS.
-      </h1>
+    <div class="problem-grid reveal">
+      <div class="problem-card">
+        <p class="problem-card-title">Grupo da escola da Olivia.</p>
+        <p class="problem-card-body">47 mensagens sobre a festa junina. Data? Perdida em algum lugar la no meio.</p>
+      </div>
+      <div class="problem-card">
+        <p class="problem-card-title">Audio de 4 minutos do seu chefe.</p>
+        <p class="problem-card-body">"Vou ouvir depois." Depois nunca chegou. As tarefas, tambem nao.</p>
+      </div>
+      <div class="problem-card">
+        <p class="problem-card-title">Print do condominio.</p>
+        <p class="problem-card-body">Sobre a assembleia. Voce foi? Voce lembrou?</p>
+      </div>
+      <div class="problem-card">
+        <p class="problem-card-title">Pagamento mencionado num grupo.</p>
+        <p class="problem-card-body">Ninguem confirmou. Atrasou. Claro.</p>
+      </div>
+    </div>
 
-      <!-- Subheadline -->
-      <p class="hero-sub">
-        Manda audio, foto ou texto no WhatsApp.<br>
-        Ele entende, organiza e te avisa na hora certa.<br>
-        Nada se perde. Nada esquece. Nada atrasa.
+    <div class="problem-transition reveal">
+      <p>
+        <strong>Nao e falta de atencao. E excesso de mensagem.</strong>
+        O WhatsApp nao foi feito pra lembrar por voce.<br>
+        O Jarvis foi.
       </p>
+    </div>
+  </div>
+</div>
 
-      <!-- CTAs -->
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="openModal()">Ativar o Jarvis</button>
-        <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
-          <span class="btn-ghost-icon">&#9655;</span>
-          Ver como funciona
+<!-- ── SEÇÃO 2: HOW IT WORKS ───────────────────────────── -->
+<div id="how" class="how-wrap" style="display:flex;flex-direction:column;align-items:center;">
+  <div class="section">
+    <p class="section-tag">Como funciona</p>
+
+    <div class="steps">
+      <div class="step-item">
+        <span class="step-num">01</span>
+        <div class="step-content">
+          <p class="step-title">Voce encaminha qualquer coisa</p>
+          <p class="step-desc">Audio, print, texto baguncado, PDF. O mesmo gesto que voce ja faz todo dia. Encaminha pro Jarvis.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-num">02</span>
+        <div class="step-content">
+          <p class="step-title">Jarvis entende e organiza</p>
+          <p class="step-desc">Extrai o que importa — data, tarefa, compromisso, prazo. Organiza sem voce fazer nada.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-num">03</span>
+        <div class="step-content">
+          <p class="step-title">Voce e lembrado na hora certa</p>
+          <p class="step-desc">No WhatsApp. Sem precisar checar nada. Sem abrir nenhum app.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="how-closer reveal">E isso. Tres passos. Uma mudanca permanente.</p>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 3: USE CASES ──────────────────────────────── -->
+<div id="cases" class="cases-wrap" style="display:flex;flex-direction:column;align-items:center;">
+  <div class="section">
+    <p class="section-tag reveal">Situacoes reais</p>
+
+    <div class="accordion reveal">
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-trigger-text">
+            <p class="acc-title">Grupo de escola</p>
+            <p class="acc-teaser">A mae que nao pode errar</p>
+          </div>
+          <span class="acc-icon">+</span>
         </button>
-      </div>
-
-      <!-- Badge flutuante -->
-      <div class="badge-live">
-        <div class="badge-row">
-          <div class="badge-dot"></div>
-          <span class="badge-label-top">Ao vivo agora</span>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="acc-before">Voce esta no grupo da turma da Olivia. 200 mensagens por semana. Datas, uniformes, eventos, arrecadacoes. Voce tenta se lembrar de tudo. As vezes consegue. As vezes nao.</p>
+            <div class="acc-divider"></div>
+            <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, trajar caipira, levar R$15." Semana que vem: lembrete automatico. Voce aparece na festa. <em>Olivia sorri.</em></p>
+          </div>
         </div>
-        <p class="badge-label-main">Jarvis no seu WhatsApp</p>
-        <p class="badge-label-sub">Responde em segundos</p>
       </div>
 
-      <!-- Texto vertical -->
-      <div class="vertical-text" aria-hidden="true">
-        <span>ASSISTENTE</span>
-        <span>INTELIGENCIA</span>
-        <span>MEMORIA</span>
-      </div>
-
-    </div>
-
-    <!-- Stats bar -->
-    <div class="stats-bar">
-      <div class="stat-item">
-        <div class="stat-value">0</div>
-        <div class="stat-label">Instalacao<br>necessaria</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">24/7</div>
-        <div class="stat-label">Sempre<br>disponivel</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">&#8734;</div>
-        <div class="stat-label">Memoria e<br>contexto</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">1 MIN</div>
-        <div class="stat-label">Para<br>comecar</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- anchor for scroll -->
-  <div id="how" style="height:1px;background:rgba(255,255,255,0.06)"></div>
-  <div style="padding:80px 48px;text-align:center;color:rgba(255,255,255,0.2);font-size:13px;font-weight:300">
-    As demais secoes serao adicionadas apos aprovacao do hero.
-  </div>
-
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal" onclick="handleOverlay(event)">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeModal()">&times;</button>
-      <h2 class="modal-title">Ativar o Jarvis</h2>
-      <p class="modal-sub">3 dias gratis. Sem cartao. Voce recebe uma mensagem no WhatsApp em segundos.</p>
-      <form id="reg-form" onsubmit="submitForm(event)">
-        <div class="form-group">
-          <label class="form-label" for="f-name">Nome</label>
-          <input class="form-input" id="f-name" type="text" placeholder="Como voce se chama?" autocomplete="name" required>
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-trigger-text">
+            <p class="acc-title">Reuniao com 5 tarefas</p>
+            <p class="acc-teaser">O profissional com agenda cheia</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="acc-before">Reuniao termina. Voce abriu o bloco de notas? Nao. Vai anotar depois? Vai. Anotou? Nao. Na sexta o gestor pergunta pelo entregavel.</p>
+            <div class="acc-divider"></div>
+            <p class="acc-after">Mandou o audio da reuniao pro Jarvis. Em minutos: lista de tarefas, responsaveis, prazos. <em>Voce entrega antes do prazo. Parece que tem superpoder.</em></p>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="f-phone">WhatsApp</label>
-          <input class="form-input" id="f-phone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" required>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-trigger-text">
+            <p class="acc-title">Audio de 3 minutos</p>
+            <p class="acc-teaser">O audio que "vou ouvir depois"</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="acc-before">Seu parceiro mandou um audio longo com um recado importante. Voce estava dirigindo. Marcou pra ouvir depois. Esqueceu. Recado perdido.</p>
+            <div class="acc-divider"></div>
+            <p class="acc-after">Encaminhou o audio pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado e programou o lembrete. <em>Quando chegou em casa, voce ja sabia de tudo.</em></p>
+          </div>
         </div>
-        <button class="form-submit" type="submit" id="submit-btn">Criar minha conta</button>
-        <p class="form-note">Voce recebera uma mensagem do Jarvis em instantes.</p>
-        <p class="form-msg" id="form-msg"></p>
-      </form>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-trigger-text">
+            <p class="acc-title">PDF ou print com prazo</p>
+            <p class="acc-teaser">O documento com data enterrada</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovacao. PDF da proposta com validade de 10 dias. Voce salva. Esquece onde salvou. O prazo passa.</p>
+            <div class="acc-divider"></div>
+            <p class="acc-after">Encaminhou pro Jarvis. Ele leu, extraiu a data, criou o lembrete automatico. Dois dias antes: "Atencao — prazo amanha." <em>Voce age a tempo. Sempre.</em></p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
+</div>
 
-  <script>
-    function openModal() {
-      document.getElementById('modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => document.getElementById('f-name').focus(), 80);
-    }
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-    function handleOverlay(e) {
-      if (e.target === document.getElementById('modal')) closeModal();
-    }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+<!-- ── SEÇÃO 4: DEPOIMENTOS ────────────────────────────── -->
+<div class="testi-wrap" style="display:flex;flex-direction:column;align-items:center;">
+  <div class="section">
+    <p class="section-tag reveal">Quem usa</p>
 
-    async function submitForm(e) {
-      e.preventDefault();
-      const name = document.getElementById('f-name').value.trim();
-      const raw = document.getElementById('f-phone').value.replace(/\D/g, '');
-      const phone = raw.startsWith('55') ? raw : '55' + raw;
-      const btn = document.getElementById('submit-btn');
-      const msg = document.getElementById('form-msg');
+    <div class="testi-list reveal">
+      <div class="testi-card">
+        <p class="testi-text">"Eu estava em 6 grupos de escola ao mesmo tempo. Jarvis foi a primeira coisa que de fato me ajudou a nao perder data. Nao e exagero: reduziu minha ansiedade de domingo a noite."</p>
+        <div class="testi-author">
+          <div class="testi-initials">FR</div>
+          <div>
+            <p class="testi-name">Fernanda R., 38 anos</p>
+            <p class="testi-role">Mae do Bento e da Luisa — Sao Paulo</p>
+          </div>
+        </div>
+      </div>
 
-      if (phone.length < 12 || phone.length > 13) {
-        msg.className = 'form-msg error';
-        msg.textContent = 'Numero invalido. Use: 11 99999-9999';
-        return;
+      <div class="testi-card">
+        <p class="testi-text">"Minha rotina e reuniao atras de reuniao. Eu mandava o audio das reunioes pro Jarvis e chegava na proxima ja com o resumo das tarefas pendentes. Meu gestor perguntou o que tinha mudado."</p>
+        <div class="testi-author">
+          <div class="testi-initials">RM</div>
+          <div>
+            <p class="testi-name">Rodrigo M., 34 anos</p>
+            <p class="testi-role">Gerente Comercial — Curitiba</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <p class="testi-text">"Tres meses usando e ainda nao cancelei — e ja testei tudo que existe no mercado. O Jarvis e o unico que funciona do jeito que a minha cabeca funciona."</p>
+        <div class="testi-author">
+          <div class="testi-initials">MT</div>
+          <div>
+            <p class="testi-name">Marcelo T., 41 anos</p>
+            <p class="testi-role">Empreendedor — Belo Horizonte</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 5: PRICING ────────────────────────────────── -->
+<div id="pricing" class="pricing-wrap" style="display:flex;flex-direction:column;align-items:center;">
+  <div class="section" style="text-align:center;">
+    <p class="section-tag reveal" style="justify-content:center;">Preco</p>
+
+    <p class="pricing-pre reveal">Organize sua vida por menos do que um cafe por semana.</p>
+
+    <div class="pricing-amount reveal">
+      <span class="pricing-currency">R$</span>
+      <span class="pricing-number">19</span>
+      <span class="pricing-cents">,90</span>
+    </div>
+
+    <p class="pricing-period reveal">/mes</p>
+    <p class="pricing-trial reveal">3 dias gratis &mdash; cancela quando quiser</p>
+
+    <button class="btn-primary reveal" style="margin-top:0;opacity:1;animation:none;" onclick="openModal()">Quero testar gratis <span>&#8594;</span></button>
+
+    <p class="pricing-note reveal">Sem contrato. Sem anuidade. Sem pegadinha.<br>Comeca gratis. Continua porque faz sentido.</p>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 6: CTA FINAL ──────────────────────────────── -->
+<div class="cta-wrap" style="display:flex;flex-direction:column;align-items:center;border-top:1px solid var(--border);">
+  <div class="section">
+    <h2 class="cta-headline reveal">
+      VOCE JA<br>ENCAMINHA<br><span>MENSAGENS</span><br>TODO DIA.
+    </h2>
+    <p class="sub reveal" style="margin-bottom:28px;">Agora elas trabalham por voce.</p>
+
+    <button class="btn-primary reveal" style="margin-bottom:0;opacity:1;animation:none;" onclick="openModal()">Comecar gratis agora <span>&#8594;</span></button>
+    <p class="cta-sub reveal">Sem cadastro complicado. So o WhatsApp que voce ja tem.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-wrap">
+  <div class="footer-inner">
+    <span class="footer-logo">JARVIS</span>
+    <span class="footer-copy">&copy; 2026 Jarvis</span>
+  </div>
+</div>
+
+<!-- ── MODAL ───────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal" onclick="handleOverlay(event)">
+  <div class="modal-card">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+
+    <p class="modal-tag">Ativar agora</p>
+    <h3 class="modal-title">COMECAR GRATIS</h3>
+    <p class="modal-sub">3 dias gratis, sem cartao. Voce recebe uma mensagem no WhatsApp em segundos.</p>
+
+    <form id="reg-form" onsubmit="submitForm(event)">
+      <div class="field">
+        <input id="f-name" type="text" placeholder="Nome" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <input id="f-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required>
+      </div>
+
+      <button class="modal-submit" type="submit" id="submit-btn">
+        Criar minha conta <span>&#8594;</span>
+      </button>
+
+      <p class="modal-note">Voce recebera uma mensagem do Jarvis em instantes.</p>
+      <p class="modal-msg" id="form-msg"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ── Accordion ──────────────────────────────────────────────
+  function toggleAcc(btn) {
+    const item = btn.closest('.acc-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // ── Scroll reveal ───────────────────────────────────────────
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
       }
+    });
+  }, { threshold: 0.12 });
 
-      btn.textContent = 'Criando conta...';
-      btn.disabled = true;
-      msg.textContent = '';
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-      try {
-        const res = await fetch('https://backend-production-f3cb.up.railway.app/api/users/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
+  // ── Step items reveal (staggered) ──────────────────────────
+  const stepObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const steps = e.target.querySelectorAll('.step-item');
+        steps.forEach((s, i) => {
+          setTimeout(() => s.classList.add('visible'), i * 120);
         });
-        const data = await res.json();
+        stepObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
 
-        if (res.ok) {
-          document.getElementById('reg-form').innerHTML =
-            '<p style="color:var(--accent);font-family:\'Bebas Neue\',sans-serif;font-size:28px;letter-spacing:0.04em;text-align:center;padding:20px 0">PRONTO.</p>' +
-            '<p style="color:var(--text-2);font-size:14px;font-weight:300;text-align:center">O Jarvis vai te mandar uma mensagem em instantes.</p>';
-        } else if (res.status === 409) {
-          msg.className = 'form-msg error';
-          msg.textContent = 'Esse numero ja tem uma conta.';
-          btn.textContent = 'Criar minha conta';
-          btn.disabled = false;
-        } else {
-          msg.className = 'form-msg error';
-          msg.textContent = data.error || 'Algo deu errado. Tente novamente.';
-          btn.textContent = 'Criar minha conta';
-          btn.disabled = false;
-        }
-      } catch {
-        msg.className = 'form-msg error';
-        msg.textContent = 'Erro de conexao. Tente novamente.';
-        btn.textContent = 'Criar minha conta';
+  const stepsEl = document.querySelector('.steps');
+  if (stepsEl) stepObs.observe(stepsEl);
+
+  // ── Modal ───────────────────────────────────────────────────
+  function openModal() {
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('f-name').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlay(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // ── Form submit ─────────────────────────────────────────────
+  async function submitForm(e) {
+    e.preventDefault();
+    const name = document.getElementById('f-name').value.trim();
+    const raw = document.getElementById('f-phone').value.replace(/\D/g, '');
+    const phone = raw.startsWith('55') ? raw : '55' + raw;
+    const btn = document.getElementById('submit-btn');
+    const msg = document.getElementById('form-msg');
+
+    if (phone.length < 12 || phone.length > 13) {
+      msg.className = 'modal-msg error';
+      msg.textContent = 'Numero invalido. Use: 11 99999-9999';
+      return;
+    }
+
+    btn.querySelector('span').textContent = '';
+    btn.childNodes[0].textContent = 'Criando conta...';
+    btn.disabled = true;
+    msg.textContent = '';
+
+    try {
+      const res = await fetch('https://backend-production-f3cb.up.railway.app/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, whatsapp_number: phone, source: 'landing' })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById('reg-form').innerHTML =
+          '<div style="padding:20px 0;text-align:center;">' +
+          '<p style="font-family:\'Bebas Neue\',sans-serif;font-size:40px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">PRONTO.</p>' +
+          '<p style="font-size:14px;font-weight:300;color:rgba(244,241,234,0.5);line-height:1.6;">O Jarvis vai te mandar uma mensagem<br>no WhatsApp em instantes.</p>' +
+          '</div>';
+      } else if (res.status === 409) {
+        msg.className = 'modal-msg error';
+        msg.textContent = 'Esse numero ja tem conta.';
+        btn.childNodes[0].textContent = 'Criar minha conta';
+        btn.querySelector('span').textContent = '→';
+        btn.disabled = false;
+      } else {
+        msg.className = 'modal-msg error';
+        msg.textContent = data.error || 'Algo deu errado. Tente novamente.';
+        btn.childNodes[0].textContent = 'Criar minha conta';
+        btn.querySelector('span').textContent = '→';
         btn.disabled = false;
       }
+    } catch {
+      msg.className = 'modal-msg error';
+      msg.textContent = 'Erro de conexao. Tente novamente.';
+      btn.childNodes[0].textContent = 'Criar minha conta';
+      btn.querySelector('span').textContent = '→';
+      btn.disabled = false;
     }
-  </script>
+  }
+</script>
 </body>
 </html>
