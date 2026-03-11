@@ -53,6 +53,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .msg.user { background:#DCF8C6; align-self:flex-end; border-radius:8px 8px 2px 8px; color:#111; }
 .msg.jarvis { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; color:#111; box-shadow:0 1px 2px rgba(0,0,0,0.08); }
 .msg.jarvis strong { color:var(--accent); font-weight:500; }
+.wa-messages::-webkit-scrollbar{display:none;}
 .typing { background:white; align-self:flex-start; border-radius:8px 8px 8px 2px; padding:10px 14px; box-shadow:0 1px 2px rgba(0,0,0,0.08); display:flex; gap:4px; align-items:center; opacity:0; }
 .typing-dot { width:6px; height:6px; background:rgba(0,0,0,0.25); border-radius:50%; }
 .wa-input { background:#F0F0F0; padding:8px 10px; display:flex; align-items:center; gap:8px; }
@@ -273,10 +274,11 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
   <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
   <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
-  <div class="stats">
+  <div class="stats" style="grid-template-columns:1fr 1fr 1fr;">
     <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
     <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
     <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memória<br>e contexto</span></div>
+    <div class="stat"><span class="stat-num">&#128274;</span><span class="stat-label">Sigilo<br>total</span></div>
     <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
   </div>
   <div class="proof">
@@ -306,6 +308,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
       <div class="web-stat"><span class="web-stat-num">Zero</span><span class="web-stat-label">Instalação</span></div>
       <div class="web-stat"><span class="web-stat-num">24/7</span><span class="web-stat-label">Disponível</span></div>
       <div class="web-stat"><span class="web-stat-num">&#8734;</span><span class="web-stat-label">Memória</span></div>
+      <div class="web-stat"><span class="web-stat-num">&#128274;</span><span class="web-stat-label">Sigilo total</span></div>
       <div class="web-stat"><span class="web-stat-num">1 min</span><span class="web-stat-label">Para começar</span></div>
     </div>
   </div>
@@ -545,124 +548,90 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 
 <script>
 // ── Chat animation ──────────────────────────────────────
-const conversation = [
-  {
-    type:'user', fwd:true,
-    html:'Reunião com professor da Olivia<br><span style="font-size:10.5px;color:rgba(0,0,0,0.55);">10/04 às 10h — Sala 3, Bloco B</span>',
-    time:'09:41'
-  },
-  { type:'typing', delay:900 },
-  {
-    type:'jarvis',
-    html:'<strong>Salvo.</strong> Reunião com o professor da Olivia — 10 de abril, 10h, Sala 3.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.5);">Quer ser lembrada antes?</span>',
-    time:'09:41', showAfter:2200
-  },
-  { type:'user', html:'Sim, me lembra 1 dia antes', time:'09:42', showAfter:3400 },
-  {
-    type:'jarvis',
-    html:'✓ Lembrete: <strong>9 de abril</strong>, manhã.',
-    time:'09:42', showAfter:4400
-  },
-  {
-    type:'user', img:true,
-    imgIcon:'🎂',
-    imgTitle:'Convite — Festa da Luisa',
-    imgSub:'22/03 · 16h · Tema Princesas',
-    time:'09:43', showAfter:5800
-  },
-  { type:'typing', delay:6600 },
-  {
-    type:'jarvis',
-    html:'🎉 Li o convite: <strong>Festa da Luisa</strong>, 22/03, 16h, tema princesas. Salvo. Te lembro na véspera.',
-    time:'09:43', showAfter:8000
-  },
-  {
-    type:'user', audio:true, dur:'0:18',
-    time:'09:45', showAfter:9600
-  },
-  { type:'typing', delay:10400 },
-  {
-    type:'jarvis',
-    html:'🔔 Entendido: <strong>ligar pro seu marido</strong> em 10 minutos.<br><span style="font-size:10.5px;color:rgba(0,0,0,0.5);">⏰ Lembrete programado: 09:55.</span>',
-    time:'09:45', showAfter:11800
-  },
+var MSGS = [
+  {t:'user',  fwd:true,  body:'Reunião com professor da Olivia<br><small style="color:rgba(0,0,0,0.5)">10/04 às 10h — Sala 3</small>', time:'09:41', at:0},
+  {t:'typing', at:900},
+  {t:'jarvis', body:'<b>Salvo.</b> Reunião prof. Olivia — 10/04, 10h.<br><small style="color:rgba(0,0,0,0.5)">Quer ser lembrada antes?</small>', time:'09:41', at:2300},
+  {t:'user',  body:'Sim, 1 dia antes', time:'09:42', at:3500},
+  {t:'jarvis', body:'✓ Lembrete: <b>9 de abril</b>, manhã.', time:'09:42', at:4500},
+  {t:'user',  img:{icon:'🎂',title:'Convite — Festa da Luisa',sub:'22/03 · 16h · Tema Princesas'}, time:'09:43', at:6000},
+  {t:'typing', at:6900},
+  {t:'jarvis', body:'🎉 Li o convite: <b>Festa da Luisa</b>, 22/03, 16h, tema princesas. Salvo. Lembro na véspera.', time:'09:43', at:8300},
+  {t:'user',  audio:'0:18', time:'09:45', at:9800},
+  {t:'typing', at:10600},
+  {t:'jarvis', body:'🔔 Entendido: <b>ligar pro marido</b> em 10 min.<br><small style="color:rgba(0,0,0,0.5)">⏰ Lembrete: 09:55.</small>', time:'09:45', at:12000}
 ];
 
-const WAVE_HEIGHTS = [4,7,12,9,14,8,5,13,10,6,11,7,9,13,5,8,12,6,10,7];
+var WAVE = [4,7,12,9,15,8,5,13,10,6,11,7,9,14,5,8,12,6,10,7];
 
-function makeAudioWave() {
-  return WAVE_HEIGHTS.map(h =>
-    `<div class="msg-audio-bar" style="height:${h}px"></div>`
-  ).join('');
-}
-
-function buildMsg(item) {
-  const div = document.createElement('div');
-  if (item.type === 'user') {
-    div.className = 'msg user';
-    let inner = '';
-    if (item.fwd) {
-      inner += `<div class="msg-fwd-label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline><polyline points="15 18 21 12 15 6"></polyline></svg> Encaminhada</div>`;
-    }
-    if (item.img) {
-      inner += `<div class="msg-img-block"><div class="msg-img-icon">${item.imgIcon}</div><div class="msg-img-meta"><div class="msg-img-title">${item.imgTitle}</div><div class="msg-img-sub">${item.imgSub}</div></div></div>`;
-    } else if (item.audio) {
-      inner += `<div class="msg-audio-block"><div class="msg-audio-icon">▶</div><div class="msg-audio-wave">${makeAudioWave()}</div><span class="msg-audio-dur">${item.dur}</span></div>`;
+function buildMsgEl(m) {
+  var d = document.createElement('div');
+  if (m.t === 'user') {
+    d.className = 'msg user';
+    var inner = '';
+    if (m.fwd) inner += '<div class="msg-fwd-label"><span style="font-size:10px;margin-right:3px;">&#8627;</span> Encaminhada</div>';
+    if (m.img) {
+      inner += '<div class="msg-img-block"><div class="msg-img-icon">'+m.img.icon+'</div><div class="msg-img-meta"><div class="msg-img-title">'+m.img.title+'</div><div class="msg-img-sub">'+m.img.sub+'</div></div></div>';
+    } else if (m.audio) {
+      var bars = WAVE.map(function(h){return '<div class="msg-audio-bar" style="height:'+h+'px"></div>';}).join('');
+      inner += '<div class="msg-audio-block"><div class="msg-audio-icon">&#9654;</div><div class="msg-audio-wave">'+bars+'</div><span class="msg-audio-dur">'+m.audio+'</span></div>';
     } else {
-      inner += item.html || item.text || '';
+      inner += m.body;
     }
-    inner += `<div class="msg-time">${item.time} ✓✓</div>`;
-    div.innerHTML = inner;
+    inner += '<div class="msg-time">'+m.time+' &#10003;&#10003;</div>';
+    d.innerHTML = inner;
   } else {
-    div.className = 'msg jarvis';
-    div.innerHTML = (item.html || item.text || '') + `<div class="msg-time">${item.time}</div>`;
+    d.className = 'msg jarvis';
+    d.innerHTML = m.body + '<div class="msg-time">'+m.time+'</div>';
   }
-  div.style.animation = 'fadeUp .35s cubic-bezier(.16,1,.3,1) forwards';
-  return div;
+  return d;
 }
 
-function buildChat(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  let typingEl = null;
+function startChat(id) {
+  var box = document.getElementById(id);
+  if (!box) return;
+  var typing = null;
+  var timers = [];
 
-  function runConversation() {
-    container.innerHTML = '';
-    typingEl = null;
-    let baseDelay = 0;
+  function clear() {
+    timers.forEach(function(t){clearTimeout(t);});
+    timers = [];
+    box.innerHTML = '';
+    if (typing) { typing = null; }
+  }
 
-    conversation.forEach((item, idx) => {
-      if (item.type === 'typing') {
-        setTimeout(() => {
-          typingEl = document.createElement('div');
-          typingEl.className = 'typing';
-          typingEl.innerHTML = [0,150,300].map(d =>
-            `<div class="typing-dot" style="animation:typingBounce .8s ${d}ms infinite ease-in-out"></div>`
-          ).join('');
-          typingEl.style.animation = 'fadeIn .2s forwards';
-          container.appendChild(typingEl);
-        }, item.delay + baseDelay);
+  function run() {
+    clear();
+    var lastAt = 0;
+    MSGS.forEach(function(m) {
+      if (m.t === 'typing') {
+        timers.push(setTimeout(function(){
+          if (typing) typing.remove();
+          typing = document.createElement('div');
+          typing.className = 'typing';
+          typing.style.cssText = 'opacity:1';
+          typing.innerHTML = '<div class="typing-dot" style="animation:typingBounce .8s 0ms infinite"></div><div class="typing-dot" style="animation:typingBounce .8s 150ms infinite"></div><div class="typing-dot" style="animation:typingBounce .8s 300ms infinite"></div>';
+          box.appendChild(typing);
+          box.scrollTop = box.scrollHeight;
+        }, m.at));
         return;
       }
-
-      const delay = (item.showAfter || 0) + baseDelay;
-      setTimeout(() => {
-        if (typingEl) { typingEl.remove(); typingEl = null; }
-        container.appendChild(buildMsg(item));
-        // scroll last msg into view
-        container.lastChild.scrollIntoView({ block: 'end', behavior: 'smooth' });
-      }, delay);
+      if (m.at > lastAt) lastAt = m.at;
+      timers.push(setTimeout(function(){
+        if (typing) { typing.remove(); typing = null; }
+        var el = buildMsgEl(m);
+        el.style.cssText = 'opacity:1';
+        box.appendChild(el);
+        box.scrollTop = box.scrollHeight;
+      }, m.at));
     });
-
-    // Loop after last message + pause
-    const lastDelay = Math.max(...conversation.filter(i => i.showAfter).map(i => i.showAfter)) + baseDelay + 3500;
-    setTimeout(runConversation, lastDelay);
+    timers.push(setTimeout(run, lastAt + 3500));
   }
 
-  runConversation();
+  run();
 }
 
-buildChat('msgs-mobile');
-buildChat('msgs-web');
+startChat('msgs-mobile');
+startChat('msgs-web');
 
 
