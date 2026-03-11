@@ -107,24 +107,26 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .section { width:100%; padding:72px 28px; }
 @media(min-width:768px){ .section { max-width:1100px; padding:88px 72px; } }
 
-.sec-tag { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:400; margin-bottom:32px; display:flex; align-items:center; gap:10px; font-family:'DM Sans',sans-serif; }
-.sec-tag::before { content:''; display:block; width:16px; height:1px; background:var(--muted); flex-shrink:0; }
+.sec-tag { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:32px; display:flex; align-items:center; gap:10px; font-family:'DM Sans',sans-serif; }
+.sec-tag::before { content:''; display:block; width:16px; height:1px; background:var(--accent); flex-shrink:0; }
 
 /* Problem */
 .problem-wrap { background:var(--bg-subtle); }
-.prob-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin-bottom:40px; }
-@media(min-width:768px){ .prob-grid { grid-template-columns:repeat(4,1fr); } }
-.prob-card { background:var(--bg-subtle); padding:22px 18px; }
-.prob-card-title { font-size:12px; font-weight:500; color:var(--ink); margin-bottom:8px; line-height:1.4; font-family:'DM Sans',sans-serif; }
-.prob-card-body { font-size:13px; font-weight:300; color:var(--muted); line-height:1.6; font-family:'DM Sans',sans-serif; }
+.prob-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:48px; }
+@media(min-width:768px){ .prob-grid { grid-template-columns:repeat(4,1fr); gap:20px; } }
+.prob-card { background:var(--bg); border:1px solid var(--border); padding:28px 24px 32px; position:relative; transition:border-color .2s,box-shadow .2s; }
+.prob-card:hover { border-color:rgba(26,23,20,0.18); box-shadow:0 8px 32px rgba(26,23,20,0.06); }
+.prob-card-persona { font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:18px; font-family:'DM Sans',sans-serif; }
+.prob-card-headline { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--ink); line-height:1.2; margin-bottom:14px; letter-spacing:-0.2px; }
+.prob-card-body { font-size:13px; font-weight:300; color:var(--muted); line-height:1.7; font-family:'DM Sans',sans-serif; }
 .prob-outro { border-top:1px solid var(--border); padding-top:32px; }
 .prob-outro p { font-size:15px; font-weight:300; color:var(--muted); line-height:1.7; font-family:'DM Sans',sans-serif; }
 .prob-outro p strong { color:var(--ink); font-weight:400; display:block; margin-bottom:4px; }
 
 /* How it works — dark inversion */
 .how-wrap { background:var(--ink); }
-.how-wrap .sec-tag { color:rgba(253,250,245,0.3); }
-.how-wrap .sec-tag::before { background:rgba(253,250,245,0.2); }
+.how-wrap .sec-tag { color:rgba(168,82,42,0.7); }
+.how-wrap .sec-tag::before { background:rgba(168,82,42,0.5); }
 .steps { display:flex; flex-direction:column; }
 .step-item { padding:24px 0; border-bottom:1px solid rgba(253,250,245,0.08); display:flex; gap:20px; align-items:flex-start; }
 .step-item:last-child { border-bottom:none; }
@@ -139,28 +141,30 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 }
 
 /* Use Cases */
-.cases-wrap { background:var(--bg); }
-.accordion { display:flex; flex-direction:column; }
-.acc-item { border-bottom:1px solid var(--border); }
-.acc-trigger { width:100%; background:none; border:none; padding:20px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; cursor:pointer; text-align:left; -webkit-tap-highlight-color:transparent; }
-.acc-title { font-size:15px; font-weight:500; color:var(--ink); margin-bottom:3px; font-family:'DM Sans',sans-serif; }
+.cases-wrap { background:var(--bg-subtle); }
+.accordion { display:flex; flex-direction:column; gap:12px; }
+.acc-item { background:var(--bg); border:1px solid var(--border); transition:border-color .2s,box-shadow .2s; }
+.acc-item:hover { border-color:rgba(26,23,20,0.18); }
+.acc-trigger { width:100%; background:none; border:none; padding:24px 24px 20px; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; cursor:pointer; text-align:left; -webkit-tap-highlight-color:transparent; }
+.acc-persona-tag { font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:10px; font-family:'DM Sans',sans-serif; }
+.acc-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:var(--ink); margin-bottom:4px; line-height:1.2; letter-spacing:-0.2px; }
 .acc-teaser { font-size:12px; font-weight:300; color:var(--muted); font-family:'DM Sans',sans-serif; }
-.acc-icon { font-size:16px; color:var(--muted); flex-shrink:0; transition:transform .25s; margin-top:2px; }
-.acc-item.open .acc-icon { transform:rotate(45deg); }
-.acc-body { max-height:0; overflow:hidden; transition:max-height .35s ease; }
+.acc-icon { font-size:18px; color:var(--muted); flex-shrink:0; transition:transform .25s; margin-top:6px; line-height:1; }
+.acc-item.open .acc-icon { transform:rotate(45deg); color:var(--accent); }
+.acc-body { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1); }
 .acc-item.open .acc-body { max-height:400px; }
-.acc-inner { padding-bottom:24px; }
-.acc-before { font-size:13px; font-weight:300; color:var(--muted); line-height:1.65; margin-bottom:16px; font-family:'DM Sans',sans-serif; }
+.acc-inner { padding:0 24px 28px; }
+.acc-before { font-size:13px; font-weight:300; color:var(--muted); line-height:1.75; margin-bottom:16px; font-family:'DM Sans',sans-serif; }
 .acc-divider { height:1px; background:var(--border); margin-bottom:16px; }
-.acc-after { font-size:13px; font-weight:400; color:var(--ink); line-height:1.65; font-family:'DM Sans',sans-serif; }
-.acc-after em { color:var(--accent); font-style:normal; }
+.acc-after { font-size:13px; font-weight:400; color:var(--ink); line-height:1.75; font-family:'DM Sans',sans-serif; }
+.acc-after em { color:var(--accent); font-style:italic; }
 @media(min-width:768px){
-  .accordion { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
-  .acc-item { background:var(--bg); padding:28px 24px; border-bottom:none; }
-  .acc-trigger { pointer-events:none; padding:0 0 12px 0; }
+  .accordion { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .acc-item { }
+  .acc-trigger { pointer-events:none; cursor:default; }
   .acc-icon { display:none; }
   .acc-body { max-height:none!important; overflow:visible; }
-  .acc-inner { padding-bottom:0; }
+  .acc-inner { padding-top:4px; }
 }
 
 /* Depoimentos */
@@ -243,7 +247,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <div class="nav-logo">Jarvis</div>
     <div class="nav-sub">by Olpi Technologies</div>
   </div>
-  <div class="nav-pill"><span class="live-dot"></span> Beta aberto</div>
+  <div class="nav-pill"><span class="live-dot"></span> Acesso liberado — por tempo limitado</div>
 </nav>
 
 <!-- MOBILE HERO -->
@@ -323,36 +327,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
 </div>
 
-<!-- ── SEÇÃO 1: THE PROBLEM ─────────────────────────────── -->
-<div id="problem" class="problem-wrap sec-wrap">
-  <div class="section">
-    <p class="sec-tag reveal">O problema</p>
-    <div class="prob-grid reveal">
-      <div class="prob-card">
-        <p class="prob-card-title">Áudio de 4 minutos do seu chefe.</p>
-        <p class="prob-card-body">"Vou ouvir depois." Depois nunca chegou. As tarefas, também não.</p>
-      </div>
-      <div class="prob-card">
-        <p class="prob-card-title">Comunicados da escola da Olivia.</p>
-        <p class="prob-card-body">Data, uniforme, arrecadação. Chegam em momentos aleatórios. Você tenta guardar. Às vezes não consegue.</p>
-      </div>
-      <div class="prob-card">
-        <p class="prob-card-title">Print do condomínio.</p>
-        <p class="prob-card-body">Sobre a assembleia. Você foi? Você lembrou?</p>
-      </div>
-      <div class="prob-card">
-        <p class="prob-card-title">Prazo que passou despercebido.</p>
-        <p class="prob-card-body">Estava numa mensagem. Você leu na hora. Não anotou. Expirou.</p>
-      </div>
-    </div>
-    <div class="prob-outro reveal">
-      <p><strong>Não é falta de atenção. É excesso de mensagem.</strong>
-      O WhatsApp não foi feito pra lembrar por você.<br>O Jarvis foi.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ── SEÇÃO 2: HOW IT WORKS ───────────────────────────── -->
+<!-- ── SEÇÃO 1: HOW IT WORKS ───────────────────────────── -->
 <div id="how" class="how-wrap sec-wrap">
   <div class="section">
     <p class="sec-tag reveal">Como funciona</p>
@@ -383,6 +358,39 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
 </div>
 
+<!-- ── SEÇÃO 2: THE PROBLEM ─────────────────────────────── -->
+<div id="problem" class="problem-wrap sec-wrap">
+  <div class="section">
+    <p class="sec-tag reveal">O problema</p>
+    <div class="prob-grid reveal">
+      <div class="prob-card">
+        <p class="prob-card-persona">Mãe</p>
+        <h3 class="prob-card-headline">Você leu.<br>Não guardou.<br>A data passou.</h3>
+        <p class="prob-card-body">O comunicado da escola chegou no grupo às 22h. Você viu, achou importante, pensou "vou lembrar". Na manhã da festa, seu filho foi de uniforme errado.</p>
+      </div>
+      <div class="prob-card">
+        <p class="prob-card-persona">Mãe</p>
+        <h3 class="prob-card-headline">Três grupos,<br>seis turmas,<br>uma cabeça só.</h3>
+        <p class="prob-card-body">Reunião de pais, autorização de passeio, arrecadação do lanche. Tudo no WhatsApp, tudo urgente, tudo ao mesmo tempo. Nenhuma agenda dá conta disso.</p>
+      </div>
+      <div class="prob-card">
+        <p class="prob-card-persona">Executivo</p>
+        <h3 class="prob-card-headline">A reunião acabou.<br>As tarefas ficaram<br>na cabeça.</h3>
+        <p class="prob-card-body">Você saiu da call com cinco pendências claras. Não abriu o bloco de notas. Duas horas depois, lembrava de três. Na sexta, seu gestor perguntou pelas outras duas.</p>
+      </div>
+      <div class="prob-card">
+        <p class="prob-card-persona">Executivo</p>
+        <h3 class="prob-card-headline">"Vou ouvir<br>depois." Depois<br>nunca chegou.</h3>
+        <p class="prob-card-body">Áudio de 4 minutos do cliente, mandado às 11h. Você estava em outra reunião. Marcou como não lido. Esqueceu. O cliente ligou às 17h perguntando a resposta.</p>
+      </div>
+    </div>
+    <div class="prob-outro reveal">
+      <p><strong>Não é falta de atenção. É excesso de mensagem.</strong>
+      O WhatsApp não foi feito pra lembrar por você. O Jarvis foi.</p>
+    </div>
+  </div>
+</div>
+
 <!-- ── SEÇÃO 3: USE CASES ──────────────────────────────── -->
 <div id="cases" class="cases-wrap sec-wrap">
   <div class="section">
@@ -390,46 +398,62 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <div class="accordion reveal">
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div><p class="acc-title">Escola da Olivia</p><p class="acc-teaser">A mãe que não pode errar</p></div>
+          <div>
+            <p class="acc-persona-tag">Mãe</p>
+            <p class="acc-title">Escola da Olivia</p>
+            <p class="acc-teaser">A mãe que não pode errar</p>
+          </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
-          <p class="acc-before">Você acompanha os comunicados da turma da Olivia. Datas, uniformes, eventos, arrecadações. Chegam em momentos aleatórios. Você tenta guardar na cabeça.</p>
+          <p class="acc-before">Você acompanha comunicados de 3 grupos ao mesmo tempo. Datas, uniformes, arrecadações. Chegam quando você está no meio de outra coisa.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, traje caipira, levar R$15." Semana que vem: lembrete automático. Você aparece na festa. <em>Olivia sorri.</em></p>
+          <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, traje caipira, levar R$15." Semana que vem: lembrete automático.<br><em>Olivia sorri. Você também.</em></p>
         </div></div>
       </div>
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div><p class="acc-title">Reunião com 5 tarefas</p><p class="acc-teaser">O profissional com agenda cheia</p></div>
+          <div>
+            <p class="acc-persona-tag">Profissional</p>
+            <p class="acc-title">Reunião com 5 tarefas</p>
+            <p class="acc-teaser">O executivo com agenda cheia</p>
+          </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
-          <p class="acc-before">Reunião termina. Você abriu o bloco de notas? Não. Vai anotar depois? Vai. Anotou? Não. Na sexta o gestor pergunta pelo entregável.</p>
+          <p class="acc-before">Reunião termina. Você abriu o bloco de notas? Não. Ia anotar depois? Ia. Anotou? Não. Na sexta o gestor pergunta pelo entregável.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Mandou o áudio da reunião pro Jarvis. Em minutos: lista de tarefas, responsáveis, prazos. <em>Você entrega antes do prazo.</em></p>
+          <p class="acc-after">Mandou o áudio da reunião pro Jarvis. Em minutos: lista de tarefas, responsáveis, prazos.<br><em>Você entrega antes do prazo.</em></p>
         </div></div>
       </div>
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div><p class="acc-title">Áudio de 3 minutos</p><p class="acc-teaser">O áudio que "vou ouvir depois"</p></div>
+          <div>
+            <p class="acc-persona-tag">No trânsito</p>
+            <p class="acc-title">Áudio de 3 minutos</p>
+            <p class="acc-teaser">O recado que não podia perder</p>
+          </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
           <p class="acc-before">Seu parceiro mandou um áudio longo com um recado importante. Você estava dirigindo. Marcou pra ouvir depois. Esqueceu.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Encaminhou pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado, programou o lembrete. <em>Quando chegou em casa, você já sabia de tudo.</em></p>
+          <p class="acc-after">Encaminhou pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado, programou o lembrete.<br><em>Quando chegou em casa, você já sabia de tudo.</em></p>
         </div></div>
       </div>
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">
-          <div><p class="acc-title">PDF ou print com prazo</p><p class="acc-teaser">O documento com data enterrada</p></div>
+          <div>
+            <p class="acc-persona-tag">Documento</p>
+            <p class="acc-title">PDF com prazo escondido</p>
+            <p class="acc-teaser">A data que estava enterrada</p>
+          </div>
           <span class="acc-icon">+</span>
         </button>
         <div class="acc-body"><div class="acc-inner">
-          <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovação. PDF da proposta com validade de 10 dias. Você salva. Esquece onde. O prazo passa.</p>
+          <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovação. PDF da proposta com validade de 10 dias. Você salva. Esquece onde.</p>
           <div class="acc-divider"></div>
-          <p class="acc-after">Encaminhou pro Jarvis. Dois dias antes: "Atenção — prazo amanhã." <em>Você age a tempo. Sempre.</em></p>
+          <p class="acc-after">Encaminhou pro Jarvis. Dois dias antes: "Atenção — prazo amanhã."<br><em>Você age a tempo. Sempre.</em></p>
         </div></div>
       </div>
     </div>
