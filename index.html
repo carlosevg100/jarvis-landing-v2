@@ -330,6 +330,104 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .captcha-input:focus { border-bottom-color:rgba(26,23,20,0.4); }
 .form-hint { font-size:11px; color:var(--muted); font-family:'DM Sans',sans-serif; font-weight:300; margin-top:8px; line-height:1.55; }
 
+/* ─── HAMBURGER MENU ────────────────────────────────────── */
+.nav-links { display:none; }
+@media(min-width:768px) {
+  .nav-links { display:flex; gap:24px; align-items:center; margin-right:20px; }
+  .nav-links a { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:400; text-decoration:none; transition:color .2s; font-family:'DM Sans',sans-serif; }
+  .nav-links a:hover { color:var(--ink); }
+}
+.nav-hamburger { display:none; background:none; border:none; cursor:pointer; padding:6px 4px; -webkit-tap-highlight-color:transparent; flex-direction:column; gap:5px; }
+.nav-hamburger span { display:block; width:22px; height:1.5px; background:var(--ink); border-radius:1px; transition:transform .28s cubic-bezier(.16,1,.3,1), opacity .2s; }
+.nav-hamburger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
+@media(max-width:767px) { .nav-hamburger { display:flex; } .nav-pill { display:none !important; } }
+.nav-mobile-menu {
+  position:fixed; top:0; left:0; right:0; z-index:99;
+  background:var(--bg); padding:72px 28px 28px;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 12px 40px rgba(26,23,20,0.1);
+  transform:translateY(-110%);
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+}
+.nav-mobile-menu.open { transform:translateY(0); pointer-events:auto; }
+@media(min-width:768px) { .nav-mobile-menu { display:none !important; } }
+.nav-mobile-menu a {
+  display:block; font-family:'DM Sans',sans-serif; font-size:12px;
+  letter-spacing:2.5px; text-transform:uppercase; color:var(--ink2);
+  text-decoration:none; padding:15px 0; border-bottom:1px solid var(--border);
+  font-weight:300; transition:color .15s;
+}
+.nav-mobile-menu a:last-child { border-bottom:none; }
+.nav-mobile-menu a:active { color:var(--accent); }
+
+/* ─── DEMO MODAL ─────────────────────────────────────────── */
+.demo-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(26,23,20,0.88); z-index:250;
+  align-items:center; justify-content:center; padding:16px; overflow-y:auto;
+}
+.demo-overlay.open { display:flex; animation:fadeIn .2s ease; }
+.demo-card {
+  background:var(--ink); width:100%; max-width:860px;
+  padding:52px 44px 52px; position:relative;
+  border:1px solid rgba(253,250,245,0.08);
+  animation:fadeUp .3s cubic-bezier(.16,1,.3,1); margin:auto;
+}
+@media(max-width:600px) { .demo-card { padding:44px 22px 44px; } }
+.demo-close {
+  position:absolute; top:18px; right:18px; background:none; border:none;
+  font-size:26px; color:rgba(253,250,245,0.3); cursor:pointer; line-height:1;
+  transition:color .15s; -webkit-tap-highlight-color:transparent;
+}
+.demo-close:hover { color:rgba(253,250,245,0.75); }
+.demo-hdr { margin-bottom:40px; }
+.demo-htag {
+  font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--accent2);
+  font-weight:500; margin-bottom:10px; font-family:'DM Sans',sans-serif;
+  display:flex; align-items:center; gap:10px;
+}
+.demo-htag::before { content:''; display:block; width:16px; height:1px; background:var(--accent2); flex-shrink:0; }
+.demo-htitle {
+  font-family:'Cormorant Garamond',serif; font-size:clamp(30px,4.5vw,48px);
+  font-weight:400; color:var(--white); line-height:1.05; letter-spacing:-0.5px;
+}
+.demo-htitle em { color:var(--accent2); font-style:italic; }
+.demo-steps { display:flex; flex-direction:column; gap:28px; }
+@media(min-width:640px) { .demo-steps { flex-direction:row; gap:0; align-items:flex-start; } }
+.demo-step { flex:1; display:flex; flex-direction:column; }
+@media(min-width:640px) { .demo-step { padding-right:28px; } .demo-step:last-child { padding-right:0; } }
+.demo-sep { display:none; }
+@media(min-width:640px) { .demo-sep { display:flex; align-items:flex-start; justify-content:center; color:rgba(253,250,245,0.15); font-size:22px; padding-top:42px; flex-shrink:0; width:18px; } }
+.demo-snum { font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:2px; color:rgba(253,250,245,0.2); margin-bottom:12px; display:block; }
+.demo-sicon { font-size:20px; margin-bottom:10px; }
+.demo-stitle { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:var(--white); margin-bottom:5px; }
+.demo-sdesc { font-size:12px; font-weight:300; color:rgba(253,250,245,0.4); line-height:1.6; margin-bottom:16px; font-family:'DM Sans',sans-serif; }
+.demo-wa-wrap { background:#ECE5DD; border-radius:12px; padding:14px 12px 10px; }
+.demo-wa-bubble {
+  background:#25D366; border-radius:14px 14px 2px 14px;
+  padding:9px 12px; max-width:90%; margin-left:auto;
+  color:#fff; font-size:12px; font-family:'DM Sans',sans-serif; font-weight:300; line-height:1.55;
+}
+.demo-wa-time { font-size:9px; color:rgba(255,255,255,0.7); text-align:right; margin-top:5px; }
+.demo-extract {
+  background:rgba(253,250,245,0.05); border:1px solid rgba(253,250,245,0.1);
+  border-radius:10px; padding:13px 14px; display:flex; flex-direction:column; gap:8px;
+}
+.demo-erow { font-size:11.5px; font-family:'DM Sans',sans-serif; font-weight:300; color:rgba(253,250,245,0.5); display:flex; align-items:center; gap:8px; line-height:1.4; }
+.demo-erow b { color:rgba(253,250,245,0.88); font-weight:400; }
+.demo-dash { background:rgba(253,250,245,0.05); border:1px solid rgba(253,250,245,0.1); border-radius:10px; padding:14px 14px 12px; position:relative; }
+.demo-dbadge { display:inline-block; background:var(--accent); color:var(--white); font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:3px 9px; border-radius:100px; margin-bottom:8px; font-family:'DM Sans',sans-serif; }
+.demo-dtitle { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:var(--white); margin-bottom:5px; }
+.demo-dmeta { font-size:11px; font-weight:300; color:rgba(253,250,245,0.42); font-family:'DM Sans',sans-serif; line-height:1.5; }
+.demo-dcheck { position:absolute; top:12px; right:12px; width:26px; height:26px; border-radius:50%; background:rgba(110,233,123,0.12); border:1.5px solid rgba(110,233,123,0.4); color:#6EE97B; font-size:12px; display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; }
+.demo-footer { margin-top:40px; padding-top:32px; border-top:1px solid rgba(253,250,245,0.08); display:flex; flex-direction:column; align-items:center; gap:10px; }
+.demo-footer-btn { background:var(--white); color:var(--ink); border:none; padding:16px 44px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:background .2s; display:inline-flex; align-items:center; gap:10px; }
+.demo-footer-btn:hover { background:var(--bg); }
+.demo-footer-note { font-size:11px; color:rgba(253,250,245,0.2); font-weight:300; font-family:'DM Sans',sans-serif; }
+
 /* Scroll reveal */
 .reveal { opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease; }
 .reveal.anim { opacity:0; transform:translateY(16px); }
@@ -350,8 +448,25 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <div class="nav-logo">Jarvis</div>
     <div class="nav-sub">by Olpi Technologies</div>
   </div>
+  <div class="nav-links">
+    <a href="#how" onclick="navScroll('how');return false;">Como funciona</a>
+    <a href="#pricing" onclick="navScroll('pricing');return false;">Preço</a>
+    <a href="#sobre" onclick="navScroll('sobre');return false;">Sobre nós</a>
+    <a href="#faq" onclick="navScroll('faq');return false;">FAQ</a>
+    <a href="#suporte" onclick="navScroll('suporte');return false;">Suporte</a>
+  </div>
   <div class="nav-pill"><span class="live-dot"></span> Free Trial</div>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="#how" onclick="navScroll('how');return false;">Como funciona</a>
+  <a href="#pricing" onclick="navScroll('pricing');return false;">Preço</a>
+  <a href="#sobre" onclick="navScroll('sobre');return false;">Sobre nós</a>
+  <a href="#faq" onclick="navScroll('faq');return false;">FAQ</a>
+  <a href="#suporte" onclick="navScroll('suporte');return false;">Suporte</a>
+</div>
 
 <!-- MOBILE HERO -->
 <div class="hero-mobile">
@@ -376,7 +491,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     </div>
   </div>
   <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
-  <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+  <button class="btn-secondary" onclick="openDemo()">&#9655; Ver como funciona</button>
   <div class="stats" style="grid-template-columns:repeat(5,1fr)">
     <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
     <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
@@ -406,7 +521,7 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
     <div class="web-trial-stamp">✦ TESTE TUDO POR 7 DIAS GRÁTIS ✦<span class="web-trial-stamp-sub">Sua vida nunca mais será a mesma.</span></div>
     <div class="web-ctas">
       <button class="web-btn-primary" onclick="openModal()">Ativar o Jarvis &#8594;</button>
-      <button class="web-btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+      <button class="web-btn-secondary" onclick="openDemo()">&#9655; Ver como funciona</button>
     </div>
     <div class="web-stats">
       <div class="web-stat"><span class="web-stat-num">Zero</span><span class="web-stat-label">Instalação</span></div>
@@ -843,6 +958,70 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
 </div>
 
+<!-- DEMO MODAL -->
+<div class="demo-overlay" id="demo-overlay" onclick="handleDemoOverlay(event)">
+  <div class="demo-card">
+    <button class="demo-close" onclick="closeDemo()">&times;</button>
+    <div class="demo-hdr">
+      <p class="demo-htag">Ver como funciona</p>
+      <h3 class="demo-htitle">Do WhatsApp ao dashboard,<br><em>em segundos.</em></h3>
+    </div>
+    <div class="demo-steps">
+
+      <!-- Step 1 -->
+      <div class="demo-step">
+        <span class="demo-snum">01</span>
+        <div class="demo-sicon">💬</div>
+        <h4 class="demo-stitle">Envie uma mensagem</h4>
+        <p class="demo-sdesc">No seu estilo natural. Texto, áudio ou print.</p>
+        <div class="demo-wa-wrap">
+          <div class="demo-wa-bubble">
+            Reunião com o Bruno amanhã às 14h no escritório
+            <div class="demo-wa-time">14:23 ✓✓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-sep">›</div>
+
+      <!-- Step 2 -->
+      <div class="demo-step">
+        <span class="demo-snum">02</span>
+        <div class="demo-sicon">🧠</div>
+        <h4 class="demo-stitle">Jarvis entende e organiza</h4>
+        <p class="demo-sdesc">Extrai o que importa automaticamente.</p>
+        <div class="demo-extract">
+          <div class="demo-erow">📋&nbsp; <b>Reunião com Bruno</b></div>
+          <div class="demo-erow">🕐&nbsp; <b>Amanhã, 14:00</b></div>
+          <div class="demo-erow">📍&nbsp; <b>Escritório</b></div>
+          <div class="demo-erow">👥&nbsp; <b>Bruno</b></div>
+        </div>
+      </div>
+
+      <div class="demo-sep">›</div>
+
+      <!-- Step 3 -->
+      <div class="demo-step">
+        <span class="demo-snum">03</span>
+        <div class="demo-sicon">✅</div>
+        <h4 class="demo-stitle">Aparece no seu dashboard</h4>
+        <p class="demo-sdesc">Organizado, visível, com lembrete automático.</p>
+        <div class="demo-dash">
+          <div class="demo-dbadge">Amanhã · 14h</div>
+          <p class="demo-dtitle">Reunião com Bruno</p>
+          <p class="demo-dmeta">📍 Escritório &nbsp;·&nbsp; 👥 Bruno</p>
+          <div class="demo-dcheck">✓</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="demo-footer">
+      <button class="demo-footer-btn" onclick="closeDemo();openModal();">Começar grátis &nbsp;&#8594;</button>
+      <p class="demo-footer-note">7 dias grátis &nbsp;·&nbsp; Sem cartão &nbsp;·&nbsp; Cancele quando quiser</p>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── Chat animation ──────────────────────────────────────
 var MSGS = [
@@ -1032,6 +1211,43 @@ function handleOverlay(e) {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
 }
 
+// ── Demo Modal ────────────────────────────────────────────
+function openDemo() {
+  document.getElementById('demo-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDemo() {
+  document.getElementById('demo-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleDemoOverlay(e) {
+  if (e.target === document.getElementById('demo-overlay')) closeDemo();
+}
+
+// ── Hamburger Menu ────────────────────────────────────────
+function toggleMenu() {
+  var btn = document.getElementById('nav-hamburger');
+  var menu = document.getElementById('nav-mobile-menu');
+  var isOpen = menu.classList.contains('open');
+  if (isOpen) {
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+  } else {
+    menu.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+function navScroll(id) {
+  var menu = document.getElementById('nav-mobile-menu');
+  var btn = document.getElementById('nav-hamburger');
+  menu.classList.remove('open');
+  btn.classList.remove('open');
+  setTimeout(function() {
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 150);
+}
+
 // ── Legal Modals ─────────────────────────────────────────
 function openLegal(id) {
   document.getElementById('modal-' + id).classList.add('open');
@@ -1050,8 +1266,11 @@ function handleLegalOverlay(e, id) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     closeModal();
+    closeDemo();
     closeLegal('terms');
     closeLegal('privacy');
+    document.getElementById('nav-mobile-menu').classList.remove('open');
+    document.getElementById('nav-hamburger').classList.remove('open');
   }
 });
 
