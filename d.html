@@ -458,7 +458,11 @@ async function toggleDone(id, ev) {
 
 function renderCalendar() {
   const title = document.getElementById('cal-month-title');
-  title.textContent = `${ptMonths[calMonth.getMonth()]} ${calMonth.getFullYear()}`;
+  const monthEvCount = allItems.filter(i => {
+    const d = getLocalDateStr(i.scheduled_time);
+    return d && d.startsWith(`${calMonth.getFullYear()}-${pad(calMonth.getMonth()+1)}`);
+  }).length;
+  title.textContent = `${ptMonths[calMonth.getMonth()]} ${calMonth.getFullYear()}${monthEvCount > 0 ? ' · '+monthEvCount+' evento'+(monthEvCount>1?'s':'') : ''}`;
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
   ptDays.forEach(d => { const el = document.createElement('div'); el.className = 'cal-day-label'; el.textContent = d; grid.appendChild(el); });
@@ -501,7 +505,20 @@ function setView(v) {
   document.getElementById('nav-list').classList.toggle('active', v === 'list');
   document.getElementById('nav-cal').classList.toggle('active', v === 'calendar');
   document.getElementById('topbar-title').textContent = v === 'list' ? 'Todos os eventos' : 'Calendário';
-  if (v === 'calendar') renderCalendar();
+  if (v === 'calendar') {
+    // Auto-navigate to month of next upcoming event if current month is empty
+    const curStr = `${calMonth.getFullYear()}-${pad(calMonth.getMonth()+1)}`;
+    const hasThisMonth = allItems.some(i => { const d = getLocalDateStr(i.scheduled_time); return d && d.startsWith(curStr); });
+    if (!hasThisMonth) {
+      const upcoming = allItems.filter(i => i.scheduled_time && getLocalDateStr(i.scheduled_time) >= todayStr)
+        .sort((a,b) => new Date(a.scheduled_time) - new Date(b.scheduled_time));
+      if (upcoming.length > 0) {
+        const next = new Date(upcoming[0].scheduled_time);
+        calMonth = new Date(next.getFullYear(), next.getMonth(), 1);
+      }
+    }
+    renderCalendar();
+  }
 }
 
 function setFilter(f, btn) {
