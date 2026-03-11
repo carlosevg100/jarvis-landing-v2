@@ -82,7 +82,7 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 12vw, 80px
 .h-transition { font-family:'Cormorant Garamond',serif; font-size:clamp(15px,3vw,20px); font-weight:400; color:var(--text-2); margin:20px 0 0; letter-spacing:0.01em; opacity:0; animation:fadeUp 0.7s 0.6s forwards; }
 .divider { width:32px; height:1px; background:var(--accent); margin:28px 0; opacity:0; animation:fadeUp 0.6s 0.75s forwards; }
 .h-turn { font-family:'Cormorant Garamond',serif; font-size:clamp(24px,5vw,36px); font-weight:500; color:var(--text); line-height:1.2; margin:0; opacity:0; animation:fadeUp 0.8s 0.85s cubic-bezier(0.16,1,0.3,1) forwards; }
-.h-signature { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,8vw,60px); font-weight:600; color:var(--accent); line-height:1.0; margin:12px 0 32px; opacity:0; animation:fadeUp 0.8s 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+.h-signature { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,8vw,60px); font-weight:600; color:var(--text); line-height:1.0; margin:12px 0 32px; opacity:0; animation:fadeUp 0.8s 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
 @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
@@ -142,7 +142,7 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 12vw, 80px
       <div class="eyebrow">— Assistente pessoal</div>
       <p class="h-list">Reuniões, tarefas, filhos, prazos, etc.</p>
       <div class="divider"></div>
-      <p class="h-signature">Prazer, Jarvis.</p>
+      <p class="h-signature">Prazer, <span style="color:var(--accent)">Jarvis</span>.</p>
       <p class="sub">Converse direto no WhatsApp — áudio, foto ou texto.<br>Ele organiza, lembra e cuida. Como uma assistente real.</p>
       <div class="hero-btns">
         <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
