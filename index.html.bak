@@ -22,9 +22,7 @@ html, body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', s
 body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events:none; z-index:999; mix-blend-mode:multiply; }
 
 /* ─── NAV ───────────────────────────────────────────────── */
-nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; justify-content:space-between; align-items:center; z-index:100; background:linear-gradient(to bottom, rgba(26,23,20,0.8) 55%, transparent); }
-.nav-logo { color:rgba(255,255,255,0.9) !important; }
-.nav-sub { color:rgba(255,255,255,0.35) !important; }
+nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; justify-content:space-between; align-items:center; z-index:100; background:linear-gradient(to bottom, var(--bg) 55%, transparent); }
 .nav-left { display:flex; flex-direction:column; gap:2px; }
 .nav-logo { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; letter-spacing:7px; text-transform:uppercase; color:var(--ink); opacity:0; animation:fadeUp .6s .1s forwards; }
 .nav-sub { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); font-weight:300; opacity:0; animation:fadeUp .6s .2s forwards; }
@@ -376,11 +374,11 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .nav-links { display:none; }
 @media(min-width:768px) {
   .nav-links { display:flex; gap:24px; align-items:center; margin-right:20px; }
-  .nav-links a { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.45); font-weight:400; text-decoration:none; transition:color var(--transition); font-family:'DM Sans',sans-serif; }
-  .nav-links a:hover { color:rgba(255,255,255,0.9); }
+  .nav-links a { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:400; text-decoration:none; transition:color var(--transition); font-family:'DM Sans',sans-serif; }
+  .nav-links a:hover { color:var(--ink); }
 }
 .nav-hamburger { display:none; background:none; border:none; cursor:pointer; padding:6px 4px; -webkit-tap-highlight-color:transparent; flex-direction:column; gap:5px; }
-.nav-hamburger span { display:block; width:22px; height:1.5px; background:rgba(255,255,255,0.8); border-radius:1px; transition:transform .28s cubic-bezier(.16,1,.3,1), opacity .2s; }
+.nav-hamburger span { display:block; width:22px; height:1.5px; background:var(--ink); border-radius:1px; transition:transform .28s cubic-bezier(.16,1,.3,1), opacity .2s; }
 .nav-hamburger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
 .nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
 .nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
@@ -637,236 +635,6 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .msg-highlight { border-left:2px solid #A8522A; padding-left:8px; }
 .msg-audio-wrap { max-width:68%; }
 .msg-sub { font-size:10.5px; color:rgba(0,0,0,0.45); margin-top:4px; line-height:1.5; }
-
-/* ═══════════════════════════════════════════════════════════
-   PREMIUM SECTIONS CSS
-   ═══════════════════════════════════════════════════════════ */
-
-/* ─── PREMIUM HERO ─────────────────────────────────────── */
-.ph-section{background:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 28px 60px;position:relative;overflow:hidden;}
-.ph-glow{position:absolute;width:400px;height:400px;background:var(--accent2);border-radius:50%;filter:blur(80px);opacity:0.08;pointer-events:none;}
-.ph-glow-1{top:-100px;right:-100px;}
-.ph-glow-2{bottom:-100px;left:-100px;}
-.ph-inner{max-width:1200px;width:100%;display:flex;flex-direction:column;align-items:center;gap:48px;}
-@media(min-width:1024px){.ph-inner{flex-direction:row;align-items:center;gap:60px;}.ph-text{flex:1;}.ph-phone-col{flex:0 0 320px;}}
-.ph-text{display:flex;flex-direction:column;align-items:flex-start;}
-.ph-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:28px;opacity:0;animation:fadeUp .6s .2s forwards;}
-.ph-eyebrow span{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;font-weight:400;}
-.ph-headline{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(36px,8vw,56px);line-height:1.1;letter-spacing:-0.5px;margin-bottom:20px;opacity:0;animation:fadeUp .8s .4s forwards;}
-.ph-typing-word{color:var(--accent2);font-weight:400;}
-.ph-cursor{color:var(--accent2);animation:phBlink 1s step-end infinite;font-weight:100;}
-@keyframes phBlink{0%,100%{opacity:1}50%{opacity:0}}
-.ph-headline-dim{color:rgba(255,255,255,0.5);}
-.ph-headline-bright{color:rgba(255,255,255,0.9);}
-.ph-chaos-tag{font-size:15px;font-weight:300;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:8px;font-family:'DM Sans',sans-serif;opacity:0;animation:fadeUp .7s .6s forwards;}
-.ph-chaos-bright{color:rgba(255,255,255,0.7);font-weight:400;}
-.ph-prazer{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,12vw,72px);font-weight:400;font-style:italic;color:rgba(255,255,255,0.9);line-height:1;margin-bottom:20px;opacity:0;animation:fadeUp .9s .8s cubic-bezier(.16,1,.3,1) forwards;}
-.ph-prazer span{color:var(--accent2);}
-.ph-wa-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.08);padding:9px 16px;border-radius:100px;font-size:12px;color:rgba(255,255,255,0.5);font-weight:400;margin-bottom:28px;opacity:0;animation:fadeUp .6s 1s forwards;font-family:'DM Sans',sans-serif;}
-.ph-wa-pill-icon{width:16px;height:16px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0;}
-.ph-ctas{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;opacity:0;animation:fadeUp .6s 1.2s forwards;}
-@media(min-width:640px){.ph-ctas{flex-direction:row;max-width:none;}}
-.ph-btn-primary{background:var(--accent2);color:#fff;border:none;padding:16px 28px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;border-radius:4px;}
-.ph-btn-primary:hover{background:var(--accent);box-shadow:0 0 32px rgba(196,118,58,0.3);transform:translateY(-1px);}
-.ph-btn-secondary{background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);padding:16px 28px;font-family:'DM Sans',sans-serif;font-weight:300;font-size:13px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;border-radius:4px;}
-.ph-btn-secondary:hover{color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.2);}
-.ph-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,0.06);margin-top:32px;width:100%;max-width:480px;opacity:0;animation:fadeUp .6s 1.4s forwards;}
-@media(min-width:640px){.ph-stats{grid-template-columns:repeat(4,1fr);}}
-.ph-stat{background:var(--ink);padding:16px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;}
-.ph-stat-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--accent2);opacity:0.6;}
-.ph-stat-num{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:rgba(255,255,255,0.9);line-height:1;}
-.ph-stat-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.25);line-height:1.4;}
-
-/* Phone col */
-.ph-phone-col{display:flex;justify-content:center;position:relative;opacity:0;animation:fadeUp 1s 1s cubic-bezier(.16,1,.3,1) forwards;}
-.ph-phone-glow{position:absolute;width:280px;height:280px;background:var(--accent2);border-radius:50%;filter:blur(80px);opacity:0.08;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-.ph-phone{width:min(280px,80vw);background:#111;border-radius:40px;padding:8px;box-shadow:0 40px 100px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.08),inset 0 0 0 1px rgba(255,255,255,0.04);position:relative;z-index:1;}
-.ph-phone-di{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:80px;height:22px;background:#111;border-radius:14px;z-index:10;}
-.ph-phone-screen{background:#ECE5DD;border-radius:34px;overflow:hidden;display:flex;flex-direction:column;height:480px;}
-.ph-wa-header{background:#075E54;padding:10px 14px;display:flex;align-items:center;gap:10px;padding-top:28px;}
-.ph-wa-avatar{width:32px;height:32px;background:var(--accent2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:white;flex-shrink:0;}
-.ph-wa-name{color:white;font-size:13px;font-weight:500;line-height:1;margin-bottom:2px;}
-.ph-wa-status{color:rgba(255,255,255,.7);font-size:10px;display:flex;align-items:center;gap:4px;}
-.ph-wa-online{width:5px;height:5px;background:#6EE97B;border-radius:50%;}
-.ph-wa-more{color:rgba(255,255,255,.8);font-size:18px;margin-left:auto;}
-.ph-chat{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:8px;background:#ECE5DD;overflow-y:auto;scrollbar-width:none;}
-.ph-chat::-webkit-scrollbar{display:none;}
-.ph-msg{max-width:85%;padding:8px 11px;border-radius:8px;font-size:12px;line-height:1.5;position:relative;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s cubic-bezier(.16,1,.3,1);}
-.ph-msg.ph-vis{opacity:1;transform:translateY(0);}
-.ph-msg-user{background:#DCF8C6;align-self:flex-end;border-radius:8px 8px 2px 8px;color:#111;}
-.ph-msg-jarvis{background:#fff;align-self:flex-start;border-radius:2px 8px 8px 8px;color:#111;box-shadow:0 1px 2px rgba(0,0,0,0.08);}
-.ph-msg-time{font-size:9px;color:rgba(0,0,0,0.35);text-align:right;margin-top:3px;display:flex;align-items:center;justify-content:flex-end;gap:3px;}
-.ph-msg-fwd{font-size:9.5px;color:rgba(0,0,0,0.4);font-style:italic;margin-bottom:4px;display:flex;align-items:center;gap:4px;}
-.ph-msg-system{align-self:center;background:rgba(0,0,0,0.05);color:rgba(0,0,0,0.45);font-size:10px;padding:4px 12px;border-radius:8px;max-width:none;}
-.ph-typing-ind{background:#fff;align-self:flex-start;border-radius:2px 8px 8px 8px;padding:10px 14px;box-shadow:0 1px 2px rgba(0,0,0,0.08);display:flex;gap:4px;align-items:center;}
-.ph-typing-dot{width:6px;height:6px;background:rgba(0,0,0,0.25);border-radius:50%;animation:typingBounce .9s infinite ease-in-out;}
-.ph-typing-dot:nth-child(2){animation-delay:.18s;}
-.ph-typing-dot:nth-child(3){animation-delay:.36s;}
-.ph-jarvis-card{background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.06);border-radius:8px;padding:10px;margin-top:6px;font-size:11px;line-height:1.5;}
-.ph-jarvis-card strong{color:var(--accent);font-weight:500;}
-.ph-wa-input{background:#F0F0F0;padding:8px 10px;display:flex;align-items:center;gap:8px;}
-.ph-wa-input-field{flex:1;background:white;border-radius:20px;padding:8px 12px;font-size:11px;color:rgba(0,0,0,0.4);}
-.ph-wa-send{width:32px;height:32px;background:#075E54;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:white;}
-.ph-audio-block{display:flex;align-items:center;gap:8px;padding:4px 0;}
-.ph-audio-play{width:32px;height:32px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ph-audio-play svg{width:10px;height:10px;fill:#fff;}
-.ph-waveform{display:flex;align-items:center;gap:2px;flex:1;height:24px;}
-.ph-waveform span{display:block;width:3px;border-radius:2px;background:rgba(0,0,0,0.18);}
-.ph-audio-dur{font-size:10px;color:rgba(0,0,0,0.4);flex-shrink:0;}
-
-/* ─── VEJA NA PRATICA ──────────────────────────────────── */
-.vnp-section{background:var(--ink);position:relative;overflow:hidden;padding:96px 0;}
-.vnp-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(196,118,58,0.06) 0%,transparent 70%);pointer-events:none;}
-.vnp-inner{max-width:1100px;margin:0 auto;padding:0 28px;}
-@media(min-width:768px){.vnp-inner{padding:0 72px;}}
-.vnp-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;justify-content:center;}
-.vnp-eyebrow span{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;}
-.vnp-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,7vw,52px);font-weight:400;color:rgba(255,255,255,0.9);text-align:center;line-height:1.1;margin-bottom:12px;}
-.vnp-title em{color:var(--accent2);font-style:italic;}
-.vnp-subtitle{font-size:15px;color:rgba(255,255,255,0.35);text-align:center;margin-bottom:48px;font-weight:300;font-family:'DM Sans',sans-serif;}
-.vnp-steps-flow{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:36px;}
-.vnp-step-circle{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;transition:all .3s;}
-.vnp-step-circle.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
-.vnp-step-circle.done{background:rgba(196,118,58,0.3);border-color:rgba(196,118,58,0.5);color:#fff;}
-.vnp-step-arrow{color:rgba(255,255,255,0.1);font-size:12px;}
-.vnp-step-label{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;text-transform:uppercase;margin-left:4px;}
-.vnp-tabs{display:flex;gap:8px;margin-bottom:36px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
-.vnp-tabs::-webkit-scrollbar{display:none;}
-.vnp-tab{flex:1;min-width:140px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:14px 16px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;}
-.vnp-tab:hover{background:rgba(255,255,255,0.04);}
-.vnp-tab.active{border-color:rgba(196,118,58,0.3);background:rgba(255,255,255,0.04);}
-.vnp-tab-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);flex-shrink:0;}
-.vnp-tab.active .vnp-tab-icon{color:var(--accent2);}
-.vnp-tab-label{font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;font-weight:400;white-space:nowrap;}
-.vnp-tab.active .vnp-tab-label{color:rgba(255,255,255,0.8);}
-.vnp-tab-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent2);width:0;transition:none;}
-.vnp-tab.active .vnp-tab-progress{transition:width 16s linear;}
-
-/* Tab content area */
-.vnp-tab-content{display:none;gap:40px;align-items:flex-start;}
-.vnp-tab-content.active{display:flex;flex-direction:column;animation:fadeUp .4s ease;}
-@media(min-width:768px){.vnp-tab-content.active{flex-direction:row;}}
-.vnp-tab-phone{flex:0 0 auto;display:flex;justify-content:center;width:100%;}
-@media(min-width:768px){.vnp-tab-phone{width:320px;flex:0 0 320px;}}
-.vnp-tab-text{flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 0;}
-.vnp-tab-text h3{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,36px);font-weight:300;color:rgba(255,255,255,0.9);line-height:1.15;margin-bottom:16px;white-space:pre-line;}
-.vnp-tab-text p{font-size:14px;color:rgba(255,255,255,0.35);line-height:1.7;font-family:'DM Sans',sans-serif;font-weight:300;margin-bottom:12px;}
-.vnp-tab-text .vnp-emotional{color:rgba(255,255,255,0.6);font-style:italic;}
-
-/* VNP Phone */
-.vnp-phone{width:min(300px,85vw);background:#111;border-radius:36px;padding:8px;position:relative;box-shadow:0 24px 60px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.06);}
-.vnp-phone-di{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:76px;height:20px;background:#111;border-radius:12px;z-index:10;}
-.vnp-phone-screen{background:#ECE5DD;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;height:420px;}
-.vnp-phone-screen .ph-wa-header{padding-top:26px;}
-.vnp-phone-screen .ph-chat{font-size:12px;}
-
-/* Dashboard mockup */
-.vnp-browser{width:100%;max-width:600px;background:#1e1e1e;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);margin:0 auto;}
-.vnp-browser-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#2a2a2a;border-bottom:1px solid rgba(255,255,255,0.06);}
-.vnp-browser-dots{display:flex;gap:6px;}
-.vnp-browser-dot{width:10px;height:10px;border-radius:50%;}
-.vnp-browser-dot-r{background:#FF5F57;}
-.vnp-browser-dot-y{background:#FFBD2E;}
-.vnp-browser-dot-g{background:#28C840;}
-.vnp-browser-url{flex:1;background:rgba(255,255,255,0.08);border-radius:4px;padding:5px 12px;font-size:10px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;margin-left:8px;}
-.vnp-browser-body{position:relative;overflow:hidden;}
-.vnp-browser-body img{width:100%;display:block;}
-.vnp-scan-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);animation:vnpScan 3s linear infinite;opacity:0.5;}
-@keyframes vnpScan{0%{top:0}100%{top:100%}}
-.vnp-category-pills{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px;background:#1a1a1a;}
-.vnp-cat-pill{padding:4px 10px;border-radius:100px;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;color:#fff;}
-
-/* Feature grid */
-.vnp-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:48px;}
-@media(min-width:768px){.vnp-features{grid-template-columns:repeat(3,1fr);gap:12px;}}
-.vnp-feature{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:16px;display:flex;align-items:flex-start;gap:10px;transition:all .2s;}
-.vnp-feature:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);}
-.vnp-feature-icon{width:18px;height:18px;color:var(--accent2);flex-shrink:0;opacity:0.6;}
-.vnp-feature-text{font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;line-height:1.4;}
-
-/* ─── O PROBLEMA ───────────────────────────────────────── */
-.op-section{background:var(--ink);position:relative;overflow:hidden;padding:96px 0;}
-.op-top-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,118,58,0.15),transparent);}
-.op-inner{max-width:1100px;margin:0 auto;padding:0 28px;}
-@media(min-width:768px){.op-inner{padding:0 72px;}}
-.op-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:40px;}
-.op-header-left{flex:1;}
-.op-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.op-eyebrow span{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;}
-.op-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,7vw,48px);font-weight:300;color:rgba(255,255,255,0.9);line-height:1.1;margin-bottom:8px;}
-.op-title em{color:var(--accent2);font-style:italic;}
-
-/* Notification chaos */
-.op-chaos{display:none;position:relative;width:260px;height:160px;}
-@media(min-width:1024px){.op-chaos{display:block;}}
-.op-notif{position:absolute;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 12px;white-space:nowrap;animation:opFloat 4s ease-in-out infinite alternate;}
-.op-notif-icon{width:24px;height:24px;background:#25D366;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.op-notif-icon svg{width:14px;height:14px;fill:#fff;}
-.op-notif-text{font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;}
-.op-notif-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px;font-family:'DM Sans',sans-serif;}
-@keyframes opFloat{0%{transform:translate(0,0)}100%{transform:translate(var(--dx,5px),var(--dy,-5px))}}
-.op-notif:nth-child(1){top:0;left:0;animation-delay:0s;--dx:8px;--dy:-6px;}
-.op-notif:nth-child(2){top:10px;right:0;animation-delay:0.5s;--dx:-6px;--dy:4px;}
-.op-notif:nth-child(3){top:50px;left:20px;animation-delay:1s;--dx:5px;--dy:8px;}
-.op-notif:nth-child(4){top:80px;right:10px;animation-delay:0.3s;--dx:-8px;--dy:-5px;}
-.op-notif:nth-child(5){top:110px;left:40px;animation-delay:0.7s;--dx:6px;--dy:-4px;}
-
-/* Pain cards */
-.op-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:48px;}
-@media(min-width:640px){.op-grid{grid-template-columns:1fr 1fr;}}
-.op-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:28px 24px;position:relative;overflow:hidden;transition:all .3s;opacity:0;transform:translateY(20px);}
-.op-card.op-vis{opacity:1;transform:translateY(0);}
-.op-card:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);}
-.op-card-tag{display:flex;align-items:center;gap:6px;margin-bottom:16px;}
-.op-card-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.op-card-tag span{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-family:'DM Sans',sans-serif;font-weight:500;}
-.op-card h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:rgba(255,255,255,0.85);line-height:1.25;margin-bottom:12px;white-space:pre-line;}
-.op-card p{font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;font-family:'DM Sans',sans-serif;font-weight:300;}
-.op-card-bg-icon{position:absolute;top:16px;right:16px;font-size:48px;opacity:0.04;pointer-events:none;transition:opacity .3s;}
-.op-card:hover .op-card-bg-icon{opacity:0.08;}
-.op-closing{margin-top:8px;}
-.op-closing p:first-child{font-size:15px;color:rgba(255,255,255,0.6);font-weight:500;line-height:1.7;font-family:'DM Sans',sans-serif;margin-bottom:8px;}
-.op-closing p:last-child{font-size:14px;color:rgba(255,255,255,0.3);font-weight:300;line-height:1.7;font-family:'DM Sans',sans-serif;}
-.op-closing em{color:var(--accent2);font-style:italic;}
-
-/* ─── COMO FUNCIONA ────────────────────────────────────── */
-.cf-section{background:var(--ink);position:relative;overflow:hidden;padding:96px 0;}
-.cf-top-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,118,58,0.12),transparent);}
-.cf-bottom-line{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,118,58,0.12),transparent);}
-.cf-inner{max-width:1100px;margin:0 auto;padding:0 28px;}
-@media(min-width:768px){.cf-inner{padding:0 72px;}}
-.cf-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.cf-eyebrow span{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;}
-.cf-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,6vw,46px);font-weight:300;color:rgba(255,255,255,0.9);line-height:1.1;margin-bottom:48px;}
-.cf-title em{color:var(--accent2);font-style:italic;}
-.cf-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:48px;}
-@media(min-width:768px){.cf-steps{flex-direction:row;gap:0;align-items:stretch;}}
-.cf-card{background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:28px 24px;flex:1;transition:all .4s;position:relative;overflow:hidden;}
-.cf-card.active{background:rgba(255,255,255,0.04);border-color:rgba(196,118,58,0.15);}
-.cf-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(180deg,rgba(196,118,58,0.06),transparent);pointer-events:none;}
-.cf-card-num{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:rgba(255,255,255,0.08);line-height:1;margin-bottom:16px;transition:color .4s;}
-.cf-card.active .cf-card-num{color:var(--accent2);}
-.cf-card-icon{width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:background .4s;color:rgba(255,255,255,0.3);}
-.cf-card.active .cf-card-icon{background:var(--accent2);color:#fff;}
-.cf-card-icon svg{width:20px;height:20px;}
-.cf-card h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:rgba(255,255,255,0.85);line-height:1.25;margin-bottom:12px;white-space:pre-line;}
-.cf-card p{font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;font-family:'DM Sans',sans-serif;font-weight:300;margin-bottom:16px;}
-.cf-pills{display:flex;flex-wrap:wrap;gap:6px;}
-.cf-pill{padding:4px 10px;border-radius:100px;font-size:10px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.06);transition:all .3s;}
-.cf-card.active .cf-pill{color:rgba(255,255,255,0.6);border-color:rgba(196,118,58,0.2);background:rgba(196,118,58,0.06);}
-/* Connector */
-.cf-connector{display:none;}
-@media(min-width:768px){.cf-connector{display:flex;align-items:center;width:40px;flex-shrink:0;position:relative;}.cf-connector-line{width:100%;height:1px;background:rgba(255,255,255,0.06);position:relative;}.cf-connector-line::after{content:'';position:absolute;top:0;left:0;height:100%;width:0;background:var(--accent2);transition:width .4s;}.cf-connector.filled .cf-connector-line::after{width:100%;}.cf-connector-arrow{position:absolute;right:-3px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.1);font-size:8px;transition:color .4s;}.cf-connector.filled .cf-connector-arrow{color:var(--accent2);}}
-.cf-bottom{text-align:center;margin-bottom:32px;}
-.cf-bottom p{font-size:16px;color:rgba(255,255,255,0.5);font-family:'DM Sans',sans-serif;font-weight:300;}
-.cf-bottom em{color:var(--accent2);font-style:italic;}
-.cf-bottom-cta{display:flex;justify-content:center;}
-.cf-bottom-btn{background:var(--accent2);color:#fff;border:none;padding:16px 32px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;border-radius:4px;}
-.cf-bottom-btn:hover{background:var(--accent);box-shadow:0 0 32px rgba(196,118,58,0.3);transform:translateY(-1px);}
-
-/* Hide old hero on all sizes since we replaced it */
-.hero-mobile{display:none!important;}
-.hero-web{display:none!important;}
 </style>
 </head>
 <body>
@@ -896,389 +664,298 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   <a href="#suporte" onclick="navScroll('suporte');return false;">Suporte</a>
 </div>
 
-<!-- ══ PREMIUM HERO ══════════════════════════════════════ -->
-<section class="ph-section">
-  <div class="ph-glow ph-glow-1"></div>
-  <div class="ph-glow ph-glow-2"></div>
-  <div class="ph-inner">
-    <div class="ph-text">
-      <div class="ph-eyebrow">
-        <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-        <span>Seu assistente pessoal</span>
-        <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-      </div>
-      <h1 class="ph-headline">
-        <span class="ph-typing-word" id="typing-word">Reuniões</span><span class="ph-cursor">|</span><span class="ph-headline-dim">,</span><br>
-        <span class="ph-headline-dim">no meio de tudo, alguém precisa</span><br>
-        <span class="ph-headline-bright">lembrar por você.</span>
-      </h1>
-      <p class="ph-chaos-tag">Datas, tarefas, compromissos — tudo vive na sua cabeça, espalhado em grupos, prints e áudios.<br><span class="ph-chaos-bright">Tire da cabeça. Coloque no Jarvis.</span></p>
-      <div class="ph-prazer">Prazer, <span>Jarvis.</span></div>
-      <div class="ph-wa-pill">
-        <div class="ph-wa-pill-icon">&#10003;</div>
-        Direto no WhatsApp. Zero instalação.
-      </div>
-      <div class="ph-ctas">
-        <button class="ph-btn-primary" onclick="openModal()">TESTE 7 DIAS GRÁTIS &rarr;</button>
-        <button class="ph-btn-secondary" onclick="document.getElementById('demo-inline').scrollIntoView({behavior:'smooth'})">Ver como funciona</button>
-      </div>
-      <div class="ph-stats">
-        <div class="ph-stat">
-          <svg class="ph-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 7v0M12 7v0M16 7v0"/></svg>
-          <span class="ph-stat-num">Zero</span><span class="ph-stat-label">instalação</span>
+<!-- MOBILE HERO -->
+<div class="hero-mobile">
+  <div class="chaos">Reuniões, tarefas,<br>filhos, prazos, etc.</div>
+  <p class="sub" style="margin-bottom:20px;">No meio de tudo, alguém precisa<br><strong>lembrar e te ajudar a organizar.</strong></p>
+  <div class="rule"></div>
+  <div class="signoff">Prazer, <span>Jarvis.</span></div>
+  <div class="wa-badge"><div class="wa-icon">&#10003;</div>Direto no WhatsApp. Sem app.</div>
+  <div class="trial-stamp">✦ TESTE TUDO POR 7 DIAS GRÁTIS ✦<span class="trial-stamp-sub">Sua vida nunca mais será a mesma.</span></div>
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-speaker"></div><div class="notch-cam"></div></div>
+      <div class="phone-screen">
+        <div class="wa-header">
+          <div class="wa-avatar">J</div>
+          <div class="wa-info"><div class="wa-name">Jarvis</div><div class="wa-status"><span class="wa-status-dot"></span>online</div></div>
+          <div class="wa-more">&#8942;</div>
         </div>
-        <div class="ph-stat">
-          <svg class="ph-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          <span class="ph-stat-num">24/7</span><span class="ph-stat-label">disponível</span>
-        </div>
-        <div class="ph-stat">
-          <svg class="ph-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6 2 11s4.48 9 10 9c1.15 0 2.25-.2 3.28-.54"/><path d="M17 18l5-5-5-5"/></svg>
-          <span class="ph-stat-num">&infin;</span><span class="ph-stat-label">memória</span>
-        </div>
-        <div class="ph-stat">
-          <svg class="ph-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          <span class="ph-stat-num">100%</span><span class="ph-stat-label">sigilo</span>
-        </div>
+        <div class="wa-messages" id="msgs-mobile"></div>
+        <div class="wa-input"><div class="wa-input-field">Mensagem</div><div class="wa-send">&#10148;</div></div>
       </div>
     </div>
-    <div class="ph-phone-col">
-      <div class="ph-phone-glow"></div>
-      <div class="ph-phone">
-        <div class="ph-phone-di"></div>
-        <div class="ph-phone-screen">
-          <div class="ph-wa-header">
-            <div class="ph-wa-avatar">J</div>
-            <div style="flex:1"><div class="ph-wa-name">Jarvis</div><div class="ph-wa-status"><span class="ph-wa-online"></span>online</div></div>
-            <div class="ph-wa-more">&#8942;</div>
+  </div>
+  <button class="btn-primary" onclick="openModal()">Ativar o Jarvis <span>&#8594;</span></button>
+  <button class="btn-secondary" onclick="document.getElementById('demo-inline').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+  <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+    <div class="stat"><span class="stat-num">Zero</span><span class="stat-label">Instalação<br>necessária</span></div>
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Sempre<br>disponível</span></div>
+    <div class="stat"><span class="stat-num">&#8734;</span><span class="stat-label">Memória<br>e contexto</span></div>
+    <div class="stat"><span class="stat-num">&#128274;</span><span class="stat-label">Sigilo<br>total</span></div>
+    <div class="stat"><span class="stat-num">1 min</span><span class="stat-label">Para<br>começar</span></div>
+  </div>
+  <div class="proof">
+    <div class="avatars">
+      <div class="avatar" style="font-size:10px;color:var(--muted);">F</div>
+      <div class="avatar" style="font-size:10px;color:var(--muted);">R</div>
+      <div class="avatar" style="font-size:10px;color:var(--muted);">A</div>
+      <div class="avatar" style="font-size:10px;color:var(--muted);">M</div>
+    </div>
+    <p class="proof-text"><strong>+2.400 pessoas</strong> já usam<br>o Jarvis hoje</p>
+  </div>
+</div>
+
+<!-- WEB HERO -->
+<div class="hero-web">
+  <div class="web-left">
+    <div class="web-chaos">Reuniões, tarefas, filhos,<br>prazos, etc.</div>
+    <p class="web-sub" style="margin-bottom:20px;">No meio de tudo, alguém precisa<br><strong>lembrar e te ajudar a organizar.</strong></p>
+    <div class="web-rule"></div>
+    <div class="web-signoff">Prazer, <span>Jarvis.</span></div>
+    <div class="web-wa-badge"><div class="web-wa-icon">&#10003;</div>Direto no WhatsApp. Zero instalação.</div>
+    <div class="web-trial-stamp">✦ TESTE TUDO POR 7 DIAS GRÁTIS ✦<span class="web-trial-stamp-sub">Sua vida nunca mais será a mesma.</span></div>
+    <div class="web-ctas">
+      <button class="web-btn-primary" onclick="openModal()">Ativar o Jarvis &#8594;</button>
+      <button class="web-btn-secondary" onclick="document.getElementById('demo-inline').scrollIntoView({behavior:'smooth'})">&#9655; Ver como funciona</button>
+    </div>
+    <div class="web-stats">
+      <div class="web-stat"><span class="web-stat-num">Zero</span><span class="web-stat-label">Instalação</span></div>
+      <div class="web-stat"><span class="web-stat-num">24/7</span><span class="web-stat-label">Disponível</span></div>
+      <div class="web-stat"><span class="web-stat-num">&#8734;</span><span class="web-stat-label">Memória</span></div>
+      <div class="web-stat"><span class="web-stat-num">&#128274;</span><span class="web-stat-label">Sigilo total</span></div>
+      <div class="web-stat"><span class="web-stat-num">1 min</span><span class="web-stat-label">Para começar</span></div>
+    </div>
+  </div>
+  <div class="web-right">
+    <div class="web-phone-wrap">
+      <div class="web-phone">
+        <div class="phone-notch"><div class="notch-speaker"></div><div class="notch-cam"></div></div>
+        <div class="phone-screen">
+          <div class="wa-header">
+            <div class="wa-avatar">J</div>
+            <div class="wa-info"><div class="wa-name">Jarvis</div><div class="wa-status"><span class="wa-status-dot"></span>online</div></div>
+            <div class="wa-more">&#8942;</div>
           </div>
-          <div class="ph-chat" id="ph-chat"></div>
-          <div class="ph-wa-input"><div class="ph-wa-input-field">Mensagem</div><div class="ph-wa-send">&#10148;</div></div>
+          <div class="wa-messages" id="msgs-web"></div>
+          <div class="wa-input"><div class="wa-input-field">Mensagem</div><div class="wa-send">&#10148;</div></div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ══ VEJA NA PRÁTICA ═══════════════════════════════════ -->
-<section id="demo-inline" class="vnp-section">
-  <div class="vnp-glow"></div>
-  <div class="vnp-inner">
-    <div class="vnp-eyebrow">
-      <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-      <span>Veja na prática</span>
-      <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-    </div>
-    <h2 class="vnp-title">Assim funciona na <em>vida real.</em></h2>
-    <p class="vnp-subtitle">Você encaminha. O Jarvis entende, organiza e lembra por você.</p>
+<!-- ── DEMO INLINE — CLEAN VERTICAL ─────────────────────── -->
+<div id="demo-inline" class="demo-inline-wrap sec-wrap">
+  <div class="section" style="max-width:720px;">
+    <p class="sec-tag reveal" style="justify-content:center;">Veja na prática</p>
+    <h2 class="demo-inline-title reveal">Assim funciona<br>na <em>vida real.</em></h2>
+    <p class="demo-inline-sub reveal">Você encaminha. O Jarvis entende, organiza e lembra por você.</p>
 
-    <!-- Step flow -->
-    <div class="vnp-steps-flow" id="vnp-steps-flow">
-      <div class="vnp-step-circle active" id="vnp-sc-1">1</div>
-      <span class="vnp-step-arrow">&rarr;</span>
-      <div class="vnp-step-circle" id="vnp-sc-2">2</div>
-      <span class="vnp-step-arrow">&rarr;</span>
-      <div class="vnp-step-circle" id="vnp-sc-3">3</div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="vnp-tabs">
-      <div class="vnp-tab active" id="vnp-tab-0" onclick="vnpSwitchTab(0)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M15 15l6 6m-11-4a7 7 0 110-14 7 7 0 010 14z"/><path d="M3 21l3.5-3.5"/><path d="M21 3l-6 6"/></svg></div>
-        <span class="vnp-tab-label">Grupo das Mães</span>
-        <div class="vnp-tab-progress" id="vnp-prog-0"></div>
+    <!-- SCENE 1 -->
+    <div class="demo-scene reveal">
+      <div class="scene-header">
+        <div class="scene-number">01</div>
+        <div>
+          <div class="scene-label">Convite de aniversário no grupo</div>
+          <div class="scene-desc">Carla manda o convite do Rafael no grupo das mães. Você encaminha pro Jarvis.</div>
+        </div>
       </div>
-      <div class="vnp-tab" id="vnp-tab-1" onclick="vnpSwitchTab(1)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 2a7 7 0 017 7c0 3-2 5.5-4 7.5L12 22l-3-5.5C7 14.5 5 12 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
-        <span class="vnp-tab-label">Memória &amp; Contexto</span>
-        <div class="vnp-tab-progress" id="vnp-prog-1"></div>
-      </div>
-      <div class="vnp-tab" id="vnp-tab-2" onclick="vnpSwitchTab(2)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-        <span class="vnp-tab-label">Dashboard Exclusivo</span>
-        <div class="vnp-tab-progress" id="vnp-prog-2"></div>
-      </div>
-    </div>
-
-    <!-- TAB 0: Grupo das Mães -->
-    <div class="vnp-tab-content active" id="vnp-content-0">
-      <div class="vnp-tab-phone">
-        <div class="vnp-phone">
-          <div class="vnp-phone-di"></div>
-          <div class="vnp-phone-screen">
-            <div class="ph-wa-header">
-              <div class="ph-wa-avatar">J</div>
-              <div style="flex:1"><div class="ph-wa-name">Jarvis</div><div class="ph-wa-status"><span class="ph-wa-online"></span>online</div></div>
+      <div class="scene-phone-center">
+        <div class="spc-frame">
+          <div class="spc-di"></div>
+          <div class="spc-screen">
+            <div class="spc-wa-bar"><div class="spc-avatar" style="background:var(--accent2);font-family:'Cormorant Garamond',serif;">J</div><div class="spc-bar-info"><div class="spc-bar-name">Jarvis</div><div class="spc-bar-status"><span class="spc-online-dot"></span> online</div></div></div>
+            <div class="spc-chat">
+              <div class="spc-bubble-user"><div class="spc-fwd">⤷ Encaminhada do grupo Mães Turma 3A</div><div style="background:linear-gradient(135deg,#FF6F00,#F44336);border-radius:10px;padding:16px;color:white;text-align:center;margin:6px 0;"><div style="font-size:22px;margin-bottom:6px;">🎂</div><div style="font-weight:700;font-size:13px;letter-spacing:0.3px;">ANIVERSÁRIO DO RAFAEL</div><div style="font-size:11px;opacity:0.9;margin-top:4px;">4 anos! · 12 de abril · 15h</div><div style="font-size:10px;opacity:0.75;margin-top:2px;">Buffet Encantado · Tema Dinossauros 🦕</div></div><div class="spc-time">16:42 ✓✓</div></div>
+              <div class="spc-bubble-jarvis"><div class="spc-jarvis-tag">Jarvis</div><strong>🎂 Anotado!</strong><br><br><div class="spc-jarvis-card"><div class="sjc-title">Aniversário do Rafael</div><div class="sjc-row">📅 12 de abril · 15h</div><div class="sjc-row">📍 Buffet Encantado</div><div class="sjc-row">🦕 Tema: Dinossauros</div><div class="sjc-divider"></div><div class="sjc-row sjc-muted">⏰ Lembrete: 11 de abril, manhã</div></div><div class="spc-time">16:42</div></div>
             </div>
-            <div class="ph-chat" id="vnp-chat-0"></div>
           </div>
         </div>
       </div>
-      <div class="vnp-tab-text">
-        <h3>Encaminhou.
-Jarvis cuidou.</h3>
-        <p>Uma mãe do grupo mandou o convite da festa. Você encaminhou pro Jarvis. Ele extraiu data, local, tema e programou o lembrete.</p>
-        <p class="vnp-emotional">Você nunca mais esquece uma festa.</p>
-      </div>
     </div>
 
-    <!-- TAB 1: Memória & Contexto -->
-    <div class="vnp-tab-content" id="vnp-content-1">
-      <div class="vnp-tab-phone">
-        <div class="vnp-phone">
-          <div class="vnp-phone-di"></div>
-          <div class="vnp-phone-screen">
-            <div class="ph-wa-header">
-              <div class="ph-wa-avatar">J</div>
-              <div style="flex:1"><div class="ph-wa-name">Jarvis</div><div class="ph-wa-status"><span class="ph-wa-online"></span>online</div></div>
+    <!-- SCENE 2 -->
+    <div class="demo-scene reveal">
+      <div class="scene-header">
+        <div class="scene-number">02</div>
+        <div>
+          <div class="scene-label">Áudio de 3 minutos do chefe</div>
+          <div class="scene-desc">Seu chefe mandou um áudio longo com tarefas. Você encaminha. Jarvis transcreve e extrai tudo.</div>
+        </div>
+      </div>
+      <div class="scene-phone-center">
+        <div class="spc-frame">
+          <div class="spc-di"></div>
+          <div class="spc-screen">
+            <div class="spc-wa-bar"><div class="spc-avatar" style="background:var(--accent2);font-family:'Cormorant Garamond',serif;">J</div><div class="spc-bar-info"><div class="spc-bar-name">Jarvis</div><div class="spc-bar-status"><span class="spc-online-dot"></span> online</div></div></div>
+            <div class="spc-chat">
+              <div class="spc-bubble-user"><div class="spc-fwd">⤷ Encaminhada de Roberto (Chefe)</div><div class="spc-audio-block"><div class="spc-play-btn">▶</div><div class="spc-waveform"><span style="height:4px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:7px"></span><span style="height:14px"></span><span style="height:5px"></span><span style="height:12px"></span><span style="height:8px"></span><span style="height:15px"></span><span style="height:6px"></span><span style="height:11px"></span><span style="height:9px"></span></div><div class="spc-audio-dur">3:12</div></div><div class="spc-time">11:45 ✓✓</div></div>
+              <div class="spc-bubble-jarvis"><div class="spc-jarvis-tag">Jarvis</div><strong>🔊 Áudio transcrito.</strong> 3 tarefas encontradas:<br><br><div class="spc-jarvis-card"><div class="sjc-title">1. Enviar proposta revisada</div><div class="sjc-row">📅 Sexta-feira · 17h</div><div class="sjc-divider"></div><div class="sjc-title">2. Call com cliente Acme</div><div class="sjc-row">📅 Segunda · 10h</div><div class="sjc-divider"></div><div class="sjc-title">3. Apresentação Q2</div><div class="sjc-row">📅 Quarta · 14h</div></div><div class="spc-time">11:45</div></div>
             </div>
-            <div class="ph-chat" id="vnp-chat-1"></div>
           </div>
         </div>
       </div>
-      <div class="vnp-tab-text">
-        <h3>Ele lembra
-de tudo por você.</h3>
-        <p>Diga uma vez. O Jarvis guarda para sempre. Atividades recorrentes, aniversários, compromissos — pergunte quando quiser.</p>
-        <p class="vnp-emotional">Sua memória, ampliada.</p>
-      </div>
     </div>
 
-    <!-- TAB 2: Dashboard -->
-    <div class="vnp-tab-content" id="vnp-content-2">
-      <div style="width:100%;">
-        <div class="vnp-browser">
-          <div class="vnp-browser-bar">
-            <div class="vnp-browser-dots">
-              <div class="vnp-browser-dot vnp-browser-dot-r"></div>
-              <div class="vnp-browser-dot vnp-browser-dot-y"></div>
-              <div class="vnp-browser-dot vnp-browser-dot-g"></div>
+    <!-- SCENE 3 -->
+    <div class="demo-scene reveal">
+      <div class="scene-header">
+        <div class="scene-number">03</div>
+        <div>
+          <div class="scene-label">PDF com prazo escondido</div>
+          <div class="scene-desc">Helena mandou o contrato de aluguel. Você encaminha. Jarvis lê o PDF e encontra a data de renovação.</div>
+        </div>
+      </div>
+      <div class="scene-phone-center">
+        <div class="spc-frame">
+          <div class="spc-di"></div>
+          <div class="spc-screen">
+            <div class="spc-wa-bar"><div class="spc-avatar" style="background:var(--accent2);font-family:'Cormorant Garamond',serif;">J</div><div class="spc-bar-info"><div class="spc-bar-name">Jarvis</div><div class="spc-bar-status"><span class="spc-online-dot"></span> online</div></div></div>
+            <div class="spc-chat">
+              <div class="spc-bubble-user"><div class="spc-fwd">⤷ Encaminhada de Helena</div><div class="spc-pdf-block"><div class="spc-pdf-icon">PDF</div><div class="spc-pdf-info"><strong>Contrato_Aluguel.pdf</strong><br><span style="opacity:0.5;font-size:10px;">2 páginas · 340 KB</span></div></div><div class="spc-time">14:20 ✓✓</div></div>
+              <div class="spc-bubble-jarvis"><div class="spc-jarvis-tag">Jarvis</div><strong>📄 PDF analisado.</strong><br><br><div class="spc-jarvis-card"><div class="sjc-title">Renovação do aluguel</div><div class="sjc-row">📅 15 de julho de 2026</div><div class="sjc-row">💰 R$ 3.200/mês</div><div class="sjc-divider"></div><div class="sjc-row sjc-muted">⏰ Lembrete: 1º de julho</div></div><div class="spc-time">14:20</div></div>
             </div>
-            <div class="vnp-browser-url">app.jarvis-br.com/dashboard</div>
-          </div>
-          <div class="vnp-browser-body">
-            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310419663029573889/c36LErEUdDMifVsM4DRHJu/dashboard-mockup-hA2E3pVnC8VTfCCc8SCKxx.webp" alt="Dashboard Jarvis" loading="lazy">
-            <div class="vnp-scan-line"></div>
-          </div>
-          <div class="vnp-category-pills">
-            <span class="vnp-cat-pill" style="background:#E65100">Família</span>
-            <span class="vnp-cat-pill" style="background:#1565C0">Escola</span>
-            <span class="vnp-cat-pill" style="background:#2E7D32">Trabalho</span>
-            <span class="vnp-cat-pill" style="background:#00838F">Saúde</span>
-            <span class="vnp-cat-pill" style="background:#6A1B9A">Financeiro</span>
-            <span class="vnp-cat-pill" style="background:#C62828">Social</span>
-            <span class="vnp-cat-pill" style="background:#F9A825;color:#333">Viagem</span>
           </div>
         </div>
       </div>
-      <div class="vnp-tab-text" style="min-width:260px;">
-        <h3>Tudo visível.
-Tudo organizado.</h3>
-        <p>Seu dashboard exclusivo mostra todos os compromissos, tarefas e lembretes em um só lugar. Acesse de qualquer navegador.</p>
-        <p class="vnp-emotional">Sua vida, finalmente com clareza.</p>
-      </div>
     </div>
 
-    <!-- Feature grid -->
-    <div class="vnp-features">
-      <div class="vnp-feature">
-        <svg class="vnp-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-        <span class="vnp-feature-text">Aceita texto, áudio, PDF, imagem</span>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 1: HOW IT WORKS ───────────────────────────── -->
+<div id="how" class="how-wrap sec-wrap">
+  <div class="section">
+    <p class="sec-tag reveal">Como funciona</p>
+    <div class="steps">
+      <div class="step-item reveal stagger-1">
+        <span class="step-num">01</span>
+        <div>
+          <p class="step-title">Você encaminha qualquer coisa</p>
+          <p class="step-desc">Áudio, print, texto bagunçado, PDF. O mesmo gesto que você já faz todo dia. Encaminha pro Jarvis.</p>
+        </div>
       </div>
-      <div class="vnp-feature">
-        <svg class="vnp-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>
-        <span class="vnp-feature-text">Edite compromissos a qualquer hora</span>
+      <div class="step-item reveal stagger-2">
+        <span class="step-num">02</span>
+        <div>
+          <p class="step-title">Jarvis entende e organiza</p>
+          <p class="step-desc">Extrai o que importa — data, tarefa, compromisso, prazo. Organiza sem você fazer nada.</p>
+        </div>
       </div>
-      <div class="vnp-feature">
-        <svg class="vnp-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
-        <span class="vnp-feature-text">Apague o que não precisa mais</span>
+      <div class="step-item reveal stagger-3">
+        <span class="step-num">03</span>
+        <div>
+          <p class="step-title">Você é lembrado na hora certa</p>
+          <p class="step-desc">No WhatsApp. Sem precisar checar nada. Sem abrir nenhum app.</p>
+        </div>
       </div>
-      <div class="vnp-feature">
-        <svg class="vnp-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span class="vnp-feature-text">Dashboard exclusivo e ao vivo</span>
+    </div>
+    <p class="step-closer reveal">É isso. Três passos. Uma mudança permanente.</p>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 2: THE PROBLEM ─────────────────────────────── -->
+<div id="problem" class="problem-wrap sec-wrap">
+  <div class="section">
+    <p class="sec-tag reveal">O problema</p>
+    <div class="prob-grid">
+      <div class="prob-card reveal stagger-1">
+        <p class="prob-card-persona">Mãe</p>
+        <h3 class="prob-card-headline">Você leu.<br>Não guardou.<br>A data passou.</h3>
+        <p class="prob-card-body">O comunicado da escola chegou no grupo às 22h. Você viu, achou importante, pensou "vou lembrar". Na manhã da festa, seu filho foi de uniforme errado.</p>
       </div>
-      <div class="vnp-feature">
-        <svg class="vnp-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        <span class="vnp-feature-text">Lembretes automáticos no WhatsApp</span>
+      <div class="prob-card reveal stagger-2">
+        <p class="prob-card-persona">Mãe</p>
+        <h3 class="prob-card-headline">Três grupos,<br>seis turmas,<br>uma cabeça só.</h3>
+        <p class="prob-card-body">Reunião de pais, autorização de passeio, arrecadação do lanche. Tudo no WhatsApp, tudo urgente, tudo ao mesmo tempo. Nenhuma agenda dá conta disso.</p>
       </div>
-      <div class="vnp-feature">
-        <svg class="vnp-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-        <span class="vnp-feature-text">Transcreve áudios em segundos</span>
+      <div class="prob-card reveal stagger-3">
+        <p class="prob-card-persona">Executivo</p>
+        <h3 class="prob-card-headline">A reunião acabou.<br>As tarefas ficaram<br>na cabeça.</h3>
+        <p class="prob-card-body">Você saiu da call com cinco pendências claras. Não abriu o bloco de notas. Duas horas depois, lembrava de três. Na sexta, seu gestor perguntou pelas outras duas.</p>
+      </div>
+      <div class="prob-card reveal stagger-4">
+        <p class="prob-card-persona">Executivo</p>
+        <h3 class="prob-card-headline">"Vou ouvir<br>depois." Depois<br>nunca chegou.</h3>
+        <p class="prob-card-body">Áudio de 4 minutos do cliente, mandado às 11h. Você estava em outra reunião. Marcou como não lido. Esqueceu. O cliente ligou às 17h perguntando a resposta.</p>
+      </div>
+    </div>
+    <div class="prob-outro reveal">
+      <p><strong>Não é falta de atenção. É excesso de mensagem.</strong>
+      O WhatsApp não foi feito pra lembrar por você. O Jarvis foi.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SEÇÃO 3: USE CASES ──────────────────────────────── -->
+<div id="cases" class="cases-wrap sec-wrap">
+  <div class="section">
+    <p class="sec-tag reveal">Situações reais</p>
+    <div class="accordion">
+      <div class="acc-item reveal stagger-1">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div>
+            <p class="acc-persona-tag">Mãe</p>
+            <p class="acc-title">Escola da Olivia</p>
+            <p class="acc-teaser">A mãe que não pode errar</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="acc-before">Você acompanha comunicados de 3 grupos ao mesmo tempo. Datas, uniformes, arrecadações. Chegam quando você está no meio de outra coisa.</p>
+          <div class="acc-divider"></div>
+          <p class="acc-after">Encaminhou pro Jarvis. "Festa junina, 21 de junho, traje caipira, levar R$15." Semana que vem: lembrete automático.<br><em>Olivia sorri. Você também.</em></p>
+        </div></div>
+      </div>
+      <div class="acc-item reveal stagger-2">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div>
+            <p class="acc-persona-tag">Profissional</p>
+            <p class="acc-title">Reunião com 5 tarefas</p>
+            <p class="acc-teaser">O executivo com agenda cheia</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="acc-before">Reunião termina. Você abriu o bloco de notas? Não. Ia anotar depois? Ia. Anotou? Não. Na sexta o gestor pergunta pelo entregável.</p>
+          <div class="acc-divider"></div>
+          <p class="acc-after">Mandou o áudio da reunião pro Jarvis. Em minutos: lista de tarefas, responsáveis, prazos.<br><em>Você entrega antes do prazo.</em></p>
+        </div></div>
+      </div>
+      <div class="acc-item reveal stagger-3">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div>
+            <p class="acc-persona-tag">No trânsito</p>
+            <p class="acc-title">Áudio de 3 minutos</p>
+            <p class="acc-teaser">O recado que não podia perder</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="acc-before">Seu parceiro mandou um áudio longo com um recado importante. Você estava dirigindo. Marcou pra ouvir depois. Esqueceu.</p>
+          <div class="acc-divider"></div>
+          <p class="acc-after">Encaminhou pro Jarvis antes de sair do carro. Jarvis transcreveu, extraiu o recado, programou o lembrete.<br><em>Quando chegou em casa, você já sabia de tudo.</em></p>
+        </div></div>
+      </div>
+      <div class="acc-item reveal stagger-4">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div>
+            <p class="acc-persona-tag">Documento</p>
+            <p class="acc-title">PDF com prazo escondido</p>
+            <p class="acc-teaser">A data que estava enterrada</p>
+          </div>
+          <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body"><div class="acc-inner">
+          <p class="acc-before">Print do boleto. Screenshot do contrato com data de renovação. PDF da proposta com validade de 10 dias. Você salva. Esquece onde.</p>
+          <div class="acc-divider"></div>
+          <p class="acc-after">Encaminhou pro Jarvis. Dois dias antes: "Atenção — prazo amanhã."<br><em>Você age a tempo. Sempre.</em></p>
+        </div></div>
       </div>
     </div>
   </div>
-</section>
-
-<!-- ══ O PROBLEMA ════════════════════════════════════════ -->
-<section id="problem" class="op-section">
-  <div class="op-top-line"></div>
-  <div class="op-inner">
-    <div class="op-header">
-      <div class="op-header-left">
-        <div class="op-eyebrow">
-          <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-          <span>O Problema</span>
-        </div>
-        <h2 class="op-title">Situações <em>reais.</em></h2>
-      </div>
-      <div class="op-chaos">
-        <div class="op-notif">
-          <div class="op-notif-icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/></svg></div>
-          <span class="op-notif-text">Mães Turma 3A</span>
-          <span class="op-notif-badge">47</span>
-        </div>
-        <div class="op-notif">
-          <div class="op-notif-icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/></svg></div>
-          <span class="op-notif-text">Trabalho Geral</span>
-          <span class="op-notif-badge">23</span>
-        </div>
-        <div class="op-notif">
-          <div class="op-notif-icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/></svg></div>
-          <span class="op-notif-text">Condomínio</span>
-          <span class="op-notif-badge">12</span>
-        </div>
-        <div class="op-notif">
-          <div class="op-notif-icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/></svg></div>
-          <span class="op-notif-text">Família</span>
-          <span class="op-notif-badge">8</span>
-        </div>
-        <div class="op-notif">
-          <div class="op-notif-icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/></svg></div>
-          <span class="op-notif-text">Escola Pippo</span>
-          <span class="op-notif-badge">31</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="op-grid" id="op-grid">
-      <div class="op-card">
-        <div class="op-card-tag"><div class="op-card-dot" style="background:#C4763A"></div><span style="color:#C4763A">ESCOLA</span></div>
-        <h3>Você leu.
-Não guardou.
-A data passou.</h3>
-        <p>O comunicado da escola chegou no grupo às 22h. Você viu, achou importante, pensou "vou lembrar". Na manhã da festa, seu filho foi de uniforme errado.</p>
-        <div class="op-card-bg-icon">&#127891;</div>
-      </div>
-      <div class="op-card">
-        <div class="op-card-tag"><div class="op-card-dot" style="background:#8B6F47"></div><span style="color:#8B6F47">ROTINA</span></div>
-        <h3>Três grupos,
-seis turmas,
-uma cabeça só.</h3>
-        <p>Reunião de pais, autorização de passeio, arrecadação do lanche. Tudo no WhatsApp, tudo urgente, tudo ao mesmo tempo. Nenhuma agenda dá conta disso.</p>
-        <div class="op-card-bg-icon">&#128260;</div>
-      </div>
-      <div class="op-card">
-        <div class="op-card-tag"><div class="op-card-dot" style="background:#6B7B3A"></div><span style="color:#6B7B3A">TRABALHO</span></div>
-        <h3>A reunião acabou.
-As tarefas ficaram
-na cabeça.</h3>
-        <p>Você saiu da call com cinco pendências claras. Não abriu o bloco de notas. Duas horas depois, lembrava de três. Na sexta, seu gestor perguntou pelas outras duas.</p>
-        <div class="op-card-bg-icon">&#128188;</div>
-      </div>
-      <div class="op-card">
-        <div class="op-card-tag"><div class="op-card-dot" style="background:#A0522D"></div><span style="color:#A0522D">URGENTE</span></div>
-        <h3>"Vou ouvir
-depois." Depois
-nunca chegou.</h3>
-        <p>Áudio de 4 minutos do cliente, mandado às 11h. Você estava em outra reunião. Marcou como não lido. Esqueceu. O cliente ligou às 17h perguntando a resposta.</p>
-        <div class="op-card-bg-icon">&#128264;</div>
-      </div>
-    </div>
-
-    <div class="op-closing">
-      <p>Não é falta de atenção. É excesso de mensagem.</p>
-      <p>O WhatsApp não foi feito pra lembrar por você. <em>O Jarvis foi.</em></p>
-    </div>
-  </div>
-</section>
-
-<!-- ══ COMO FUNCIONA ═════════════════════════════════════ -->
-<section id="how" class="cf-section">
-  <div class="cf-top-line"></div>
-  <div class="cf-bottom-line"></div>
-  <div class="cf-inner">
-    <div class="cf-eyebrow">
-      <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-      <span>Como Funciona</span>
-    </div>
-    <h2 class="cf-title">Três passos. <em>Uma mudança permanente.</em></h2>
-
-    <div class="cf-steps" id="cf-steps">
-      <!-- Step 1 -->
-      <div class="cf-card active" id="cf-card-0">
-        <div class="cf-card-num">01</div>
-        <div class="cf-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3l-6 6"/><path d="M15 3h6v6"/><path d="M10 14L3 21"/></svg>
-        </div>
-        <h3>Você encaminha
-qualquer coisa</h3>
-        <p>Áudio, print, texto, PDF, link. O mesmo gesto que você já faz todo dia no WhatsApp.</p>
-        <div class="cf-pills">
-          <span class="cf-pill">Texto</span>
-          <span class="cf-pill">Áudio</span>
-          <span class="cf-pill">Imagem</span>
-          <span class="cf-pill">PDF</span>
-          <span class="cf-pill">Print</span>
-          <span class="cf-pill">Link</span>
-        </div>
-      </div>
-
-      <!-- Connector 1 -->
-      <div class="cf-connector filled" id="cf-conn-0">
-        <div class="cf-connector-line"></div>
-        <span class="cf-connector-arrow">&rarr;</span>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="cf-card" id="cf-card-1">
-        <div class="cf-card-num">02</div>
-        <div class="cf-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 017 7c0 3-2 5.5-4 7.5L12 22l-3-5.5C7 14.5 5 12 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        </div>
-        <h3>Jarvis entende
-e organiza</h3>
-        <p>Extrai o que importa — data, tarefa, compromisso, prazo. Organiza sem você fazer nada.</p>
-        <div class="cf-pills">
-          <span class="cf-pill">Entende contexto</span>
-          <span class="cf-pill">Extrai datas</span>
-          <span class="cf-pill">Categoriza</span>
-          <span class="cf-pill">Salva recorrência</span>
-        </div>
-      </div>
-
-      <!-- Connector 2 -->
-      <div class="cf-connector" id="cf-conn-1">
-        <div class="cf-connector-line"></div>
-        <span class="cf-connector-arrow">&rarr;</span>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="cf-card" id="cf-card-2">
-        <div class="cf-card-num">03</div>
-        <div class="cf-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        </div>
-        <h3>Você é lembrado
-na hora certa</h3>
-        <p>No WhatsApp. Sem precisar checar nada. Sem abrir nenhum app. Sem esquecer nunca mais.</p>
-        <div class="cf-pills">
-          <span class="cf-pill">Na hora</span>
-          <span class="cf-pill">30 min antes</span>
-          <span class="cf-pill">1 dia antes</span>
-          <span class="cf-pill">Você escolhe</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="cf-bottom">
-      <p>É isso. Três passos. <em>Uma mudança permanente.</em></p>
-    </div>
-    <div class="cf-bottom-cta">
-      <button class="cf-bottom-btn" onclick="openModal()">COMEÇAR GRÁTIS &rarr;</button>
-    </div>
-  </div>
-</section>
-
-<!-- Use Cases section removed - covered by VejaNaPratica -->
+</div>
 
 <!-- ── DEPOIMENTOS ─────────────────────────────────────── -->
 <div class="testi-wrap sec-wrap">
@@ -1760,365 +1437,139 @@ na hora certa</h3>
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-// PREMIUM SECTIONS JS
-// ══════════════════════════════════════════════════════════
+// ── Chat animation ──────────────────────────────────────
+var MSGS = [
+  {t:'user', fwd:true,
+   body:'Reunião com professor da Olivia<br><small style="color:rgba(0,0,0,0.42);font-size:10px">10/04 às 10h — Sala 3</small>',
+   time:'09:41', at:400},
+  {t:'typing', at:1600, dur:2200},
+  {t:'jarvis', highlight:true,
+   body:'<b>Salvo.</b> Reunião com o prof. Olivia — 10/04, 10h, Sala 3.',
+   sub:'Quer ser lembrada antes?',
+   time:'09:41', at:3800},
+  {t:'user', body:'Sim, 1 dia antes por favor', time:'09:42', at:5800},
+  {t:'typing', at:6600, dur:1400},
+  {t:'jarvis',
+   body:'✓ Lembrete agendado: <b>9 de abril</b>, manhã.',
+   time:'09:42', at:8000},
+  {t:'user', img:{icon:'🎂',title:'Convite — Festa da Luisa',sub:'22/03 · 16h · Tema Princesas'},
+   time:'09:43', at:11000},
+  {t:'typing', at:12200, dur:2600},
+  {t:'jarvis', highlight:true,
+   body:'🎉 Li o convite: <b>Festa da Luisa</b>, 22/03, 16h, tema princesas. Salvo.',
+   sub:'Lembrete na véspera programado.',
+   time:'09:43', at:14800},
+  {t:'user', audio:'0:18', time:'09:45', at:18000},
+  {t:'typing', at:19400, dur:2200},
+  {t:'jarvis', highlight:true,
+   body:'🔔 Entendido: <b>ligar pro marido</b> em 10 minutos.',
+   sub:'⏰ Lembrete: 09:55.',
+   time:'09:45', at:21600}
+];
 
-// ── 1. Hero Typing Word Animation ────────────────────────
-(function(){
-  var WORDS = ["Reuniões","Tarefas","Filhos","Prazos","Contas"];
-  var el = document.getElementById('typing-word');
-  if(!el) return;
-  var wi=0, ci=0, deleting=false, pause=false;
-  function tick(){
-    if(pause) return;
-    var word = WORDS[wi];
-    if(!deleting){
-      ci++;
-      el.textContent = word.slice(0,ci);
-      if(ci===word.length){
-        pause=true;
-        setTimeout(function(){pause=false;deleting=true;tick();},2000);
-        return;
-      }
-      setTimeout(tick,90);
+var WAVE_H = [4,7,12,9,15,8,5,14,10,6,11,8,9,13,5,7,12,6,10,7];
+
+function buildMsgEl(m) {
+  var d = document.createElement('div');
+  var inner = '';
+  if (m.t === 'user') {
+    d.className = 'msg user msg-anim' + (m.audio ? ' msg-audio-wrap' : '');
+    if (m.fwd) {
+      inner += '<div class="msg-fwd-label">&#8627; Encaminhada</div>';
+    }
+    if (m.img) {
+      inner += '<div class="msg-img-block">'
+        + '<div class="msg-img-icon">'+m.img.icon+'</div>'
+        + '<div class="msg-img-meta">'
+        + '<div class="msg-img-title">'+m.img.title+'</div>'
+        + '<div class="msg-img-sub">'+m.img.sub+'</div>'
+        + '</div></div>';
+    } else if (m.audio) {
+      var bars = WAVE_H.map(function(h){
+        return '<div class="msg-audio-bar" style="width:3px;height:'+h+'px;background:rgba(0,0,0,0.22);border-radius:2px;flex-shrink:0"></div>';
+      }).join('');
+      inner += '<div class="msg-audio-block" style="display:flex;flex-direction:row;align-items:center;gap:8px;padding:4px 0">'
+        + '<div class="msg-audio-icon">&#9654;</div>'
+        + '<div class="msg-audio-wave" style="flex:1;display:flex;flex-direction:row;align-items:center;gap:2px;overflow:hidden;height:20px">'+bars+'</div>'
+        + '<span class="msg-audio-dur">'+m.audio+'</span></div>';
     } else {
-      ci--;
-      el.textContent = word.slice(0,ci);
-      if(ci===0){
-        deleting=false;
-        wi=(wi+1)%WORDS.length;
-        setTimeout(tick,300);
+      inner += m.body;
+    }
+    inner += '<div class="msg-time">'+m.time+' <span class="check-mark">&#10003;&#10003;</span></div>';
+  } else {
+    d.className = 'msg jarvis msg-anim' + (m.highlight ? ' msg-highlight' : '');
+    inner = m.body;
+    if (m.sub) inner += '<div class="msg-sub">'+m.sub+'</div>';
+    inner += '<div class="msg-time">'+m.time+'</div>';
+  }
+  d.innerHTML = inner;
+  return d;
+}
+
+function startChat(id) {
+  var box = document.getElementById(id);
+  if (!box) return;
+  var typing = null;
+  var timers = [];
+
+  function run() {
+    timers.forEach(function(t){ clearTimeout(t); });
+    timers = [];
+    box.innerHTML = '';
+    typing = null;
+    var lastAt = 0;
+
+    MSGS.forEach(function(m) {
+      if (m.t === 'typing') {
+        timers.push(setTimeout(function(dur){
+          return function() {
+            if (typing) typing.remove();
+            typing = document.createElement('div');
+            typing.className = 'typing';
+            typing.innerHTML =
+              '<div class="typing-dot" style="animation:typingBounce .9s 0ms infinite ease-in-out"></div>'
+              +'<div class="typing-dot" style="animation:typingBounce .9s 180ms infinite ease-in-out"></div>'
+              +'<div class="typing-dot" style="animation:typingBounce .9s 360ms infinite ease-in-out"></div>';
+            box.appendChild(typing);
+            box.scrollTop = box.scrollHeight;
+          };
+        }(m.dur), m.at));
         return;
       }
-      setTimeout(tick,50);
-    }
-  }
-  el.textContent = WORDS[0];
-  ci = WORDS[0].length;
-  setTimeout(function(){pause=false;deleting=true;tick();},2500);
-})();
 
-// ── 2. Hero Phone Chat Animation ─────────────────────────
-(function(){
-  var chat = document.getElementById('ph-chat');
-  if(!chat) return;
-  var timers=[];
+      if (m.at > lastAt) lastAt = m.at;
+      timers.push(setTimeout(function(msg){
+        return function() {
+          if (typing) { typing.remove(); typing = null; }
+          var el = buildMsgEl(msg);
+          box.appendChild(el);
+          requestAnimationFrame(function(){
+            requestAnimationFrame(function(){
+              el.classList.add('msg-visible');
+            });
+          });
+          box.scrollTop = box.scrollHeight;
+        };
+      }(m), m.at));
+    });
 
-  function addMsg(html,cls,delay){
-    timers.push(setTimeout(function(){
-      var d=document.createElement('div');
-      d.className='ph-msg '+cls;
-      d.innerHTML=html;
-      chat.appendChild(d);
-      requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('ph-vis');});});
-      chat.scrollTop=chat.scrollHeight;
-    },delay));
-  }
-  function addTyping(delay,dur){
-    timers.push(setTimeout(function(){
-      var t=document.createElement('div');
-      t.className='ph-typing-ind';
-      t.id='ph-typing-tmp';
-      t.innerHTML='<div class="ph-typing-dot"></div><div class="ph-typing-dot"></div><div class="ph-typing-dot"></div>';
-      chat.appendChild(t);
-      chat.scrollTop=chat.scrollHeight;
-      setTimeout(function(){var e=document.getElementById('ph-typing-tmp');if(e)e.remove();},dur);
-    },delay));
+    timers.push(setTimeout(run, lastAt + 5000));
   }
 
-  function run(){
-    timers.forEach(clearTimeout);
-    timers=[];
-    chat.innerHTML='';
-
-    // Forwarded birthday invite
-    addMsg('<div class="ph-msg-fwd">&#8627; Encaminhada de Mães Turma 3A</div>'
-      +'<div style="background:linear-gradient(135deg,#FF6F00,#F44336);border-radius:8px;padding:14px;color:white;text-align:center;margin:4px 0;">'
-      +'<div style="font-size:18px;margin-bottom:4px;">&#127874;</div>'
-      +'<div style="font-weight:700;font-size:12px;">ANIVERSÁRIO DO RAFAEL</div>'
-      +'<div style="font-size:10px;opacity:0.9;margin-top:3px;">4 anos! &middot; 12 de abril &middot; 15h</div>'
-      +'<div style="font-size:9px;opacity:0.75;margin-top:2px;">Buffet Encantado &middot; Tema Dinossauros &#129429;</div>'
-      +'</div>'
-      +'<div class="ph-msg-time">16:42 &#10003;&#10003;</div>','ph-msg-user',500);
-
-    addTyping(2200,2000);
-
-    // Jarvis response
-    addMsg('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'<strong>&#127874; Anotado!</strong>'
-      +'<div class="ph-jarvis-card">'
-      +'<div style="font-weight:600;font-size:12px;margin-bottom:3px;">Aniversário do Rafael</div>'
-      +'<div style="font-size:11px;color:rgba(26,23,20,0.6);">&#128197; 12 de abril &middot; 15h</div>'
-      +'<div style="font-size:11px;color:rgba(26,23,20,0.6);">&#128205; Buffet Encantado</div>'
-      +'<div style="font-size:11px;color:rgba(26,23,20,0.6);">&#129429; Tema: Dinossauros</div>'
-      +'<div style="height:1px;background:rgba(0,0,0,0.06);margin:8px 0;"></div>'
-      +'<div style="font-size:10px;color:rgba(26,23,20,0.4);font-style:italic;">&#9200; Lembrete: 11 de abril, manhã</div>'
-      +'</div>'
-      +'<div class="ph-msg-time">16:42</div>','ph-msg-jarvis',4400);
-
-    // Audio message
-    addMsg('<div class="ph-audio-block">'
-      +'<div class="ph-audio-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>'
-      +'<div class="ph-waveform"><span style="height:4px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:7px"></span><span style="height:14px"></span><span style="height:5px"></span><span style="height:12px"></span><span style="height:8px"></span></div>'
-      +'<span class="ph-audio-dur">0:23</span>'
-      +'</div>'
-      +'<div class="ph-msg-time">16:44 &#10003;&#10003;</div>','ph-msg-user',7500);
-
-    addTyping(9200,2000);
-
-    // Jarvis transcribes audio
-    addMsg('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'<strong>&#128264; Áudio transcrito.</strong><br>'
-      +'Lembrar de comprar presente do Rafael.<br>'
-      +'<div style="height:1px;background:rgba(0,0,0,0.06);margin:6px 0;"></div>'
-      +'<div style="font-size:10px;color:rgba(26,23,20,0.4);font-style:italic;">&#9200; Lembrete: 10 de abril</div>'
-      +'<div class="ph-msg-time">16:44</div>','ph-msg-jarvis',11400);
-
-    // Time jump
-    addMsg('11 de abril','ph-msg-system',14000);
-
-    // Reminder
-    addMsg('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'&#128276; <strong>Lembrete!</strong><br>'
-      +'Amanhã: Aniversário do Rafael, 15h no Buffet Encantado.<br>'
-      +'<span style="font-size:10px;color:rgba(26,23,20,0.4);">Não esqueça o presente! &#127873;</span>'
-      +'<div class="ph-msg-time">08:00</div>','ph-msg-jarvis',16000);
-
-    timers.push(setTimeout(run,20000));
-  }
   run();
-})();
+}
 
-// ── 3. VejaNaPratica Tab System ──────────────────────────
-(function(){
-  var TAB_DURATION = 16000;
-  var activeTab = 0;
-  var progressInterval = null;
-  var autoTimer = null;
-  var vnpTimers = [];
+startChat('msgs-mobile');
+startChat('msgs-web');
 
-  function clearVnpTimers(){vnpTimers.forEach(clearTimeout);vnpTimers=[];}
-
-  // Chat messages for Tab 0
-  function playTab0(){
-    var c = document.getElementById('vnp-chat-0');
-    if(!c) return;
-    clearVnpTimers();
-    c.innerHTML='';
-
-    function add(html,cls,delay){
-      vnpTimers.push(setTimeout(function(){
-        var d=document.createElement('div');
-        d.className='ph-msg '+cls;
-        d.innerHTML=html;
-        c.appendChild(d);
-        requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('ph-vis');});});
-        c.scrollTop=c.scrollHeight;
-      },delay));
-    }
-    function typing(delay,dur){
-      vnpTimers.push(setTimeout(function(){
-        var t=document.createElement('div');
-        t.className='ph-typing-ind';
-        t.id='vnp-typing-0';
-        t.innerHTML='<div class="ph-typing-dot"></div><div class="ph-typing-dot"></div><div class="ph-typing-dot"></div>';
-        c.appendChild(t);
-        c.scrollTop=c.scrollHeight;
-        setTimeout(function(){var e=document.getElementById('vnp-typing-0');if(e)e.remove();},dur);
-      },delay));
-    }
-
-    add('<div class="ph-msg-fwd">&#8627; Encaminhada de Mães Turma 3A</div>'
-      +'<div style="background:linear-gradient(135deg,#FF6F00,#F44336);border-radius:8px;padding:14px;color:white;text-align:center;margin:4px 0;">'
-      +'<div style="font-size:18px;margin-bottom:4px;">&#127874;</div>'
-      +'<div style="font-weight:700;font-size:12px;">ANIVERSÁRIO DO RAFAEL</div>'
-      +'<div style="font-size:10px;opacity:0.9;margin-top:3px;">4 anos! &middot; 12 de abril &middot; 15h</div>'
-      +'<div style="font-size:9px;opacity:0.75;margin-top:2px;">Buffet Encantado</div></div>'
-      +'<div class="ph-msg-time">16:42 &#10003;&#10003;</div>','ph-msg-user',400);
-    typing(2000,1800);
-    add('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'<strong>&#127874; Anotado!</strong>'
-      +'<div class="ph-jarvis-card">'
-      +'<div style="font-weight:600;font-size:12px;margin-bottom:3px;">Aniversário do Rafael</div>'
-      +'<div style="font-size:11px;color:rgba(26,23,20,0.6);">&#128197; 12 de abril &middot; 15h</div>'
-      +'<div style="font-size:11px;color:rgba(26,23,20,0.6);">&#128205; Buffet Encantado</div>'
-      +'<div style="height:1px;background:rgba(0,0,0,0.06);margin:8px 0;"></div>'
-      +'<div style="font-size:10px;color:rgba(26,23,20,0.4);font-style:italic;">&#9200; Lembrete: 11 de abril, manhã</div></div>'
-      +'<div class="ph-msg-time">16:42</div>','ph-msg-jarvis',4000);
-    add('11 de abril','ph-msg-system',7000);
-    add('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'&#128276; <strong>Lembrete!</strong><br>Amanhã: Aniversário do Rafael, 15h no Buffet Encantado.'
-      +'<div class="ph-msg-time">08:00</div>','ph-msg-jarvis',9000);
-    updateStepFlow(0);
-    vnpTimers.push(setTimeout(function(){updateStepFlow(1);},4000));
-    vnpTimers.push(setTimeout(function(){updateStepFlow(2);},7000));
-  }
-
-  // Chat messages for Tab 1
-  function playTab1(){
-    var c = document.getElementById('vnp-chat-1');
-    if(!c) return;
-    clearVnpTimers();
-    c.innerHTML='';
-
-    function add(html,cls,delay){
-      vnpTimers.push(setTimeout(function(){
-        var d=document.createElement('div');
-        d.className='ph-msg '+cls;
-        d.innerHTML=html;
-        c.appendChild(d);
-        requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('ph-vis');});});
-        c.scrollTop=c.scrollHeight;
-      },delay));
-    }
-    function typing(delay,dur){
-      vnpTimers.push(setTimeout(function(){
-        var t=document.createElement('div');
-        t.className='ph-typing-ind';
-        t.id='vnp-typing-1';
-        t.innerHTML='<div class="ph-typing-dot"></div><div class="ph-typing-dot"></div><div class="ph-typing-dot"></div>';
-        c.appendChild(t);
-        c.scrollTop=c.scrollHeight;
-        setTimeout(function(){var e=document.getElementById('vnp-typing-1');if(e)e.remove();},dur);
-      },delay));
-    }
-
-    add('futebol do pippo todas tercas e quintas as 16:00<div class="ph-msg-time">10:15 &#10003;&#10003;</div>','ph-msg-user',400);
-    typing(1800,1500);
-    add('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'&#9989; Anotado! <strong>Futebol do Pippo</strong><br>'
-      +'&#128197; Terças e quintas, 16:00<br>'
-      +'<span style="font-size:10px;color:rgba(26,23,20,0.4);">Recorrência salva.</span>'
-      +'<div class="ph-msg-time">10:15</div>','ph-msg-jarvis',3500);
-    add('quando é o aniversário do rafael?<div class="ph-msg-time">10:20 &#10003;&#10003;</div>','ph-msg-user',6000);
-    typing(7400,1200);
-    add('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'O aniversário do Rafael é <strong>12 de abril</strong>.<br>'
-      +'<span style="font-size:10px;color:rgba(26,23,20,0.4);">Salvo desde 10/03.</span>'
-      +'<div class="ph-msg-time">10:20</div>','ph-msg-jarvis',8800);
-    add('como ta agenda do pippo??<div class="ph-msg-time">10:22 &#10003;&#10003;</div>','ph-msg-user',11000);
-    typing(12400,1800);
-    add('<div style="font-size:9px;font-weight:600;color:#A8522A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Jarvis</div>'
-      +'&#128203; <strong>Agenda do Pippo:</strong><br>'
-      +'&bull; Ter 16h — Futebol<br>'
-      +'&bull; Qui 16h — Futebol<br>'
-      +'&bull; 12/04 15h — Aniversário Rafael<br>'
-      +'<div class="ph-msg-time">10:22</div>','ph-msg-jarvis',14400);
-    updateStepFlow(0);
-    vnpTimers.push(setTimeout(function(){updateStepFlow(1);},3500));
-    vnpTimers.push(setTimeout(function(){updateStepFlow(2);},8800));
-  }
-
-  function playTab2(){
-    updateStepFlow(2);
-  }
-
-  function updateStepFlow(step){
-    for(var i=1;i<=3;i++){
-      var sc=document.getElementById('vnp-sc-'+i);
-      if(!sc) continue;
-      sc.classList.remove('active','done');
-      if(i-1===step) sc.classList.add('active');
-      else if(i-1<step) sc.classList.add('done');
-    }
-  }
-
-  window.vnpSwitchTab = function(idx){
-    if(idx===activeTab) return;
-    activeTab=idx;
-    // Update tabs
-    for(var i=0;i<3;i++){
-      var tab=document.getElementById('vnp-tab-'+i);
-      var content=document.getElementById('vnp-content-'+i);
-      var prog=document.getElementById('vnp-prog-'+i);
-      if(tab) tab.classList.toggle('active',i===idx);
-      if(content) content.classList.toggle('active',i===idx);
-      if(prog) prog.style.width = i===idx ? '0%' : '0%';
-    }
-    // Start progress
-    startProgress(idx);
-    // Play chat
-    if(idx===0) playTab0();
-    else if(idx===1) playTab1();
-    else playTab2();
-  };
-
-  function startProgress(idx){
-    clearTimeout(autoTimer);
-    var prog=document.getElementById('vnp-prog-'+idx);
-    if(prog){
-      prog.style.transition='none';
-      prog.style.width='0%';
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
-          prog.style.transition='width '+TAB_DURATION+'ms linear';
-          prog.style.width='100%';
-        });
-      });
-    }
-    autoTimer=setTimeout(function(){
-      vnpSwitchTab((idx+1)%3);
-    },TAB_DURATION);
-  }
-
-  // Init
-  playTab0();
-  startProgress(0);
-})();
-
-// ── 4. O Problema — Fade-in on scroll ────────────────────
-(function(){
-  var cards = document.querySelectorAll('.op-card');
-  if(!cards.length) return;
-  var opObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        var idx = Array.from(cards).indexOf(e.target);
-        setTimeout(function(){e.target.classList.add('op-vis');}, idx*120);
-        opObs.unobserve(e.target);
-      }
-    });
-  },{threshold:0.1});
-  cards.forEach(function(c){opObs.observe(c);});
-})();
-
-// ── 5. Como Funciona — Step Cycling ──────────────────────
-(function(){
-  var cards = [document.getElementById('cf-card-0'),document.getElementById('cf-card-1'),document.getElementById('cf-card-2')];
-  var conns = [document.getElementById('cf-conn-0'),document.getElementById('cf-conn-1')];
-  if(!cards[0]) return;
-  var active = 0;
-  var cycling = false;
-  var cfTimer = null;
-
-  function setActive(idx){
-    active=idx;
-    cards.forEach(function(c,i){if(c)c.classList.toggle('active',i===idx);});
-    conns.forEach(function(c,i){if(c)c.classList.toggle('filled',i<idx);});
-  }
-
-  function cycle(){
-    if(!cycling) return;
-    cfTimer = setTimeout(function(){
-      setActive((active+1)%3);
-      cycle();
-    },3000);
-  }
-
-  var cfObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting && !cycling){
-        cycling=true;
-        cycle();
-      } else if(!e.isIntersecting && cycling){
-        cycling=false;
-        clearTimeout(cfTimer);
-      }
-    });
-  },{threshold:0.2});
-  cfObs.observe(document.getElementById('cf-steps'));
-})();
+// ── Use-cases Accordion ─────────────────────────────────
+function toggleAcc(btn) {
+  if (window.innerWidth >= 768) return;
+  const item = btn.closest('.acc-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
 
 // ── FAQ Accordion ────────────────────────────────────────
 function faqToggle(btn) {
