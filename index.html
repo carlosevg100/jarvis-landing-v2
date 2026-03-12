@@ -727,10 +727,14 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .vnp-title em{color:var(--accent2);font-style:italic;}
 .vnp-subtitle{font-size:15px;color:rgba(255,255,255,0.35);text-align:center;margin-bottom:48px;font-weight:300;font-family:'DM Sans',sans-serif;}
 .vnp-steps-flow{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:36px;}
-.vnp-step-circle{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;transition:all .3s;}
-.vnp-step-circle.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
+.vnp-steps-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px;}
+.vnp-step-item{display:flex;align-items:center;gap:8px;}
+.vnp-step-circle{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;font-weight:600;transition:all .5s;}
+.vnp-step-circle.active{background:var(--accent2);border-color:var(--accent2);color:#fff;box-shadow:0 0 12px rgba(196,118,58,0.3);}
 .vnp-step-circle.done{background:rgba(196,118,58,0.3);border-color:rgba(196,118,58,0.5);color:#fff;}
-.vnp-step-arrow{color:rgba(255,255,255,0.1);font-size:12px;}
+.vnp-step-label{font-size:11px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;font-weight:400;}
+.vnp-step-connector{width:40px;height:1px;background:rgba(255,255,255,0.06);margin:0 12px;position:relative;overflow:hidden;}
+.vnp-step-connector::after{content:'';position:absolute;top:0;left:0;height:100%;width:0;background:rgba(196,118,58,0.4);transition:width .6s ease-out;}
 .vnp-step-label{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;text-transform:uppercase;margin-left:4px;}
 .vnp-tabs{display:flex;gap:8px;margin-bottom:36px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
 .vnp-tabs::-webkit-scrollbar{display:none;}
@@ -739,8 +743,11 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .vnp-tab.active{border-color:rgba(196,118,58,0.3);background:rgba(255,255,255,0.04);}
 .vnp-tab-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);flex-shrink:0;}
 .vnp-tab.active .vnp-tab-icon{color:var(--accent2);}
-.vnp-tab-label{font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;font-weight:400;white-space:nowrap;}
-.vnp-tab.active .vnp-tab-label{color:rgba(255,255,255,0.8);}
+.vnp-tab-text-col{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.vnp-tab-label{font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap;}
+.vnp-tab.active .vnp-tab-label{color:rgba(255,255,255,0.9);}
+.vnp-tab-sublabel{font-size:9px;color:rgba(255,255,255,0.2);font-family:'DM Sans',sans-serif;font-weight:300;display:none;}
+@media(min-width:640px){.vnp-tab-sublabel{display:block;}}
 .vnp-tab-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent2);width:0;transition:none;}
 .vnp-tab.active .vnp-tab-progress{transition:width 16s linear;}
 
@@ -972,38 +979,38 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
       <span>Veja na prática</span>
       <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
     </div>
-    <h2 class="vnp-title">Assim funciona na <em>vida real.</em></h2>
+    <h2 class="vnp-title">Assim funciona<br>na <em>sua rotina.</em></h2>
     <p class="vnp-subtitle">Você encaminha. O Jarvis entende, organiza e lembra por você.</p>
 
     <!-- Step flow -->
     <div class="vnp-steps-flow" id="vnp-steps-flow">
-      <div class="vnp-step-circle active" id="vnp-sc-1">1</div>
-      <span class="vnp-step-arrow">&rarr;</span>
-      <div class="vnp-step-circle" id="vnp-sc-2">2</div>
-      <span class="vnp-step-arrow">&rarr;</span>
-      <div class="vnp-step-circle" id="vnp-sc-3">3</div>
+      <div class="vnp-step-item"><div class="vnp-step-circle active" id="vnp-sc-1">1</div><span class="vnp-step-label">Encaminha</span></div>
+      <div class="vnp-step-connector"></div>
+      <div class="vnp-step-item"><div class="vnp-step-circle" id="vnp-sc-2">2</div><span class="vnp-step-label">Jarvis entende</span></div>
+      <div class="vnp-step-connector"></div>
+      <div class="vnp-step-item"><div class="vnp-step-circle" id="vnp-sc-3">3</div><span class="vnp-step-label">Você é lembrado</span></div>
     </div>
 
     <!-- Tabs -->
     <div class="vnp-tabs">
       <div class="vnp-tab active" id="vnp-tab-0" onclick="vnpSwitchTab(0)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M15 15l6 6m-11-4a7 7 0 110-14 7 7 0 010 14z"/><path d="M3 21l3.5-3.5"/><path d="M21 3l-6 6"/></svg></div>
-        <span class="vnp-tab-label">Grupo das Mães</span>
+        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M13 8l4 4-4 4"/></svg></div>
+        <div class="vnp-tab-text-col"><span class="vnp-tab-label">Encaminhou? Pronto.</span><span class="vnp-tab-sublabel">Qualquer mensagem, de qualquer grupo</span></div>
         <div class="vnp-tab-progress" id="vnp-prog-0"></div>
       </div>
       <div class="vnp-tab" id="vnp-tab-1" onclick="vnpSwitchTab(1)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 2a7 7 0 017 7c0 3-2 5.5-4 7.5L12 22l-3-5.5C7 14.5 5 12 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
-        <span class="vnp-tab-label">Memória &amp; Contexto</span>
+        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 2C6.48 2 2 6 2 11s4.48 9 10 9 10-4 10-9-4.48-9-10-9z"/><path d="M12 8v4l3 3"/></svg></div>
+        <div class="vnp-tab-text-col"><span class="vnp-tab-label">Memória &amp; Contexto</span><span class="vnp-tab-sublabel">Muito mais que um agendador</span></div>
         <div class="vnp-tab-progress" id="vnp-prog-1"></div>
       </div>
       <div class="vnp-tab" id="vnp-tab-2" onclick="vnpSwitchTab(2)">
         <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-        <span class="vnp-tab-label">Dashboard Exclusivo</span>
+        <div class="vnp-tab-text-col"><span class="vnp-tab-label">Dashboard Exclusivo</span><span class="vnp-tab-sublabel">Seu painel pessoal ao vivo</span></div>
         <div class="vnp-tab-progress" id="vnp-prog-2"></div>
       </div>
     </div>
 
-    <!-- TAB 0: Grupo das Mães -->
+    <!-- TAB 0: Encaminhou? Pronto -->
     <div class="vnp-tab-content active" id="vnp-content-0">
       <div class="vnp-tab-phone">
         <div class="vnp-phone">
@@ -1018,9 +1025,8 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
         </div>
       </div>
       <div class="vnp-tab-text">
-        <h3>Encaminhou.
-Jarvis cuidou.</h3>
-        <p>Uma mãe do grupo mandou o convite da festa. Você encaminhou pro Jarvis. Ele extraiu data, local, tema e programou o lembrete.</p>
+        <h3>Encaminhou.<br>Jarvis cuidou.</h3>
+        <p>Convite de aniversário, reunião de trabalho, consulta médica — qualquer mensagem de qualquer grupo. Encaminhou pro Jarvis, ele extrai tudo e te organiza e lembra.</p>
         <p class="vnp-emotional">Você nunca mais esquece uma festa.</p>
       </div>
     </div>
@@ -1040,10 +1046,9 @@ Jarvis cuidou.</h3>
         </div>
       </div>
       <div class="vnp-tab-text">
-        <h3>Ele lembra
-de tudo por você.</h3>
-        <p>Diga uma vez. O Jarvis guarda para sempre. Atividades recorrentes, aniversários, compromissos — pergunte quando quiser.</p>
-        <p class="vnp-emotional">Sua memória, ampliada.</p>
+        <h3>Ele lembra.<br>Você pergunta.</h3>
+        <p>Diga "futebol do Pippo toda terça e quinta às 16h". Pergunte "como tá a agenda do Pippo?". O Jarvis tem contexto — entende, organiza e responde.</p>
+        <p class="vnp-emotional">Como ter uma secretária particular no WhatsApp.</p>
       </div>
     </div>
 
@@ -1075,9 +1080,9 @@ de tudo por você.</h3>
         </div>
       </div>
       <div class="vnp-tab-text" style="min-width:260px;">
-        <h3>Tudo visível.
-Tudo organizado.</h3>
-        <p>Seu dashboard exclusivo mostra todos os compromissos, tarefas e lembretes em um só lugar. Acesse de qualquer navegador.</p>
+        <h3>Tudo num<br>painel só.</h3>
+        <p>Cada evento vira um card organizado por categoria — Família, Escola, Trabalho, Saúde. Filtre por hoje, semana ou mês. Tudo ao vivo.</p>
+        <p class="vnp-emotional">Sua vida organizada. Visualmente.</p>
         <p class="vnp-emotional">Sua vida, finalmente com clareza.</p>
       </div>
     </div>
