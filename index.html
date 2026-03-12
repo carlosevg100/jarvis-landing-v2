@@ -293,6 +293,9 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .modal-field:focus-within { border-bottom-color:rgba(26,23,20,0.3); }
 .modal-field input { width:100%; border:none; background:transparent; padding:12px 0; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; }
 .modal-field input::placeholder { color:rgba(26,23,20,0.25); }
+.consent-row{display:flex;align-items:flex-start;gap:8px;margin:12px 0 4px;font-size:12px;color:rgba(26,23,20,0.5);cursor:pointer;line-height:1.5;}
+.consent-row input{margin-top:3px;accent-color:#A8522A;flex-shrink:0;}
+.consent-row a{color:#A8522A;text-decoration:underline;}
 .modal-submit { width:100%; background:var(--ink); color:var(--white); border:none; padding:16px 24px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-top:24px; transition:background var(--transition), transform var(--transition); }
 .modal-submit:hover { background:var(--ink2); }
 .modal-submit:disabled { opacity:.5; cursor:not-allowed; }
@@ -878,6 +881,11 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .hero-mobile{display:none!important;}
 .hero-web{display:none!important;}
 </style>
+<!-- PostHog Analytics -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_Bke8lGIyrW0Lo1xO8BOtDPuhs0dNHSiynP2iY9ss5vL',{api_host:'https://us.i.posthog.com',autocapture:true});
+</script>
 </head>
 <body>
 
@@ -1485,8 +1493,8 @@ na hora certa</h3>
   <div class="footer-inner">
     <span class="footer-logo">Jarvis</span>
     <div class="footer-links">
-      <a href="#" onclick="openLegal('terms');return false;">Termos de Uso</a>
-      <a href="#" onclick="openLegal('privacy');return false;">Política de Privacidade</a>
+      <a href="/termos.html">Termos de Uso</a>
+      <a href="/privacidade.html">Política de Privacidade</a>
       <a href="#suporte" onclick="document.getElementById('suporte').scrollIntoView({behavior:'smooth'});return false;">Suporte</a>
     </div>
     <span class="footer-copy">&copy; 2026 Jarvis. Todos os direitos reservados.</span>
@@ -1506,6 +1514,7 @@ na hora certa</h3>
       <div class="modal-field"><input id="reg-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
       <div class="captcha-row"><span class="captcha-question" id="captcha-question">Carregando...</span><input class="captcha-input" id="captcha-answer" type="number" placeholder="?" autocomplete="off" min="1" max="20"></div>
       <p class="form-hint">Verifique seu número antes de continuar. Enviamos a primeira mensagem em instantes.</p>
+      <label class="consent-row" id="consent-row"><input type="checkbox" id="reg-consent"> <span>Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a> e a <a href="/privacidade.html" target="_blank">Política de Privacidade</a>.</span></label>
       <button class="modal-submit" id="modal-submit" onclick="register()">Criar minha conta <span>&#8594;</span></button>
       <p class="modal-note">Sem compromisso. Cancele quando quiser.</p>
       <p class="modal-msg" id="reg-msg"></p>
@@ -2180,6 +2189,7 @@ function genCaptcha() {
 
 // ── Signup Modal ─────────────────────────────────────────
 function openModal() {
+  if(window.posthog)posthog.capture('cta_clicked',{location:document.activeElement?.closest('section')?.id||'unknown'});
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   genCaptcha();
@@ -2318,6 +2328,7 @@ document.addEventListener('keydown', function(e) {
 
 // ── Register ─────────────────────────────────────────────
 async function register() {
+  if(window.posthog)posthog.capture('register_started');
   const name = document.getElementById('reg-name').value.trim();
   const phoneRaw = document.getElementById('reg-phone').value.replace(/\D/g, '');
   const phone = phoneRaw.startsWith('55') ? phoneRaw : '55' + phoneRaw;
@@ -2329,6 +2340,7 @@ async function register() {
   msgEl.className = 'modal-msg';
 
   if (!name) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Por favor, informe seu nome.'; return; }
+  if (!document.getElementById('reg-consent').checked) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Aceite os Termos de Uso e Política de Privacidade.'; return; }
   if (phoneRaw.length !== 11) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'WhatsApp deve ter 11 dígitos — ex: (11) 99999-9999'; return; }
   if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
     msgEl.className = 'modal-msg error';
@@ -2348,12 +2360,14 @@ async function register() {
     });
 
     if (res.ok) {
+      if(window.posthog){posthog.capture('register_completed');posthog.identify(phone,{name:name});}
       document.getElementById('reg-form').innerHTML =
         '<div style="padding:24px 0;text-align:center;">' +
-        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
-        '<p style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.6;">Verifique o WhatsApp em instantes.</p>' +
+        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto! ✅</p>' +
+        '<p style="font-size:14px;font-weight:400;color:var(--ink);line-height:1.6;margin-bottom:6px;">Tudo certo. Abra o WhatsApp agora.</p>' +
+        '<p style="font-size:12px;font-weight:300;color:var(--muted);line-height:1.6;">A primeira mensagem do Jarvis chega em instantes.</p>' +
         '</div>';
-      setTimeout(closeModal, 2500);
+      setTimeout(closeModal, 4000);
     } else if (res.status === 409) {
       msgEl.className = 'modal-msg error';
       msgEl.textContent = 'Esse número já tem uma conta.';
