@@ -42,11 +42,13 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .wa-badge { display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--ink2); border:1px solid var(--border); padding:9px 14px; border-radius:6px; font-size:12px; font-weight:400; letter-spacing:0.3px; margin-bottom:32px; opacity:0; animation:fadeUp .6s 1.6s forwards; width:fit-content; }
 .wa-icon { width:16px; height:16px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; color:#fff; font-weight:600; }
 .phone-wrap { width:100%; display:flex; justify-content:center; margin-bottom:36px; opacity:0; animation:fadeUp .9s 1.8s cubic-bezier(.16,1,.3,1) forwards; }
-.phone { width:min(300px,85vw); background:#1A1714; border-radius:36px; padding:12px; box-shadow:0 40px 80px rgba(26,23,20,0.22),0 0 0 1px rgba(26,23,20,0.15),inset 0 0 0 1px rgba(255,255,255,0.05); }
-.phone-notch { width:80px; height:22px; background:#1A1714; border-radius:0 0 14px 14px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; gap:6px; }
-.notch-cam { width:8px;height:8px;background:#2a2724;border-radius:50%; }
-.notch-speaker { width:36px;height:4px;background:#2a2724;border-radius:2px; }
-.phone-screen { background:#ECE5DD; border-radius:26px; overflow:hidden; height:420px; display:flex; flex-direction:column; }
+.phone { width:min(300px,85vw); background:#1A1714; border-radius:44px; padding:10px; box-shadow:0 40px 100px rgba(26,23,20,0.35),0 0 0 1px rgba(255,255,255,0.08),inset 0 0 0 1px rgba(255,255,255,0.04); position:relative; }
+.phone::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:90px; height:24px; background:#1A1714; border-radius:20px; z-index:10; }
+.phone::after { content:''; position:absolute; top:18px; left:50%; transform:translateX(-50%); margin-left:22px; width:8px; height:8px; background:radial-gradient(circle, #1e3a5f 30%, #0d1b2a 60%); border-radius:50%; z-index:11; box-shadow:inset 0 0 2px rgba(30,80,140,0.4); }
+.phone-notch { display:none; }
+.notch-cam { display:none; }
+.notch-speaker { display:none; }
+.phone-screen { background:#ECE5DD; border-radius:36px; overflow:hidden; height:440px; display:flex; flex-direction:column; }
 .wa-header { background:#075E54; padding:10px 14px; display:flex; align-items:center; gap:10px; }
 .wa-avatar { width:34px; height:34px; background:var(--accent2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:16px; color:white; font-weight:400; flex-shrink:0; }
 .wa-info { flex:1; }
@@ -118,7 +120,9 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   .web-stat-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--ink);display:block;line-height:1;margin-bottom:4px;}
   .web-stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
   .web-phone-wrap{opacity:0;animation:fadeUp 1s 1.2s cubic-bezier(.16,1,.3,1) forwards;}
-  .web-phone{width:260px;background:#1A1714;border-radius:40px;padding:12px;box-shadow:0 60px 120px rgba(26,23,20,.28),0 0 0 1px rgba(26,23,20,.15),inset 0 0 0 1px rgba(255,255,255,.05);}
+  .web-phone{width:280px;background:#1A1714;border-radius:44px;padding:10px;box-shadow:0 60px 120px rgba(26,23,20,.35),0 0 0 1px rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.04);position:relative;}
+  .web-phone::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:90px;height:24px;background:#1A1714;border-radius:20px;z-index:10;}
+  .web-phone::after{content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);margin-left:22px;width:8px;height:8px;background:radial-gradient(circle,#1e3a5f 30%,#0d1b2a 60%);border-radius:50%;z-index:11;box-shadow:inset 0 0 2px rgba(30,80,140,.4);}
 }
 
 /* ─── SECTIONS ──────────────────────────────────────────── */
@@ -560,35 +564,44 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .demo-footer-btn:active { transform:translateY(0); }
 .demo-footer-note { font-size:12px; color:#aaa; font-weight:300; font-family:'DM Sans',sans-serif; }
 
-/* ─── INLINE DEMO (APPLE STYLE) ─────────────────────────── */
+/* ─── CINEMATIC DEMO ─────────────────────────────────────── */
 .demo-inline-wrap { background:var(--ink); }
 .demo-inline-wrap .sec-tag { color:rgba(168,82,42,0.7); }
 .demo-inline-wrap .sec-tag::before { background:rgba(168,82,42,0.5); }
 .demo-inline-title { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,7vw,56px); font-weight:400; color:var(--white); text-align:center; line-height:1.1; margin-bottom:12px; letter-spacing:-0.5px; }
 .demo-inline-title em { color:var(--accent2); font-style:italic; }
-.demo-inline-sub { font-size:15px; color:rgba(253,250,245,0.4); text-align:center; margin-bottom:40px; font-weight:300; }
-.demo-inline-tabs { display:flex; justify-content:center; gap:8px; margin-bottom:40px; }
-.demo-tab { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:rgba(253,250,245,0.5); padding:10px 22px; border-radius:100px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:400; cursor:pointer; transition:all .3s ease; display:flex; align-items:center; gap:8px; }
-.demo-tab:hover { background:rgba(255,255,255,0.1); color:rgba(253,250,245,0.8); }
-.demo-tab.active { background:var(--accent); border-color:var(--accent); color:white; font-weight:500; box-shadow:0 4px 20px rgba(168,82,42,0.35); }
-.demo-tab-icon { font-size:16px; }
-.demo-inline-stage { position:relative; min-height:300px; }
-.demo-inline-panel { display:none; gap:32px; align-items:stretch; animation:demoFadeIn .4s ease; }
-.demo-inline-panel.active { display:flex; }
-@media(max-width:767px){ .demo-inline-panel.active { flex-direction:column; align-items:center; } }
-@keyframes demoFadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-.demo-inline-phone { flex:1; max-width:320px; background:#ECE5DD; border-radius:20px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
-.dip-header { background:#075E54; padding:10px 14px; display:flex; align-items:center; gap:10px; }
-.dip-body { padding:14px 10px; display:flex; flex-direction:column; gap:8px; min-height:200px; }
-.dip-bubble-in { background:white; border-radius:2px 12px 12px 12px; padding:10px 12px; font-size:12px; line-height:1.5; color:#1A1A1A; max-width:85%; align-self:flex-start; box-shadow:0 1px 2px rgba(0,0,0,0.1); }
-.dip-bubble-out { background:#DCF8C6; border-radius:12px 12px 2px 12px; padding:10px 12px; font-size:12px; line-height:1.5; color:#1A1A1A; max-width:85%; align-self:flex-end; box-shadow:0 1px 2px rgba(0,0,0,0.1); }
-.dip-bubble-out strong { color:#075E54; }
-.dip-time { font-size:9px; color:rgba(0,0,0,0.35); text-align:right; margin-top:4px; }
-.demo-inline-result { flex:1; max-width:400px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px 28px; display:flex; flex-direction:column; gap:16px; align-self:center; }
-.dir-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(46,125,50,0.15); color:#66BB6A; font-size:11px; font-weight:600; padding:5px 14px; border-radius:100px; width:fit-content; font-family:'DM Sans',sans-serif; }
-.dir-task { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; color:var(--white); line-height:1.2; }
-.dir-date { font-size:14px; color:var(--accent2); font-weight:500; font-family:'DM Sans',sans-serif; }
-.dir-detail { font-size:13px; color:rgba(253,250,245,0.5); font-weight:300; font-family:'DM Sans',sans-serif; }
+.demo-inline-sub { font-size:15px; color:rgba(253,250,245,0.4); text-align:center; margin-bottom:60px; font-weight:300; }
+
+/* Scene */
+.demo-scene { margin-bottom:80px; }
+.demo-scene:last-child { margin-bottom:0; }
+.scene-number { font-family:'Cormorant Garamond',serif; font-size:64px; font-weight:300; color:rgba(168,82,42,0.2); line-height:1; margin-bottom:4px; }
+.scene-label { font-family:'DM Sans',sans-serif; font-size:18px; font-weight:500; color:var(--white); margin-bottom:28px; letter-spacing:0.3px; }
+.scene-flow { display:flex; align-items:center; gap:16px; overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch; }
+@media(max-width:767px){ .scene-flow { gap:12px; } }
+.scene-arrow { font-size:24px; color:var(--accent2); flex-shrink:0; font-weight:300; }
+@media(max-width:767px){ .scene-arrow { font-size:18px; } }
+
+/* Mini phone frame */
+.scene-phone { flex-shrink:0; }
+.scene-phone-frame { width:220px; background:#1A1714; border-radius:28px; padding:6px; position:relative; box-shadow:0 16px 48px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.06); }
+@media(min-width:768px){ .scene-phone-frame { width:260px; border-radius:32px; padding:8px; } }
+.spf-di { position:absolute; top:7px; left:50%; transform:translateX(-50%); width:60px; height:16px; background:#1A1714; border-radius:12px; z-index:10; }
+.spf-screen { background:#ECE5DD; border-radius:22px; overflow:hidden; }
+.spf-chat { padding:10px 8px; display:flex; flex-direction:column; gap:6px; min-height:180px; font-size:11px; line-height:1.45; }
+.spf-msg-system { text-align:center; font-size:9px; color:rgba(0,0,0,0.35); background:rgba(0,0,0,0.04); padding:3px 10px; border-radius:8px; align-self:center; }
+.spf-msg-other { background:white; border-radius:2px 10px 10px 10px; padding:6px 10px; max-width:88%; align-self:flex-start; color:#1A1A1A; box-shadow:0 1px 1px rgba(0,0,0,0.08); }
+.spf-msg-me { background:#DCF8C6; border-radius:10px 10px 2px 10px; padding:6px 10px; max-width:88%; align-self:flex-end; color:#1A1A1A; box-shadow:0 1px 1px rgba(0,0,0,0.08); }
+.spf-msg-jarvis { background:white; border-radius:2px 10px 10px 10px; padding:8px 10px; max-width:90%; align-self:flex-start; color:#1A1A1A; box-shadow:0 1px 1px rgba(0,0,0,0.08); line-height:1.5; }
+.spf-sender { display:block; font-size:9px; font-weight:600; margin-bottom:2px; }
+
+/* Result card */
+.scene-result { flex-shrink:0; width:220px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:24px 20px; display:flex; flex-direction:column; gap:12px; }
+@media(min-width:768px){ .scene-result { width:260px; padding:28px 24px; } }
+.dir-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(46,125,50,0.15); color:#66BB6A; font-size:10px; font-weight:600; padding:4px 12px; border-radius:100px; width:fit-content; font-family:'DM Sans',sans-serif; }
+.dir-task { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:var(--white); line-height:1.2; }
+.dir-date { font-size:13px; color:var(--accent2); font-weight:500; font-family:'DM Sans',sans-serif; }
+.dir-detail { font-size:12px; color:rgba(253,250,245,0.45); font-weight:300; font-family:'DM Sans',sans-serif; }
 
 /* ─── SCROLL REVEAL ─────────────────────────────────────── */
 .reveal { opacity:1; transform:none; transition:opacity .55s ease, transform .55s cubic-bezier(.16,1,.3,1); }
@@ -716,73 +729,162 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
   </div>
 </div>
 
-<!-- ── DEMO INLINE — APPLE STYLE ────────────────────────── -->
+<!-- ── DEMO INLINE — CINEMATIC STORY ────────────────────── -->
 <div id="demo-inline" class="demo-inline-wrap sec-wrap">
-  <div class="section" style="max-width:960px;">
+  <div class="section" style="max-width:1000px;">
     <p class="sec-tag reveal" style="justify-content:center;">Veja na prática</p>
-    <h2 class="demo-inline-title reveal">Sua vida organizada<br>em <em>segundos.</em></h2>
-    <p class="demo-inline-sub reveal">Três tipos de mensagem. Um único gesto.</p>
+    <h2 class="demo-inline-title reveal">Assim funciona<br>na <em>vida real.</em></h2>
+    <p class="demo-inline-sub reveal">Três situações reais. O mesmo gesto: encaminhar.</p>
 
-    <div class="demo-inline-tabs reveal">
-      <button class="demo-tab active" onclick="setDemoInline(0, this)"><span class="demo-tab-icon">💬</span> Texto</button>
-      <button class="demo-tab" onclick="setDemoInline(1, this)"><span class="demo-tab-icon">📸</span> Imagem</button>
-      <button class="demo-tab" onclick="setDemoInline(2, this)"><span class="demo-tab-icon">🎤</span> Áudio</button>
-    </div>
-
-    <div class="demo-inline-stage reveal">
-      <!-- Panel 0: Texto -->
-      <div class="demo-inline-panel active" id="dip-0">
-        <div class="demo-inline-phone">
-          <div class="dip-header"><div class="wa-avatar" style="width:28px;height:28px;font-size:12px;">J</div><div><div style="color:white;font-size:12px;font-weight:500;">Jarvis</div><div style="color:rgba(255,255,255,0.6);font-size:9px;">online</div></div></div>
-          <div class="dip-body">
-            <div class="dip-bubble-in">Reunião com professor da Olivia, 10/04 às 10h, Sala 3<div class="dip-time">09:41</div></div>
-            <div class="dip-bubble-out"><strong>Salvo.</strong> Reunião prof. Olivia — 10/04, 10h, Sala 3.<br><span style="opacity:0.6;font-size:11px;">Quer ser lembrada antes?</span><div class="dip-time">09:41</div></div>
+    <!-- SCENE 1: Grupo de mães → convite → forward → Jarvis -->
+    <div class="demo-scene reveal">
+      <div class="scene-number">01</div>
+      <div class="scene-label">Convite no grupo da escola</div>
+      <div class="scene-flow">
+        <div class="scene-phone">
+          <div class="scene-phone-frame">
+            <div class="spf-di"></div>
+            <div class="spf-screen">
+              <div class="spf-wa-bar" style="background:#075E54;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);">←</div>
+                <div style="width:26px;height:26px;border-radius:50%;background:#4A7FA8;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;">👩‍👧</div>
+                <div style="flex:1;"><div style="color:white;font-size:11px;font-weight:600;">Mães Turma 3A</div><div style="color:rgba(255,255,255,0.5);font-size:8px;">Ana, Carla, Juliana, +12</div></div>
+              </div>
+              <div class="spf-chat">
+                <div class="spf-msg-system">Carla adicionou Fernanda</div>
+                <div class="spf-msg-other"><span class="spf-sender" style="color:#4A7FA8;">~ Ana Paula</span>Bom dia mães! 💕</div>
+                <div class="spf-msg-other"><span class="spf-sender" style="color:#E65100;">~ Coordenação</span><div style="background:linear-gradient(135deg,#6A1B9A,#E91E63);border-radius:8px;padding:12px;color:white;text-align:center;margin:4px 0;"><div style="font-size:16px;margin-bottom:4px;">🎪</div><div style="font-weight:600;font-size:11px;">FESTA JUNINA 2026</div><div style="font-size:9px;opacity:0.85;margin-top:2px;">21 de junho · 14h<br>Traje caipira · Levar R$15</div></div></div>
+                <div class="spf-msg-other"><span class="spf-sender" style="color:#2E7D32;">~ Juliana</span>Anotado! 📝</div>
+                <div class="spf-msg-me"><div style="font-size:8px;color:rgba(0,0,0,0.35);margin-bottom:3px;">⤷ Encaminhada</div><div style="background:linear-gradient(135deg,#6A1B9A,#E91E63);border-radius:8px;padding:12px;color:white;text-align:center;margin:4px 0;"><div style="font-size:16px;margin-bottom:4px;">🎪</div><div style="font-weight:600;font-size:11px;">FESTA JUNINA 2026</div><div style="font-size:9px;opacity:0.85;margin-top:2px;">21 de junho · 14h</div></div><div style="font-size:8px;color:rgba(0,0,0,0.35);text-align:right;">Encaminhada para <strong>Jarvis</strong></div></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="demo-inline-result">
-          <div class="dir-badge">✓ Salvo no dashboard</div>
-          <div class="dir-task">Reunião prof. Olivia</div>
-          <div class="dir-date">📅 10 de abril · 10h00</div>
-          <div class="dir-detail">📍 Sala 3</div>
+        <div class="scene-arrow">→</div>
+        <div class="scene-phone">
+          <div class="scene-phone-frame">
+            <div class="spf-di"></div>
+            <div class="spf-screen">
+              <div class="spf-wa-bar" style="background:#075E54;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);">←</div>
+                <div style="width:26px;height:26px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-family:'Cormorant Garamond',serif;">J</div>
+                <div style="flex:1;"><div style="color:white;font-size:11px;font-weight:600;">Jarvis</div><div style="color:rgba(255,255,255,0.5);font-size:8px;display:flex;align-items:center;gap:3px;"><span style="width:4px;height:4px;background:#6EE97B;border-radius:50%;display:inline-block;"></span> online</div></div>
+              </div>
+              <div class="spf-chat">
+                <div class="spf-msg-me"><div style="font-size:8px;color:rgba(0,0,0,0.35);margin-bottom:3px;">⤷ Encaminhada</div><div style="background:linear-gradient(135deg,#6A1B9A,#E91E63);border-radius:8px;padding:10px;color:white;text-align:center;font-size:10px;"><div style="font-size:14px;margin-bottom:2px;">🎪</div><strong>FESTA JUNINA 2026</strong><br>21/06 · 14h · R$15</div></div>
+                <div class="spf-msg-jarvis"><strong style="color:#075E54;">🎉 Salvo!</strong><br>Festa Junina — 21/06, 14h<br>Traje caipira, levar R$15<br><span style="font-size:10px;opacity:0.5;">Lembrete: 20/06 manhã</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="scene-arrow">→</div>
+        <div class="scene-result">
+          <div class="dir-badge">✓ Salvo automaticamente</div>
+          <div class="dir-task">Festa Junina 2026</div>
+          <div class="dir-date">📅 21 de junho · 14h</div>
+          <div class="dir-detail">👗 Traje caipira</div>
+          <div class="dir-detail">💰 Levar R$15</div>
           <div class="dir-detail">⏰ Lembrete na véspera</div>
         </div>
       </div>
+    </div>
 
-      <!-- Panel 1: Imagem -->
-      <div class="demo-inline-panel" id="dip-1">
-        <div class="demo-inline-phone">
-          <div class="dip-header"><div class="wa-avatar" style="width:28px;height:28px;font-size:12px;">J</div><div><div style="color:white;font-size:12px;font-weight:500;">Jarvis</div><div style="color:rgba(255,255,255,0.6);font-size:9px;">online</div></div></div>
-          <div class="dip-body">
-            <div class="dip-bubble-in"><div style="font-size:9px;color:rgba(0,0,0,0.4);margin-bottom:4px;">↳ Encaminhada</div><div style="background:linear-gradient(135deg,#7B2FF7,#F107A3);border-radius:8px;padding:14px;text-align:center;color:white;margin-bottom:4px;"><div style="font-size:20px;margin-bottom:4px;">🎂</div><div style="font-weight:600;font-size:12px;">Aniversário do Rafael</div><div style="font-size:10px;opacity:0.85;">02/04 · 18h30</div></div><div class="dip-time">16:15</div></div>
-            <div class="dip-bubble-out"><strong>Adicionado ✓</strong><div class="dip-time">16:15</div></div>
+    <!-- SCENE 2: Áudio longo → transcrição → tarefa -->
+    <div class="demo-scene reveal">
+      <div class="scene-number">02</div>
+      <div class="scene-label">Áudio de 3 minutos do chefe</div>
+      <div class="scene-flow">
+        <div class="scene-phone">
+          <div class="scene-phone-frame">
+            <div class="spf-di"></div>
+            <div class="spf-screen">
+              <div class="spf-wa-bar" style="background:#075E54;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);">←</div>
+                <div style="width:26px;height:26px;border-radius:50%;background:#37474F;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">RC</div>
+                <div style="flex:1;"><div style="color:white;font-size:11px;font-weight:600;">Roberto (Chefe)</div><div style="color:rgba(255,255,255,0.5);font-size:8px;">último acesso hoje 11:42</div></div>
+              </div>
+              <div class="spf-chat">
+                <div class="spf-msg-other" style="display:flex;align-items:center;gap:8px;padding:8px 10px;"><div style="width:30px;height:30px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="color:white;font-size:10px;">▶</span></div><div style="flex:1;"><div style="display:flex;gap:2px;align-items:center;height:18px;"><div style="width:2px;height:5px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:10px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:16px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:8px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:14px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:6px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:12px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:2px;height:9px;background:rgba(0,0,0,0.2);border-radius:1px;"></div></div><div style="font-size:9px;color:rgba(0,0,0,0.35);margin-top:2px;">3:12</div></div></div>
+                <div class="spf-msg-me" style="font-size:10px;text-align:right;">Encaminhada para <strong>Jarvis</strong> →</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="demo-inline-result">
-          <div class="dir-badge">✓ Extraído da imagem</div>
-          <div class="dir-task">Aniversário do Rafael</div>
-          <div class="dir-date">📅 02 de abril · 18h30</div>
-          <div class="dir-detail">📍 Rua das Flores, 123</div>
-          <div class="dir-detail">🎂 Tema: Princesas</div>
-        </div>
-      </div>
-
-      <!-- Panel 2: Áudio -->
-      <div class="demo-inline-panel" id="dip-2">
-        <div class="demo-inline-phone">
-          <div class="dip-header"><div class="wa-avatar" style="width:28px;height:28px;font-size:12px;">J</div><div><div style="color:white;font-size:12px;font-weight:500;">Jarvis</div><div style="color:rgba(255,255,255,0.6);font-size:9px;">online</div></div></div>
-          <div class="dip-body">
-            <div class="dip-bubble-in" style="display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="color:white;font-size:10px;">▶</span></div><div style="flex:1;"><div style="display:flex;gap:2px;align-items:center;height:16px;"><div style="width:3px;height:4px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:8px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:14px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:6px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:12px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:9px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:5px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:11px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:7px;background:rgba(0,0,0,0.2);border-radius:1px;"></div><div style="width:3px;height:13px;background:rgba(0,0,0,0.2);border-radius:1px;"></div></div><div style="font-size:9px;color:rgba(0,0,0,0.4);margin-top:2px;">0:23</div></div><div class="dip-time" style="margin-top:0;">09:47</div></div>
-            <div class="dip-bubble-out"><strong>Entendido ✓</strong> Levar Olivia na escola às 8h amanhã.<div class="dip-time">09:47</div></div>
+        <div class="scene-arrow">→</div>
+        <div class="scene-phone">
+          <div class="scene-phone-frame">
+            <div class="spf-di"></div>
+            <div class="spf-screen">
+              <div class="spf-wa-bar" style="background:#075E54;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);">←</div>
+                <div style="width:26px;height:26px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-family:'Cormorant Garamond',serif;">J</div>
+                <div style="flex:1;"><div style="color:white;font-size:11px;font-weight:600;">Jarvis</div><div style="color:rgba(255,255,255,0.5);font-size:8px;display:flex;align-items:center;gap:3px;"><span style="width:4px;height:4px;background:#6EE97B;border-radius:50%;display:inline-block;"></span> online</div></div>
+              </div>
+              <div class="spf-chat">
+                <div class="spf-msg-jarvis"><strong style="color:#075E54;">🔊 Áudio transcrito.</strong><br>3 tarefas encontradas:<br><br>1. Enviar proposta revisada<br>&nbsp;&nbsp;&nbsp;📅 Sexta, 17h<br>2. Agendar call com cliente<br>&nbsp;&nbsp;&nbsp;📅 Segunda, 10h<br>3. Preparar apresentação Q2<br>&nbsp;&nbsp;&nbsp;📅 Quarta, 14h</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="demo-inline-result">
-          <div class="dir-badge">✓ Extraído do áudio</div>
-          <div class="dir-task">Levar Olivia na escola</div>
-          <div class="dir-date">📅 Amanhã · 08h00</div>
-          <div class="dir-detail">⏰ Lembrete: 30 min antes</div>
+        <div class="scene-arrow">→</div>
+        <div class="scene-result">
+          <div class="dir-badge">✓ 3 tarefas criadas do áudio</div>
+          <div class="dir-task">Proposta revisada</div>
+          <div class="dir-date">📅 Sexta · 17h</div>
+          <div class="dir-detail" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);font-weight:500;color:rgba(253,250,245,0.7);">+ Agendar call (Segunda 10h)</div>
+          <div class="dir-detail" style="font-weight:500;color:rgba(253,250,245,0.7);">+ Apresentação Q2 (Quarta 14h)</div>
         </div>
       </div>
     </div>
+
+    <!-- SCENE 3: PDF com prazo → extração → lembrete -->
+    <div class="demo-scene reveal">
+      <div class="scene-number">03</div>
+      <div class="scene-label">PDF com prazo escondido</div>
+      <div class="scene-flow">
+        <div class="scene-phone">
+          <div class="scene-phone-frame">
+            <div class="spf-di"></div>
+            <div class="spf-screen">
+              <div class="spf-wa-bar" style="background:#075E54;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);">←</div>
+                <div style="width:26px;height:26px;border-radius:50%;background:#5D4037;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">📄</div>
+                <div style="flex:1;"><div style="color:white;font-size:11px;font-weight:600;">Helena (esposa)</div><div style="color:rgba(255,255,255,0.5);font-size:8px;">online</div></div>
+              </div>
+              <div class="spf-chat">
+                <div class="spf-msg-other"><div style="background:#f5f5f5;border-radius:6px;padding:10px;display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div style="width:32px;height:38px;background:#E53935;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white;font-weight:700;">PDF</div><div style="font-size:10px;line-height:1.3;"><strong>Contrato_Aluguel.pdf</strong><br><span style="color:rgba(0,0,0,0.4);font-size:8px;">2 páginas · 340 KB</span></div></div>Amor, olha o contrato. A data de renovação tá ali dentro.</div>
+                <div class="spf-msg-me" style="font-size:10px;">Encaminhada para <strong>Jarvis</strong> →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="scene-arrow">→</div>
+        <div class="scene-phone">
+          <div class="scene-phone-frame">
+            <div class="spf-di"></div>
+            <div class="spf-screen">
+              <div class="spf-wa-bar" style="background:#075E54;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);">←</div>
+                <div style="width:26px;height:26px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-family:'Cormorant Garamond',serif;">J</div>
+                <div style="flex:1;"><div style="color:white;font-size:11px;font-weight:600;">Jarvis</div><div style="color:rgba(255,255,255,0.5);font-size:8px;display:flex;align-items:center;gap:3px;"><span style="width:4px;height:4px;background:#6EE97B;border-radius:50%;display:inline-block;"></span> online</div></div>
+              </div>
+              <div class="spf-chat">
+                <div class="spf-msg-jarvis"><strong style="color:#075E54;">📄 PDF analisado.</strong><br>Contrato de aluguel<br>Renovação: <strong>15 de julho de 2026</strong><br>Valor: R$ 3.200/mês<br><span style="font-size:10px;opacity:0.5;">⏰ Lembrete: 1º de julho</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="scene-arrow">→</div>
+        <div class="scene-result">
+          <div class="dir-badge">✓ Extraído do PDF</div>
+          <div class="dir-task">Renovação do aluguel</div>
+          <div class="dir-date">📅 15 de julho · 2026</div>
+          <div class="dir-detail">💰 R$ 3.200/mês</div>
+          <div class="dir-detail">⏰ Lembrete: 2 semanas antes</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
