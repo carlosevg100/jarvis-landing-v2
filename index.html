@@ -1499,7 +1499,11 @@ na hora certa</h3>
       <div class="modal-field"><input id="reg-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
       <div class="captcha-row"><span class="captcha-question" id="captcha-question">Carregando...</span><input class="captcha-input" id="captcha-answer" type="number" placeholder="?" autocomplete="off" min="1" max="20"></div>
       <p class="form-hint">Verifique seu número antes de continuar. Enviamos a primeira mensagem em instantes.</p>
-      <button class="modal-submit" id="modal-submit" onclick="register()">Criar minha conta <span>&#8594;</span></button>
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:16px;cursor:pointer;font-size:11px;font-weight:300;color:rgba(26,23,20,0.55);line-height:1.5;">
+        <input type="checkbox" id="reg-consent" style="margin-top:2px;accent-color:var(--accent);min-width:16px;">
+        <span>Li e concordo com os <a href="/termos.html" target="_blank" style="color:var(--accent);text-decoration:underline;">Termos de Uso</a> e a <a href="/privacidade.html" target="_blank" style="color:var(--accent);text-decoration:underline;">Política de Privacidade</a>. Entendo que o Jarvis é uma ferramenta de apoio à organização pessoal, pode apresentar erros, e não substitui agendas profissionais ou médicas. A OLpi Technologies não se responsabiliza por compromissos perdidos ou informações incorretas.</span>
+      </label>
+      <button class="modal-submit" id="modal-submit" onclick="register()" disabled>Criar minha conta <span>&#8594;</span></button>
       <p class="modal-note">Sem compromisso. Cancele quando quiser.</p>
       <p class="modal-msg" id="reg-msg"></p>
     </div>
@@ -2310,6 +2314,15 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ── Register ─────────────────────────────────────────────
+// Enable submit button when consent checkbox is checked
+document.addEventListener('DOMContentLoaded', () => {
+  const cb = document.getElementById('reg-consent');
+  const btn = document.getElementById('modal-submit');
+  if (cb && btn) {
+    cb.addEventListener('change', () => { btn.disabled = !cb.checked; });
+  }
+});
+
 async function register() {
   const name = document.getElementById('reg-name').value.trim();
   const phoneRaw = document.getElementById('reg-phone').value.replace(/\D/g, '');
