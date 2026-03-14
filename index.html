@@ -293,9 +293,6 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .modal-field:focus-within { border-bottom-color:rgba(26,23,20,0.3); }
 .modal-field input { width:100%; border:none; background:transparent; padding:12px 0; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; }
 .modal-field input::placeholder { color:rgba(26,23,20,0.25); }
-.consent-row{display:flex;align-items:flex-start;gap:8px;margin:12px 0 4px;font-size:12px;color:rgba(26,23,20,0.5);cursor:pointer;line-height:1.5;}
-.consent-row input{margin-top:3px;accent-color:#A8522A;flex-shrink:0;}
-.consent-row a{color:#A8522A;text-decoration:underline;}
 .modal-submit { width:100%; background:var(--ink); color:var(--white); border:none; padding:16px 24px; font-family:'DM Sans',sans-serif; font-weight:400; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-top:24px; transition:background var(--transition), transform var(--transition); }
 .modal-submit:hover { background:var(--ink2); }
 .modal-submit:disabled { opacity:.5; cursor:not-allowed; }
@@ -647,11 +644,9 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 
 /* ─── PREMIUM HERO ─────────────────────────────────────── */
 .ph-section{background:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 28px 60px;position:relative;overflow:hidden;}
-.ph-bg-img{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23C4763A' stop-opacity='0.12'/%3E%3Cstop offset='50%25' stop-color='%23A8522A' stop-opacity='0.06'/%3E%3Cstop offset='100%25' stop-color='%231A1714' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 400 Q200 300 400 400 T800 400' stroke='url(%23g)' fill='none' stroke-width='1.5'/%3E%3Cpath d='M0 350 Q200 250 400 350 T800 350' stroke='url(%23g)' fill='none' stroke-width='1'/%3E%3Cpath d='M0 450 Q200 350 400 450 T800 450' stroke='url(%23g)' fill='none' stroke-width='1'/%3E%3Cpath d='M0 300 Q200 200 400 300 T800 300' stroke='url(%23g)' fill='none' stroke-width='0.8' opacity='0.5'/%3E%3Cpath d='M0 500 Q200 400 400 500 T800 500' stroke='url(%23g)' fill='none' stroke-width='0.8' opacity='0.5'/%3E%3C/svg%3E");background-size:cover;background-position:center;opacity:0.15;pointer-events:none;}
-.ph-bg-grad{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(26,23,20,0.6) 0%, transparent 40%, rgba(26,23,20,1) 100%);pointer-events:none;}
-.ph-glow{position:absolute;width:500px;height:500px;background:var(--accent2);border-radius:50%;filter:blur(120px);opacity:0.06;pointer-events:none;}
-.ph-glow-1{top:-150px;right:-150px;}
-.ph-glow-2{bottom:-150px;left:-150px;}
+.ph-glow{position:absolute;width:400px;height:400px;background:var(--accent2);border-radius:50%;filter:blur(80px);opacity:0.08;pointer-events:none;}
+.ph-glow-1{top:-100px;right:-100px;}
+.ph-glow-2{bottom:-100px;left:-100px;}
 .ph-inner{max-width:1200px;width:100%;display:flex;flex-direction:column;align-items:center;gap:48px;}
 @media(min-width:1024px){.ph-inner{flex-direction:row;align-items:center;gap:60px;}.ph-text{flex:1;}.ph-phone-col{flex:0 0 320px;}}
 .ph-text{display:flex;flex-direction:column;align-items:flex-start;}
@@ -661,20 +656,19 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .ph-typing-word{color:var(--accent2);font-weight:400;}
 .ph-cursor{color:var(--accent2);animation:phBlink 1s step-end infinite;font-weight:100;}
 @keyframes phBlink{0%,100%{opacity:1}50%{opacity:0}}
-.ph-headline-sub{color:rgba(255,255,255,0.35);font-size:clamp(18px,4vw,24px);font-weight:300;font-family:'Cormorant Garamond',serif;}
-.ph-midline{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,6vw,36px);font-weight:400;color:rgba(255,255,255,0.6);line-height:1.35;margin-bottom:16px;opacity:0;animation:fadeUp .7s .6s forwards;}
-.ph-midline strong{color:rgba(255,255,255,0.95);font-weight:500;}
-.ph-prazer{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,9vw,56px);font-weight:300;color:rgba(255,255,255,0.6);line-height:1;margin-bottom:24px;opacity:0;animation:fadeUp .9s .8s cubic-bezier(.16,1,.3,1) forwards;}
-.ph-prazer span{font-weight:400;}
-.ph-prazer em{color:var(--accent2);font-style:italic;font-weight:500;}
+.ph-headline-dim{color:rgba(255,255,255,0.5);}
+.ph-headline-bright{color:rgba(255,255,255,0.9);}
+.ph-chaos-tag{font-size:15px;font-weight:300;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:8px;font-family:'DM Sans',sans-serif;opacity:0;animation:fadeUp .7s .6s forwards;}
+.ph-chaos-bright{color:rgba(255,255,255,0.7);font-weight:400;}
+.ph-prazer{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,12vw,72px);font-weight:400;font-style:italic;color:rgba(255,255,255,0.9);line-height:1;margin-bottom:20px;opacity:0;animation:fadeUp .9s .8s cubic-bezier(.16,1,.3,1) forwards;}
+.ph-prazer span{color:var(--accent2);}
 .ph-wa-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.08);padding:9px 16px;border-radius:100px;font-size:12px;color:rgba(255,255,255,0.5);font-weight:400;margin-bottom:28px;opacity:0;animation:fadeUp .6s 1s forwards;font-family:'DM Sans',sans-serif;}
-.ph-wa-pill-icon{color:#4ade80;font-size:14px;flex-shrink:0;}
+.ph-wa-pill-icon{width:16px;height:16px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0;}
 .ph-ctas{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;opacity:0;animation:fadeUp .6s 1.2s forwards;}
 @media(min-width:640px){.ph-ctas{flex-direction:row;max-width:none;}}
-.ph-btn-primary{background:var(--accent2);color:#fff;border:none;padding:16px 32px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;border-radius:12px;position:relative;overflow:hidden;}
-.ph-btn-primary:hover{background:var(--accent);box-shadow:0 0 40px rgba(196,118,58,0.3);transform:translateY(-1px);}
-.ph-btn-sub{font-size:11px;color:rgba(255,255,255,0.3);font-weight:300;text-align:center;width:100%;}
-.ph-btn-secondary{background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.08);padding:16px 24px;font-family:'DM Sans',sans-serif;font-weight:300;font-size:13px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;border-radius:12px;}
+.ph-btn-primary{background:var(--accent2);color:#fff;border:none;padding:16px 28px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;border-radius:4px;}
+.ph-btn-primary:hover{background:var(--accent);box-shadow:0 0 32px rgba(196,118,58,0.3);transform:translateY(-1px);}
+.ph-btn-secondary{background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);padding:16px 28px;font-family:'DM Sans',sans-serif;font-weight:300;font-size:13px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;border-radius:4px;}
 .ph-btn-secondary:hover{color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.2);}
 .ph-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,0.06);margin-top:32px;width:100%;max-width:480px;opacity:0;animation:fadeUp .6s 1.4s forwards;}
 @media(min-width:640px){.ph-stats{grid-template-columns:repeat(4,1fr);}}
@@ -731,14 +725,10 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .vnp-title em{color:var(--accent2);font-style:italic;}
 .vnp-subtitle{font-size:15px;color:rgba(255,255,255,0.35);text-align:center;margin-bottom:48px;font-weight:300;font-family:'DM Sans',sans-serif;}
 .vnp-steps-flow{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:36px;}
-.vnp-steps-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px;}
-.vnp-step-item{display:flex;align-items:center;gap:8px;}
-.vnp-step-circle{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;font-weight:600;transition:all .5s;}
-.vnp-step-circle.active{background:var(--accent2);border-color:var(--accent2);color:#fff;box-shadow:0 0 12px rgba(196,118,58,0.3);}
+.vnp-step-circle{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;transition:all .3s;}
+.vnp-step-circle.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
 .vnp-step-circle.done{background:rgba(196,118,58,0.3);border-color:rgba(196,118,58,0.5);color:#fff;}
-.vnp-step-label{font-size:11px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;font-weight:400;}
-.vnp-step-connector{width:40px;height:1px;background:rgba(255,255,255,0.06);margin:0 12px;position:relative;overflow:hidden;}
-.vnp-step-connector::after{content:'';position:absolute;top:0;left:0;height:100%;width:0;background:rgba(196,118,58,0.4);transition:width .6s ease-out;}
+.vnp-step-arrow{color:rgba(255,255,255,0.1);font-size:12px;}
 .vnp-step-label{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;text-transform:uppercase;margin-left:4px;}
 .vnp-tabs{display:flex;gap:8px;margin-bottom:36px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
 .vnp-tabs::-webkit-scrollbar{display:none;}
@@ -747,11 +737,8 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 .vnp-tab.active{border-color:rgba(196,118,58,0.3);background:rgba(255,255,255,0.04);}
 .vnp-tab-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);flex-shrink:0;}
 .vnp-tab.active .vnp-tab-icon{color:var(--accent2);}
-.vnp-tab-text-col{display:flex;flex-direction:column;gap:2px;min-width:0;}
-.vnp-tab-label{font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap;}
-.vnp-tab.active .vnp-tab-label{color:rgba(255,255,255,0.9);}
-.vnp-tab-sublabel{font-size:9px;color:rgba(255,255,255,0.2);font-family:'DM Sans',sans-serif;font-weight:300;display:none;}
-@media(min-width:640px){.vnp-tab-sublabel{display:block;}}
+.vnp-tab-label{font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;font-weight:400;white-space:nowrap;}
+.vnp-tab.active .vnp-tab-label{color:rgba(255,255,255,0.8);}
 .vnp-tab-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent2);width:0;transition:none;}
 .vnp-tab.active .vnp-tab-progress{transition:width 16s linear;}
 
@@ -883,10 +870,9 @@ nav { position:fixed; top:0; left:0; right:0; padding:20px 28px; display:flex; j
 </style>
 <!-- PostHog Analytics -->
 <script>
-!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('phc_6SzwxOi2pv63SL0zHzigOjUUbmLxWhho8TkED3dztaU',{api_host:'https://us.i.posthog.com',autocapture:true});
-</script>
-</head>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId setPersonProperties".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init("phc_RiGqfKjbzWcpNdMF1joiS2KrXREPaG7yKJkOAOhINdK",{api_host:"https://us.i.posthog.com",person_profiles:"identified_only"});
+</script></head>
 <body>
 
 <nav>
@@ -916,32 +902,29 @@ posthog.init('phc_6SzwxOi2pv63SL0zHzigOjUUbmLxWhho8TkED3dztaU',{api_host:'https:
 
 <!-- ══ PREMIUM HERO ══════════════════════════════════════ -->
 <section class="ph-section">
-  <div class="ph-bg-img"></div>
-  <div class="ph-bg-grad"></div>
   <div class="ph-glow ph-glow-1"></div>
   <div class="ph-glow ph-glow-2"></div>
   <div class="ph-inner">
     <div class="ph-text">
       <div class="ph-eyebrow">
         <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
-        <span>Seu assistente pessoal inteligente</span>
+        <span>Seu assistente pessoal</span>
         <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
       </div>
       <h1 class="ph-headline">
-        <span class="ph-typing-word" id="typing-word">Reuniões</span><span class="ph-cursor">|</span><br>
-        <span class="ph-headline-sub">Tudo vive na sua cabeça,</span><br>
-        <span class="ph-headline-sub">espalhado em grupos, prints e áudios.</span>
+        <span class="ph-typing-word" id="typing-word">Reuniões</span><span class="ph-cursor">|</span><span class="ph-headline-dim">,</span><br>
+        <span class="ph-headline-dim">no meio de tudo, alguém precisa</span><br>
+        <span class="ph-headline-bright">lembrar por você.</span>
       </h1>
-      <p class="ph-midline">No meio de tudo isso,<br>alguém precisa <strong>lembrar por você.</strong></p>
-      <div class="ph-prazer">Prazer, <span><em>Jarvis</em>.</span></div>
+      <p class="ph-chaos-tag">Datas, tarefas, compromissos — tudo vive na sua cabeça, espalhado em grupos, prints e áudios.<br><span class="ph-chaos-bright">Tire da cabeça. Coloque no Jarvis.</span></p>
+      <div class="ph-prazer">Prazer, <span>Jarvis.</span></div>
       <div class="ph-wa-pill">
-        <span class="ph-wa-pill-icon">✓</span>
+        <div class="ph-wa-pill-icon">&#10003;</div>
         Direto no WhatsApp. Zero instalação.
       </div>
       <div class="ph-ctas">
-        <button class="ph-btn-primary" onclick="openModal()">LIBERTE SUA CABEÇA &rarr;</button>
-        <span class="ph-btn-sub">7 dias grátis. Cancele quando quiser.</span>
-        <button class="ph-btn-secondary" onclick="document.getElementById('demo-inline').scrollIntoView({behavior:'smooth'})"><span style="width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;"><svg width="8" height="8" viewBox="0 0 24 24" fill="rgba(255,255,255,0.4)"><path d="M8 5v14l11-7z"/></svg></span>Ver como funciona</button>
+        <button class="ph-btn-primary" onclick="openModal()">TESTE 7 DIAS GRÁTIS &rarr;</button>
+        <button class="ph-btn-secondary" onclick="document.getElementById('demo-inline').scrollIntoView({behavior:'smooth'})">Ver como funciona</button>
       </div>
       <div class="ph-stats">
         <div class="ph-stat">
@@ -989,38 +972,38 @@ posthog.init('phc_6SzwxOi2pv63SL0zHzigOjUUbmLxWhho8TkED3dztaU',{api_host:'https:
       <span>Veja na prática</span>
       <div style="width:24px;height:1px;background:rgba(196,118,58,0.4)"></div>
     </div>
-    <h2 class="vnp-title">Assim funciona<br>na <em>sua rotina.</em></h2>
+    <h2 class="vnp-title">Assim funciona na <em>vida real.</em></h2>
     <p class="vnp-subtitle">Você encaminha. O Jarvis entende, organiza e lembra por você.</p>
 
     <!-- Step flow -->
     <div class="vnp-steps-flow" id="vnp-steps-flow">
-      <div class="vnp-step-item"><div class="vnp-step-circle active" id="vnp-sc-1">1</div><span class="vnp-step-label">Encaminha</span></div>
-      <div class="vnp-step-connector"></div>
-      <div class="vnp-step-item"><div class="vnp-step-circle" id="vnp-sc-2">2</div><span class="vnp-step-label">Jarvis entende</span></div>
-      <div class="vnp-step-connector"></div>
-      <div class="vnp-step-item"><div class="vnp-step-circle" id="vnp-sc-3">3</div><span class="vnp-step-label">Você é lembrado</span></div>
+      <div class="vnp-step-circle active" id="vnp-sc-1">1</div>
+      <span class="vnp-step-arrow">&rarr;</span>
+      <div class="vnp-step-circle" id="vnp-sc-2">2</div>
+      <span class="vnp-step-arrow">&rarr;</span>
+      <div class="vnp-step-circle" id="vnp-sc-3">3</div>
     </div>
 
     <!-- Tabs -->
     <div class="vnp-tabs">
       <div class="vnp-tab active" id="vnp-tab-0" onclick="vnpSwitchTab(0)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M13 8l4 4-4 4"/></svg></div>
-        <div class="vnp-tab-text-col"><span class="vnp-tab-label">Encaminhou? Pronto.</span><span class="vnp-tab-sublabel">Qualquer mensagem, de qualquer grupo</span></div>
+        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M15 15l6 6m-11-4a7 7 0 110-14 7 7 0 010 14z"/><path d="M3 21l3.5-3.5"/><path d="M21 3l-6 6"/></svg></div>
+        <span class="vnp-tab-label">Grupo das Mães</span>
         <div class="vnp-tab-progress" id="vnp-prog-0"></div>
       </div>
       <div class="vnp-tab" id="vnp-tab-1" onclick="vnpSwitchTab(1)">
-        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 2C6.48 2 2 6 2 11s4.48 9 10 9 10-4 10-9-4.48-9-10-9z"/><path d="M12 8v4l3 3"/></svg></div>
-        <div class="vnp-tab-text-col"><span class="vnp-tab-label">Memória &amp; Contexto</span><span class="vnp-tab-sublabel">Muito mais que um agendador</span></div>
+        <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M12 2a7 7 0 017 7c0 3-2 5.5-4 7.5L12 22l-3-5.5C7 14.5 5 12 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+        <span class="vnp-tab-label">Memória &amp; Contexto</span>
         <div class="vnp-tab-progress" id="vnp-prog-1"></div>
       </div>
       <div class="vnp-tab" id="vnp-tab-2" onclick="vnpSwitchTab(2)">
         <div class="vnp-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-        <div class="vnp-tab-text-col"><span class="vnp-tab-label">Dashboard Exclusivo</span><span class="vnp-tab-sublabel">Seu painel pessoal ao vivo</span></div>
+        <span class="vnp-tab-label">Dashboard Exclusivo</span>
         <div class="vnp-tab-progress" id="vnp-prog-2"></div>
       </div>
     </div>
 
-    <!-- TAB 0: Encaminhou? Pronto -->
+    <!-- TAB 0: Grupo das Mães -->
     <div class="vnp-tab-content active" id="vnp-content-0">
       <div class="vnp-tab-phone">
         <div class="vnp-phone">
@@ -1035,8 +1018,9 @@ posthog.init('phc_6SzwxOi2pv63SL0zHzigOjUUbmLxWhho8TkED3dztaU',{api_host:'https:
         </div>
       </div>
       <div class="vnp-tab-text">
-        <h3>Encaminhou.<br>Jarvis cuidou.</h3>
-        <p>Convite de aniversário, reunião de trabalho, consulta médica — qualquer mensagem de qualquer grupo. Encaminhou pro Jarvis, ele extrai tudo e te organiza e lembra.</p>
+        <h3>Encaminhou.
+Jarvis cuidou.</h3>
+        <p>Uma mãe do grupo mandou o convite da festa. Você encaminhou pro Jarvis. Ele extraiu data, local, tema e programou o lembrete.</p>
         <p class="vnp-emotional">Você nunca mais esquece uma festa.</p>
       </div>
     </div>
@@ -1056,9 +1040,10 @@ posthog.init('phc_6SzwxOi2pv63SL0zHzigOjUUbmLxWhho8TkED3dztaU',{api_host:'https:
         </div>
       </div>
       <div class="vnp-tab-text">
-        <h3>Ele lembra.<br>Você pergunta.</h3>
-        <p>Diga "futebol do Pippo toda terça e quinta às 16h". Pergunte "como tá a agenda do Pippo?". O Jarvis tem contexto — entende, organiza e responde.</p>
-        <p class="vnp-emotional">Como ter uma secretária particular no WhatsApp.</p>
+        <h3>Ele lembra
+de tudo por você.</h3>
+        <p>Diga uma vez. O Jarvis guarda para sempre. Atividades recorrentes, aniversários, compromissos — pergunte quando quiser.</p>
+        <p class="vnp-emotional">Sua memória, ampliada.</p>
       </div>
     </div>
 
@@ -1090,9 +1075,9 @@ posthog.init('phc_6SzwxOi2pv63SL0zHzigOjUUbmLxWhho8TkED3dztaU',{api_host:'https:
         </div>
       </div>
       <div class="vnp-tab-text" style="min-width:260px;">
-        <h3>Tudo num<br>painel só.</h3>
-        <p>Cada evento vira um card organizado por categoria — Família, Escola, Trabalho, Saúde. Filtre por hoje, semana ou mês. Tudo ao vivo.</p>
-        <p class="vnp-emotional">Sua vida organizada. Visualmente.</p>
+        <h3>Tudo visível.
+Tudo organizado.</h3>
+        <p>Seu dashboard exclusivo mostra todos os compromissos, tarefas e lembretes em um só lugar. Acesse de qualquer navegador.</p>
         <p class="vnp-emotional">Sua vida, finalmente com clareza.</p>
       </div>
     </div>
@@ -1493,8 +1478,8 @@ na hora certa</h3>
   <div class="footer-inner">
     <span class="footer-logo">Jarvis</span>
     <div class="footer-links">
-      <a href="/termos.html">Termos de Uso</a>
-      <a href="/privacidade.html">Política de Privacidade</a>
+      <a href="#" onclick="openLegal('terms');return false;">Termos de Uso</a>
+      <a href="#" onclick="openLegal('privacy');return false;">Política de Privacidade</a>
       <a href="#suporte" onclick="document.getElementById('suporte').scrollIntoView({behavior:'smooth'});return false;">Suporte</a>
     </div>
     <span class="footer-copy">&copy; 2026 Jarvis. Todos os direitos reservados.</span>
@@ -1514,7 +1499,6 @@ na hora certa</h3>
       <div class="modal-field"><input id="reg-phone" type="tel" placeholder="WhatsApp — (11) 99999-9999" autocomplete="tel" required></div>
       <div class="captcha-row"><span class="captcha-question" id="captcha-question">Carregando...</span><input class="captcha-input" id="captcha-answer" type="number" placeholder="?" autocomplete="off" min="1" max="20"></div>
       <p class="form-hint">Verifique seu número antes de continuar. Enviamos a primeira mensagem em instantes.</p>
-      <label class="consent-row" id="consent-row"><input type="checkbox" id="reg-consent"> <span>Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a> e a <a href="/privacidade.html" target="_blank">Política de Privacidade</a>.</span></label>
       <button class="modal-submit" id="modal-submit" onclick="register()">Criar minha conta <span>&#8594;</span></button>
       <p class="modal-note">Sem compromisso. Cancele quando quiser.</p>
       <p class="modal-msg" id="reg-msg"></p>
@@ -2189,7 +2173,6 @@ function genCaptcha() {
 
 // ── Signup Modal ─────────────────────────────────────────
 function openModal() {
-  if(window.posthog)posthog.capture('cta_clicked',{location:document.activeElement?.closest('section')?.id||'unknown'});
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   genCaptcha();
@@ -2328,7 +2311,6 @@ document.addEventListener('keydown', function(e) {
 
 // ── Register ─────────────────────────────────────────────
 async function register() {
-  if(window.posthog)posthog.capture('register_started');
   const name = document.getElementById('reg-name').value.trim();
   const phoneRaw = document.getElementById('reg-phone').value.replace(/\D/g, '');
   const phone = phoneRaw.startsWith('55') ? phoneRaw : '55' + phoneRaw;
@@ -2340,7 +2322,6 @@ async function register() {
   msgEl.className = 'modal-msg';
 
   if (!name) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Por favor, informe seu nome.'; return; }
-  if (!document.getElementById('reg-consent').checked) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'Aceite os Termos de Uso e Política de Privacidade.'; return; }
   if (phoneRaw.length !== 11) { msgEl.className = 'modal-msg error'; msgEl.textContent = 'WhatsApp deve ter 11 dígitos — ex: (11) 99999-9999'; return; }
   if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
     msgEl.className = 'modal-msg error';
@@ -2360,14 +2341,12 @@ async function register() {
     });
 
     if (res.ok) {
-      if(window.posthog){posthog.capture('register_completed');posthog.identify(phone,{name:name});}
       document.getElementById('reg-form').innerHTML =
         '<div style="padding:24px 0;text-align:center;">' +
-        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto! ✅</p>' +
-        '<p style="font-size:14px;font-weight:400;color:var(--ink);line-height:1.6;margin-bottom:6px;">Tudo certo. Abra o WhatsApp agora.</p>' +
-        '<p style="font-size:12px;font-weight:300;color:var(--muted);line-height:1.6;">A primeira mensagem do Jarvis chega em instantes.</p>' +
+        '<p style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:400;color:var(--ink);margin-bottom:10px;">Pronto.</p>' +
+        '<p style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.6;">Verifique o WhatsApp em instantes.</p>' +
         '</div>';
-      setTimeout(closeModal, 4000);
+      setTimeout(closeModal, 2500);
     } else if (res.status === 409) {
       msgEl.className = 'modal-msg error';
       msgEl.textContent = 'Esse número já tem uma conta.';
