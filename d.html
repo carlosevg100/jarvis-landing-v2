@@ -990,83 +990,118 @@ if (document.readyState === 'complete') {
 </body>
 </html>
 
+<style>
+.date-edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:flex;align-items:center;justify-content:center}
+.date-edit-box{background:#fff;border-radius:12px;padding:24px;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.date-edit-box h3{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:16px;color:#1A1714}
+.date-edit-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px;font-family:'DM Sans',sans-serif;margin-bottom:12px;outline:none}
+.date-edit-box input:focus{border-color:#A8522A}
+.date-edit-btns{display:flex;gap:8px;margin-top:8px}
+.date-edit-btns button{flex:1;padding:12px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+.date-edit-btns .save{background:#1A1714;color:#FDFAF5}
+.date-edit-btns .save:hover{background:#3A3430}
+.date-edit-btns .cancel{background:#f0ece6;color:#1A1714}
+.date-edit-btns .cancel:hover{background:#e5dfd4}
+.edit-success{color:#2d8a4e;font-size:12px;text-align:center;margin-top:8px;display:none}
+</style>
+
 <script>
-// ── Make dates clickable with flatpickr ──
+window._dashToken = window.location.pathname.split('/d/')[1] || '';
+
+function openDateEditor(el) {
+  const card = el.closest('.event-card');
+  if (!card) return;
+  const itemId = card.dataset.id;
+  const currentDate = card.dataset.scheduledTime || '';
+  
+  // Formatar data atual para input datetime-local (YYYY-MM-DDTHH:MM)
+  let defaultVal = '';
+  if (currentDate) {
+    const d = new Date(currentDate);
+    const sp = new Date(d.toLocaleString('en-US', {timeZone:'America/Sao_Paulo'}));
+    defaultVal = sp.getFullYear() + '-' + String(sp.getMonth()+1).padStart(2,'0') + '-' + String(sp.getDate()).padStart(2,'0') + 'T' + String(sp.getHours()).padStart(2,'0') + ':' + String(sp.getMinutes()).padStart(2,'0');
+  }
+  
+  // Criar overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'date-edit-overlay';
+  overlay.innerHTML = `
+    <div class="date-edit-box">
+      <h3>Alterar data e hora</h3>
+      <input type="datetime-local" id="date-edit-input" value="${defaultVal}">
+      <div class="date-edit-btns">
+        <button class="cancel" onclick="this.closest('.date-edit-overlay').remove()">Cancelar</button>
+        <button class="save" id="date-edit-save">Salvar</button>
+      </div>
+      <div class="edit-success" id="date-edit-ok">✓ Salvo</div>
+    </div>`;
+  
+  document.body.appendChild(overlay);
+  overlay.querySelector('#date-edit-input').focus();
+  
+  // Fechar ao clicar fora
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  
+  // Salvar
+  overlay.querySelector('#date-edit-save').addEventListener('click', () => {
+    const input = overlay.querySelector('#date-edit-input');
+    const val = input.value;
+    if (!val) return;
+    
+    const btn = overlay.querySelector('#date-edit-save');
+    btn.textContent = 'Salvando...';
+    btn.disabled = true;
+    
+    // Converter para ISO (BRT → UTC: +3h)
+    const localDate = new Date(val);
+    const iso = new Date(localDate.getTime() + 3*3600000).toISOString();
+    
+    fetch('/d/item/' + itemId, {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({token: window._dashToken, scheduled_time: iso})
+    }).then(r => r.json()).then(data => {
+      if (data.ok) {
+        el.textContent = fmtEventDate(iso);
+        card.dataset.scheduledTime = iso;
+        const ok = overlay.querySelector('#date-edit-ok');
+        ok.style.display = 'block';
+        setTimeout(() => overlay.remove(), 800);
+      } else {
+        btn.textContent = 'Erro — tente de novo';
+        btn.disabled = false;
+      }
+    }).catch(() => {
+      btn.textContent = 'Erro — tente de novo';
+      btn.disabled = false;
+    });
+  });
+}
+
 function initDateEditing() {
   document.querySelectorAll('.event-date-primary').forEach(el => {
     if (el._dateEditInit) return;
     el._dateEditInit = true;
     el.style.cursor = 'pointer';
-    el.title = 'Clique para alterar data/hora';
-    
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const card = el.closest('.event-card');
-      if (!card) return;
-      const itemId = card.dataset.id;
-      
-      // Get current date from the element text or data attribute
-      const currentDate = card.dataset.scheduledTime || '';
-      
-      // Create flatpickr inline
-      if (el._fp) { el._fp.open(); return; }
-      
-      el._fp = flatpickr(el, {
-        enableTime: true,
-        time_24hr: true,
-        dateFormat: 'd/m/Y H:i',
-        defaultDate: currentDate ? new Date(currentDate) : new Date(),
-        locale: { firstDayOfWeek: 1 },
-        onChange: function(selectedDates) {
-          if (!selectedDates[0]) return;
-          const iso = selectedDates[0].toISOString();
-          
-          fetch('/d/item/' + itemId, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: window._dashToken, scheduled_time: iso })
-          }).then(r => r.json()).then(data => {
-            if (data.ok) {
-              el.textContent = fmtEventDate(iso);
-              el._fp.destroy();
-              el._fp = null;
-            }
-          }).catch(() => {});
-        },
-        onClose: function() {
-          // Cleanup
-        }
-      });
-      el._fp.open();
-    });
+    el.title = 'Clique para alterar';
+    el.addEventListener('click', (e) => { e.stopPropagation(); openDateEditor(el); });
   });
   
-  // ── Make titles single-click editable (not double-click) ──
   document.querySelectorAll('.event-title').forEach(el => {
     if (el._titleEditInit) return;
     el._titleEditInit = true;
     el.style.cursor = 'text';
-    el.title = 'Clique para editar';
-    
     el.addEventListener('click', (e) => {
       const card = el.closest('.event-card');
-      if (card && !card.dataset.editing) {
-        makeEditable(card);
-      }
+      if (card && !card.dataset.editing) makeEditable(card);
     });
   });
 }
 
-// Extract token from URL
-window._dashToken = window.location.pathname.split('/d/')[1] || '';
-
-// Hook into existing render cycle
 const _origInitCards = window.initCards;
 window.initCards = function() {
   if (_origInitCards) _origInitCards();
   setTimeout(initDateEditing, 100);
 };
-
-// Init on page load
 document.addEventListener('DOMContentLoaded', () => setTimeout(initDateEditing, 500));
 </script>
