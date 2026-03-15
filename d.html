@@ -1056,7 +1056,7 @@ function openDateEditor(el) {
     const localDate = new Date(val);
     const iso = new Date(localDate.getTime() + 3*3600000).toISOString();
     
-    fetch('/d/item/' + itemId, {
+    fetch(API + '/d/item/' + itemId, {
       method: 'PATCH',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({token: window._dashToken, scheduled_time: iso})
