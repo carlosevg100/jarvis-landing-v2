@@ -546,6 +546,7 @@ function renderList() {
       card.dataset.position = item.position || 0;
       card.dataset.originalTask = item.task || item.description || '';
       card.style.borderLeftColor = color;
+      card.dataset.scheduledTime = item.scheduled_time || '';
       card.innerHTML = `
         <div class="event-left">
           <div class="event-cat-tag" style="background:${color}">${(catLabels[cat]||cat).toUpperCase()}</div>
@@ -988,3 +989,84 @@ if (document.readyState === 'complete') {
 </script>
 </body>
 </html>
+
+<script>
+// ── Make dates clickable with flatpickr ──
+function initDateEditing() {
+  document.querySelectorAll('.event-date-primary').forEach(el => {
+    if (el._dateEditInit) return;
+    el._dateEditInit = true;
+    el.style.cursor = 'pointer';
+    el.title = 'Clique para alterar data/hora';
+    
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = el.closest('.event-card');
+      if (!card) return;
+      const itemId = card.dataset.id;
+      
+      // Get current date from the element text or data attribute
+      const currentDate = card.dataset.scheduledTime || '';
+      
+      // Create flatpickr inline
+      if (el._fp) { el._fp.open(); return; }
+      
+      el._fp = flatpickr(el, {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: 'd/m/Y H:i',
+        defaultDate: currentDate ? new Date(currentDate) : new Date(),
+        locale: { firstDayOfWeek: 1 },
+        onChange: function(selectedDates) {
+          if (!selectedDates[0]) return;
+          const iso = selectedDates[0].toISOString();
+          
+          fetch('/d/item/' + itemId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: window._dashToken, scheduled_time: iso })
+          }).then(r => r.json()).then(data => {
+            if (data.ok) {
+              el.textContent = fmtEventDate(iso);
+              el._fp.destroy();
+              el._fp = null;
+            }
+          }).catch(() => {});
+        },
+        onClose: function() {
+          // Cleanup
+        }
+      });
+      el._fp.open();
+    });
+  });
+  
+  // ── Make titles single-click editable (not double-click) ──
+  document.querySelectorAll('.event-title').forEach(el => {
+    if (el._titleEditInit) return;
+    el._titleEditInit = true;
+    el.style.cursor = 'text';
+    el.title = 'Clique para editar';
+    
+    el.addEventListener('click', (e) => {
+      const card = el.closest('.event-card');
+      if (card && !card.dataset.editing) {
+        makeEditable(card);
+      }
+    });
+  });
+}
+
+// Extract token from URL
+window._dashToken = window.location.pathname.split('/d/')[1] || '';
+
+// Hook into existing render cycle
+const _origInitCards = window.initCards;
+window.initCards = function() {
+  if (_origInitCards) _origInitCards();
+  setTimeout(initDateEditing, 100);
+};
+
+// Init on page load
+document.addEventListener('DOMContentLoaded', () => setTimeout(initDateEditing, 500));
+</script>
