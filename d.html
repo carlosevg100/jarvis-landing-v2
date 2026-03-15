@@ -206,7 +206,92 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
  }
  .cat-sheet-item:active{background:rgba(255,255,255,.06);}
 }
+
+/* ── EDIT UI ── */
+.event-card { position: relative; }
+.event-card .drag-handle {
+  position: absolute; left: 6px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 24px; cursor: grab; display: flex; flex-direction: column;
+  justify-content: center; gap: 3px; opacity: 0; transition: opacity .2s; padding: 4px 2px;
+}
+.event-card:hover .drag-handle { opacity: 0.35; }
+.drag-handle span { display: block; width: 12px; height: 1.5px; background: var(--ink2); border-radius: 2px; }
+.event-card { padding-left: 28px; }
+
+.edit-inline {
+  font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400;
+  color: var(--ink); border: none; outline: none; background: transparent;
+  width: 100%; border-bottom: 1.5px solid var(--accent); padding-bottom: 2px;
+  line-height: 1.3;
+}
+
+.card-actions {
+  display: flex; gap: 8px; margin-top: 8px; opacity: 0; transition: opacity .2s;
+}
+.event-card:hover .card-actions { opacity: 1; }
+.card-btn {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;
+  padding: 5px 10px; border-radius: 4px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); cursor: pointer; transition: all .2s;
+}
+.card-btn:hover { color: var(--ink); border-color: rgba(26,23,20,.25); background: rgba(26,23,20,.03); }
+.card-btn.danger:hover { color: #C04A4A; border-color: rgba(192,74,74,.3); }
+.card-btn.save { background: var(--ink); color: white; border-color: var(--ink); display: none; }
+.card-btn.save.visible { display: block; }
+
+.add-item-bar {
+  display: flex; gap: 10px; align-items: center; padding: 14px 16px;
+  background: white; border: 1.5px dashed rgba(168,82,42,.25); border-radius: 8px;
+  margin-bottom: 8px; cursor: pointer; color: var(--muted); font-size: 13px;
+  transition: all .2s;
+}
+.add-item-bar:hover { border-color: var(--accent); color: var(--accent); }
+.add-item-bar.open { border-style: solid; border-color: var(--accent); cursor: default; color: var(--ink); }
+
+.add-item-input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+  font-weight: 300;
+}
+.add-item-input::placeholder { color: var(--muted); }
+
+.add-date-input {
+  font-size: 12px; border: 1px solid var(--border); padding: 4px 10px;
+  border-radius: 4px; background: var(--bg); color: var(--ink); cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.toast {
+  position: fixed; bottom: 20px; right: 20px; background: var(--ink); color: white;
+  padding: 12px 20px; border-radius: 8px; font-size: 12px; letter-spacing: .5px;
+  transform: translateY(100px); opacity: 0; transition: all .3s ease; z-index: 200;
+  box-shadow: 0 4px 16px rgba(26,23,20,.25);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+.confirm-dialog {
+  position: fixed; inset: 0; background: rgba(26,23,20,.4); z-index: 300;
+  display: none; align-items: center; justify-content: center;
+}
+.confirm-dialog.show { display: flex; }
+.confirm-box {
+  background: white; border-radius: 12px; padding: 28px; max-width: 360px; width: 90%;
+  box-shadow: 0 20px 60px rgba(26,23,20,.2); text-align: center;
+}
+.confirm-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; margin-bottom: 10px; color: var(--ink); }
+.confirm-box p { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+.confirm-actions { display: flex; gap: 10px; justify-content: center; }
+.confirm-btn { padding: 9px 22px; border-radius: 6px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all .2s; }
+.confirm-btn.danger { background: #C04A4A; color: white; border-color: #C04A4A; }
+
+@media(max-width:768px){
+  .event-card { padding-left: 28px; }
+  .card-actions { opacity: 1; }
+}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
 <div id="loading-overlay"><div class="loading-logo">Jarvis</div></div>
@@ -457,6 +542,9 @@ function renderList() {
       const color = catColors[cat] || '#7A7A7A';
       const card = document.createElement('div');
       card.className = `event-card${done ? ' done' : ''}`;
+      card.dataset.id = item.id;
+      card.dataset.position = item.position || 0;
+      card.dataset.originalTask = item.task || item.description || '';
       card.style.borderLeftColor = color;
       card.innerHTML = `
         <div class="event-left">
@@ -616,6 +704,287 @@ function closeCatSheet() {
 }
 
 init();
+</script>
+
+<div class="toast" id="toast"></div>
+<div class="confirm-dialog" id="confirm-dialog">
+  <div class="confirm-box">
+    <h3>Confirmar exclusão</h3>
+    <p>Este item será removido do dashboard. Você ainda pode ver no histórico.</p>
+    <div class="confirm-actions">
+      <button class="confirm-btn" onclick="closeConfirm()">Cancelar</button>
+      <button class="confirm-btn danger" id="confirm-ok" onclick="doConfirmDelete()">Remover</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── JARVIS EDIT ENGINE ──────────────────────────────────────────────────────
+const DASHBOARD_TOKEN = window.location.pathname.split('/d/')[1]?.split('?')[0] || '';
+const API = 'https://jarvis-api-olpi.vercel.app';
+let pendingDeleteId = null;
+
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? '#C04A4A' : 'var(--ink)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Patch request helper ──
+async function apiPatch(path, body) {
+  const r = await fetch(API + path, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: DASHBOARD_TOKEN, ...body })
+  });
+  return r.ok ? r.json() : Promise.reject(await r.json());
+}
+
+async function apiPost(path, body) {
+  const r = await fetch(API + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: DASHBOARD_TOKEN, ...body })
+  });
+  return r.ok ? r.json() : Promise.reject(await r.json());
+}
+
+async function apiDelete(path) {
+  const r = await fetch(API + path + '?token=' + DASHBOARD_TOKEN, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: DASHBOARD_TOKEN })
+  });
+  return r.ok ? r.json() : Promise.reject(await r.json());
+}
+
+// ── Inline edit task title ──
+function makeEditable(card) {
+  const titleEl = card.querySelector('.event-title');
+  if (!titleEl || card.dataset.editing) return;
+  const itemId = card.dataset.id;
+  const original = titleEl.textContent.trim();
+
+  card.dataset.editing = '1';
+  titleEl.contentEditable = 'true';
+  titleEl.classList.add('edit-inline');
+  titleEl.focus();
+
+  // Show save button
+  const saveBtn = card.querySelector('.card-btn.save');
+  if (saveBtn) saveBtn.classList.add('visible');
+
+  // Select all text
+  const range = document.createRange();
+  range.selectNodeContents(titleEl);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+
+  titleEl.addEventListener('blur', () => {
+    const newVal = titleEl.textContent.trim();
+    if (newVal !== original && newVal.length > 0) {
+      saveTask(card, itemId, newVal);
+    } else {
+      cancelEdit(card, titleEl, original);
+    }
+  }, { once: true });
+
+  titleEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); titleEl.blur(); }
+    if (e.key === 'Escape') { titleEl.textContent = original; cancelEdit(card, titleEl, original); }
+  });
+}
+
+function cancelEdit(card, el, original) {
+  el.contentEditable = 'false';
+  el.classList.remove('edit-inline');
+  el.textContent = original;
+  delete card.dataset.editing;
+  const saveBtn = card.querySelector('.card-btn.save');
+  if (saveBtn) saveBtn.classList.remove('visible');
+}
+
+async function saveTask(card, itemId, newTask) {
+  const titleEl = card.querySelector('.event-title');
+  titleEl.contentEditable = 'false';
+  titleEl.classList.remove('edit-inline');
+  delete card.dataset.editing;
+  const saveBtn = card.querySelector('.card-btn.save');
+  if (saveBtn) saveBtn.classList.remove('visible');
+
+  try {
+    await apiPatch('/d/item/' + itemId, { task: newTask });
+    showToast('Salvo.');
+    card.querySelector('.event-title').textContent = newTask;
+  } catch(e) {
+    showToast('Erro ao salvar.', true);
+    card.querySelector('.event-title').textContent = card.dataset.originalTask || newTask;
+  }
+}
+
+// ── Delete ──
+function confirmDelete(itemId) {
+  pendingDeleteId = itemId;
+  document.getElementById('confirm-dialog').classList.add('show');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-dialog').classList.remove('show');
+  pendingDeleteId = null;
+}
+
+async function doConfirmDelete() {
+  if (!pendingDeleteId) return;
+  const card = document.querySelector('[data-id="' + pendingDeleteId + '"]');
+  closeConfirm();
+  try {
+    await apiDelete('/d/item/' + pendingDeleteId);
+    if (card) {
+      card.style.transition = 'all .3s ease';
+      card.style.opacity = '0';
+      card.style.maxHeight = card.offsetHeight + 'px';
+      setTimeout(() => { card.style.maxHeight = '0'; card.style.padding = '0'; card.style.margin = '0'; card.style.overflow = 'hidden'; }, 50);
+      setTimeout(() => card.remove(), 400);
+    }
+    showToast('Item removido.');
+  } catch(e) { showToast('Erro ao remover.', true); }
+}
+
+// ── Create new item ──
+function toggleAddBar(bar) {
+  if (bar.classList.contains('open')) return;
+  bar.classList.add('open');
+  bar.innerHTML = '<input class="add-item-input" placeholder="Novo compromisso..." autofocus>' +
+    '<input type="datetime-local" class="add-date-input" title="Data e hora">' +
+    '<button class="card-btn save visible" onclick="submitNewItem(this.closest(\'.add-item-bar\'))">Salvar</button>' +
+    '<button class="card-btn" onclick="resetAddBar(this.closest(\'.add-item-bar\'))">×</button>';
+  bar.querySelector('input').focus();
+  bar.querySelector('input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitNewItem(bar);
+    if (e.key === 'Escape') resetAddBar(bar);
+  });
+}
+
+function resetAddBar(bar) {
+  bar.classList.remove('open');
+  bar.innerHTML = '<span style="font-size:16px">+</span> Novo item';
+}
+
+async function submitNewItem(bar) {
+  const input = bar.querySelector('.add-item-input');
+  const dateInput = bar.querySelector('.add-date-input');
+  const task = input?.value?.trim();
+  if (!task) { input?.focus(); return; }
+
+  const scheduled_time = dateInput?.value ? new Date(dateInput.value).toISOString() : null;
+
+  try {
+    const result = await apiPost('/d/item', { task, scheduled_time });
+    showToast('Item criado.');
+    resetAddBar(bar);
+    // Refresh page to show new item
+    setTimeout(() => window.location.reload(), 800);
+  } catch(e) { showToast('Erro ao criar.', true); }
+}
+
+// ── Add drag handles + action buttons to each card ──
+function initCards() {
+  document.querySelectorAll('.event-card[data-id]').forEach(card => {
+    const itemId = card.dataset.id;
+
+    // Add drag handle
+    if (!card.querySelector('.drag-handle')) {
+      const handle = document.createElement('div');
+      handle.className = 'drag-handle';
+      handle.innerHTML = '<span></span><span></span><span></span>';
+      card.insertBefore(handle, card.firstChild);
+    }
+
+    // Add action buttons if not present
+    if (!card.querySelector('.card-actions')) {
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+      actions.innerHTML =
+        '<button class="card-btn save" onclick="saveTask(this.closest(\'.event-card\'), \'' + itemId + '\', this.closest(\'.event-card\').querySelector(\'.event-title\').textContent)">Salvar</button>' +
+        '<button class="card-btn" onclick="makeEditable(this.closest(\'.event-card\'))">Editar</button>' +
+        '<button class="card-btn danger" onclick="confirmDelete(\'' + itemId + '\')" >Remover</button>';
+      const left = card.querySelector('.event-left');
+      if (left) left.appendChild(actions);
+    }
+
+    // Double-click to edit
+    const titleEl = card.querySelector('.event-title');
+    if (titleEl && !titleEl._editListenerAdded) {
+      titleEl.addEventListener('dblclick', () => makeEditable(card));
+      titleEl._editListenerAdded = true;
+    }
+  });
+}
+
+// ── Sortable drag-and-drop ──
+function initSortable() {
+  document.querySelectorAll('.list-group').forEach(group => {
+    if (window.Sortable && !group._sortable) {
+      group._sortable = Sortable.create(group, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'sortable-ghost',
+        onEnd: async (evt) => {
+          const cards = Array.from(evt.from.querySelectorAll('.event-card[data-id]'));
+          const movedId = evt.item.dataset.id;
+          const idx = cards.indexOf(evt.item);
+
+          // Calculate new position using fractional indexing
+          const prevPos = idx > 0 ? parseFloat(cards[idx-1].dataset.position || 1000) : 0;
+          const nextPos = idx < cards.length - 1 ? parseFloat(cards[idx+1].dataset.position || 999999) : (prevPos + 2000);
+          const newPos = (prevPos + nextPos) / 2;
+
+          try {
+            await apiPatch('/d/item/' + movedId + '/position', { position: newPos });
+            evt.item.dataset.position = newPos;
+          } catch(e) { console.error('reorder failed', e); }
+        }
+      });
+    }
+  });
+}
+
+// ── Add item bars to each section ──
+function addItemBars() {
+  document.querySelectorAll('.list-group').forEach(group => {
+    if (!group.querySelector('.add-item-bar')) {
+      const bar = document.createElement('div');
+      bar.className = 'add-item-bar';
+      bar.innerHTML = '<span style="font-size:16px">+</span> Novo item';
+      bar.onclick = () => toggleAddBar(bar);
+      group.appendChild(bar);
+    }
+  });
+}
+
+// ── SORTABLE GHOST STYLE ──
+const ghostStyle = document.createElement('style');
+ghostStyle.textContent = '.sortable-ghost { opacity: 0.3; background: rgba(168,82,42,.08) !important; }';
+document.head.appendChild(ghostStyle);
+
+// ── Hook into renderList to re-init edit UI ──
+const _origRenderList = renderList;
+renderList = function() {
+  _origRenderList();
+  setTimeout(() => { initCards(); addItemBars(); initSortable(); }, 50);
+};
+
+// ── Init on DOMContentLoaded ──
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { initCards(); addItemBars(); initSortable(); }, 300);
+});
+
+// Also run after any page content updates
+if (document.readyState === 'complete') {
+  setTimeout(() => { initCards(); addItemBars(); initSortable(); }, 300);
+}
 </script>
 </body>
 </html>
