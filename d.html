@@ -288,6 +288,57 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   .event-card { padding-left: 28px; }
   .card-actions { opacity: 1; }
 }
+
+/* ── CAL SUB-TOGGLE ── */
+.cal-sub-toggle{display:flex;gap:4px;margin-bottom:16px;}
+.cal-sub-btn{padding:7px 18px;border-radius:6px;font-size:10px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;}
+.cal-sub-btn:hover{color:var(--ink2);border-color:rgba(26,23,20,.2);}
+.cal-sub-btn.active{background:var(--ink);color:var(--surface);border-color:var(--ink);}
+
+/* ── TIMESLOT GRID (Day + Week shared) ── */
+.timeslot-grid{display:flex;overflow-y:auto;max-height:calc(100vh - 280px);border:1px solid var(--border);border-radius:8px;background:var(--surface);}
+.ts-time-col{width:52px;flex-shrink:0;border-right:1px solid var(--border);background:var(--bg2);}
+.ts-time-cell{height:60px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:flex-end;padding:4px 8px 0 0;font-size:10px;color:var(--muted);letter-spacing:.5px;}
+.ts-time-cell:last-child{border-bottom:none;}
+.ts-events-col{flex:1;position:relative;}
+.ts-hour-line{height:60px;border-bottom:1px solid rgba(26,23,20,.06);box-sizing:border-box;}
+.ts-event{position:absolute;left:2px;right:2px;border-radius:4px;padding:3px 7px;font-size:11px;font-weight:500;overflow:hidden;cursor:pointer;z-index:2;transition:opacity .15s;}
+.ts-event:hover{opacity:.85;}
+.ts-event .ts-ev-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;}
+.ts-event .ts-ev-time{font-size:9px;opacity:.75;line-height:1;}
+/* Now line */
+.ts-now-line{position:absolute;left:0;right:0;height:2px;background:#E03E3E;z-index:10;}
+.ts-now-dot{position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:#E03E3E;}
+
+/* ── WEEK HEADER ── */
+.week-header{display:flex;border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;background:var(--bg2);overflow:hidden;}
+.week-header-time{width:52px;flex-shrink:0;border-right:1px solid var(--border);}
+.week-day-col-hdr{flex:1;text-align:center;padding:8px 4px;border-right:1px solid var(--border);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.week-day-col-hdr:last-child{border-right:none;}
+.week-day-col-hdr.today{color:var(--accent);}
+.week-day-num{font-size:18px;font-weight:300;color:var(--ink);display:block;line-height:1;}
+.week-day-num.today{
+  width:28px;height:28px;border-radius:50%;background:#E03E3E;color:white;
+  display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:13px;
+}
+/* Week body: columns -->
+.week-grid .ts-events-col{border-right:1px solid rgba(26,23,20,.06);}
+.week-grid .ts-events-col:last-child{border-right:none;}
+
+/* ── EVENT MODAL ── */
+.ev-modal{position:fixed;inset:0;background:rgba(26,23,20,.45);z-index:500;display:none;align-items:center;justify-content:center;}
+.ev-modal.show{display:flex;}
+.ev-modal-box{background:var(--surface);border-radius:14px;padding:28px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(26,23,20,.2);}
+.ev-modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink);margin-bottom:6px;line-height:1.3;}
+.ev-modal-meta{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.7;}
+.ev-modal-close{float:right;cursor:pointer;font-size:18px;color:var(--muted);margin-top:-4px;}
+.ev-modal-close:hover{color:var(--ink);}
+
+@media(max-width:768px){
+ .timeslot-grid{max-height:calc(100vh - 240px);}
+ .cal-sub-toggle{gap:3px;}
+ .cal-sub-btn{padding:6px 12px;font-size:9px;}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -353,14 +404,34 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   </div>
   <div class="list-view active" id="list-view"></div>
   <div class="calendar-view" id="calendar-view">
+   <!-- Sub-view toggle: Day / Week / Month -->
+   <div class="cal-sub-toggle">
+    <button class="cal-sub-btn" id="calsub-day"   onclick="setCalView('day')">Hoje</button>
+    <button class="cal-sub-btn" id="calsub-week"  onclick="setCalView('week')">Semana</button>
+    <button class="cal-sub-btn active" id="calsub-month" onclick="setCalView('month')">Mês</button>
+   </div>
+   <!-- Shared nav header -->
    <div class="cal-header">
     <div class="cal-title" id="cal-month-title"></div>
     <div class="cal-nav">
-     <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
-     <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+     <button class="cal-nav-btn" id="cal-today-btn" onclick="calGoToday()" style="padding:0 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:500;">Hoje</button>
+     <button class="cal-nav-btn" onclick="calNavPrev()">‹</button>
+     <button class="cal-nav-btn" onclick="calNavNext()">›</button>
     </div>
    </div>
-   <div class="cal-grid" id="cal-grid"></div>
+   <!-- Month view (existing) -->
+   <div id="cal-month-view">
+    <div class="cal-grid" id="cal-grid"></div>
+   </div>
+   <!-- Day view -->
+   <div id="cal-day-view" style="display:none;">
+    <div class="timeslot-grid" id="day-grid"></div>
+   </div>
+   <!-- Week view -->
+   <div id="cal-week-view" style="display:none;">
+    <div class="week-header" id="week-header"></div>
+    <div class="timeslot-grid" id="week-grid"></div>
+   </div>
   </div>
  </div>
 </div>
@@ -987,6 +1058,278 @@ if (document.readyState === 'complete') {
   setTimeout(() => { initCards(); addItemBars(); initSortable(); }, 300);
 }
 </script>
+
+<!-- ── CALENDAR TIMESLOT ENGINE ────────────────────────── -->
+<div class="ev-modal" id="ev-modal" onclick="if(event.target===this)closeEvModal()">
+ <div class="ev-modal-box">
+  <span class="ev-modal-close" onclick="closeEvModal()">✕</span>
+  <div class="ev-modal-title" id="ev-modal-title"></div>
+  <div class="ev-modal-meta" id="ev-modal-meta"></div>
+ </div>
+</div>
+
+<script>
+// ── Calendar sub-view state ──────────────────────────────────────────────────
+let calSubView = 'month';   // 'day' | 'week' | 'month'
+let calDayDate = new Date(today); // current day shown in Day view
+let calWeekDate = new Date(today); // any date within the current week
+
+const HOURS_START = 0;   // 00:00
+const HOURS_END   = 24;  // exclusive — shows 00-23
+const CELL_H      = 60;  // px per hour
+
+function setCalView(v) {
+  calSubView = v;
+  ['day','week','month'].forEach(s => {
+    document.getElementById('calsub-' + s)?.classList.toggle('active', s === v);
+    document.getElementById('cal-' + s + '-view').style.display = s === v ? '' : 'none';
+  });
+  renderCalendar();
+}
+
+function calNavPrev() {
+  if (calSubView === 'month') { calMonth.setMonth(calMonth.getMonth() - 1); }
+  else if (calSubView === 'day') { calDayDate.setDate(calDayDate.getDate() - 1); }
+  else { calWeekDate.setDate(calWeekDate.getDate() - 7); }
+  renderCalendar();
+}
+function calNavNext() {
+  if (calSubView === 'month') { calMonth.setMonth(calMonth.getMonth() + 1); }
+  else if (calSubView === 'day') { calDayDate.setDate(calDayDate.getDate() + 1); }
+  else { calWeekDate.setDate(calWeekDate.getDate() + 7); }
+  renderCalendar();
+}
+function calGoToday() {
+  calDayDate  = new Date(today);
+  calWeekDate = new Date(today);
+  calMonth    = new Date(today.getFullYear(), today.getMonth(), 1);
+  renderCalendar();
+  if (calSubView !== 'month') setTimeout(scrollToNow, 80);
+}
+
+// ── Time helpers ─────────────────────────────────────────────────────────────
+function minutesFromMidnight(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-CA',{timeZone:TZ}) === fmtDateStr(d)
+    ? d.getHours() * 60 + d.getMinutes()
+    : null;
+}
+function fmtTime(dateStr) {
+  return new Date(dateStr).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:TZ});
+}
+function fmtDateLong(d) {
+  return d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',timeZone:TZ});
+}
+function fmtDateShort(d) {
+  return d.toLocaleDateString('pt-BR',{day:'numeric',month:'short',timeZone:TZ});
+}
+function startOfWeek(d) {
+  const s = new Date(d);
+  s.setDate(s.getDate() - s.getDay()); // Sunday
+  return s;
+}
+
+// ── Build time column ─────────────────────────────────────────────────────────
+function buildTimeCol() {
+  const col = document.createElement('div');
+  col.className = 'ts-time-col';
+  for (let h = HOURS_START; h < HOURS_END; h++) {
+    const cell = document.createElement('div');
+    cell.className = 'ts-time-cell';
+    cell.textContent = h.toString().padStart(2,'0') + ':00';
+    col.appendChild(cell);
+  }
+  return col;
+}
+
+// ── Build events column (positioned absolute) ────────────────────────────────
+function buildEventsCol(dayDateStr, weekColIdx, totalCols) {
+  const col = document.createElement('div');
+  col.className = 'ts-events-col';
+  const totalH = (HOURS_END - HOURS_START) * CELL_H;
+  col.style.minHeight = totalH + 'px';
+
+  // Hour lines
+  for (let h = HOURS_START; h < HOURS_END; h++) {
+    const line = document.createElement('div');
+    line.className = 'ts-hour-line';
+    col.appendChild(line);
+  }
+
+  // Now line (only if this column is today)
+  if (dayDateStr === todayStr) {
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const top = (nowMin - HOURS_START * 60) * (CELL_H / 60);
+    const nl = document.createElement('div');
+    nl.className = 'ts-now-line';
+    nl.style.top = top + 'px';
+    nl.innerHTML = '<div class="ts-now-dot"></div>';
+    col.appendChild(nl);
+  }
+
+  // Events for this day
+  const dayItems = allItems.filter(i => {
+    if (!i.scheduled_time) return false;
+    return getLocalDateStr(i.scheduled_time) === dayDateStr;
+  }).sort((a,b) => new Date(a.scheduled_time) - new Date(b.scheduled_time));
+
+  // Detect overlaps for side-by-side layout
+  const placed = [];
+  dayItems.forEach(item => {
+    const minStart = minutesFromMidnight(item.scheduled_time);
+    if (minStart === null) return;
+    const dur = 60; // default 1h
+    const top    = (minStart - HOURS_START * 60) * (CELL_H / 60);
+    const height = Math.max(24, dur * (CELL_H / 60));
+
+    // Find columns with overlapping events
+    let col_idx = 0;
+    for (const p of placed) {
+      if (p.end > minStart && p.start < minStart + dur && p.col_idx === col_idx) col_idx++;
+    }
+    placed.push({ start: minStart, end: minStart + dur, col_idx });
+
+    const maxCols = Math.max(1, placed.filter(p => p.start < minStart + dur && p.end > minStart).length);
+    const w = (1 / maxCols);
+
+    const cat   = item.auto_category || 'outros';
+    const color = (typeof catColors !== 'undefined' ? catColors[cat] : null) || '#7A7A7A';
+    const ev = document.createElement('div');
+    ev.className = 'ts-event';
+    ev.style.cssText = `top:${top}px;height:${height}px;background:${color}20;border-left:3px solid ${color};left:calc(${col_idx/maxCols*100}% + 2px);right:${(1-(col_idx+1)/maxCols)*100}%;`;
+    ev.innerHTML = `<div class="ts-ev-title">${item.task||'—'}</div><div class="ts-ev-time">${fmtTime(item.scheduled_time)}</div>`;
+    ev.onclick = (e) => { e.stopPropagation(); openEvModal(item); };
+    col.appendChild(ev);
+  });
+
+  return col;
+}
+
+// ── Render Day View ───────────────────────────────────────────────────────────
+function renderDayView() {
+  const dayStr = fmtDateStr(calDayDate);
+  const isToday = dayStr === todayStr;
+  const titleEl = document.getElementById('cal-month-title');
+  const isThisYear = calDayDate.getFullYear() === today.getFullYear();
+  titleEl.textContent = calDayDate.toLocaleDateString('pt-BR', {
+    weekday:'long', day:'numeric', month:'long',
+    ...(isThisYear ? {} : {year:'numeric'}),
+    timeZone: TZ
+  });
+  if (isToday) titleEl.innerHTML += ' <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-left:8px;">hoje</span>';
+
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = '';
+  grid.appendChild(buildTimeCol());
+  grid.appendChild(buildEventsCol(dayStr, 0, 1));
+}
+
+// ── Render Week View ──────────────────────────────────────────────────────────
+function renderWeekView() {
+  const weekStart = startOfWeek(calWeekDate);
+  const weekEnd   = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 6);
+
+  const titleEl = document.getElementById('cal-month-title');
+  titleEl.textContent = `${fmtDateShort(weekStart)} – ${fmtDateShort(weekEnd)}`;
+
+  // Header
+  const header = document.getElementById('week-header');
+  header.innerHTML = '<div class="week-header-time"></div>';
+  const ptDaysShort = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart); d.setDate(d.getDate() + i);
+    const dStr = fmtDateStr(d);
+    const isT = dStr === todayStr;
+    const hdr = document.createElement('div');
+    hdr.className = 'week-day-col-hdr' + (isT ? ' today' : '');
+    const numEl = isT
+      ? `<span class="week-day-num today">${d.getDate()}</span>`
+      : `<span class="week-day-num">${d.getDate()}</span>`;
+    hdr.innerHTML = ptDaysShort[d.getDay()] + '<br>' + numEl;
+    header.appendChild(hdr);
+  }
+
+  // Grid
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = '';
+  grid.appendChild(buildTimeCol());
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart); d.setDate(d.getDate() + i);
+    grid.appendChild(buildEventsCol(fmtDateStr(d), i, 7));
+  }
+}
+
+// ── Override renderCalendar to route to sub-views ─────────────────────────────
+const _origRenderCalendar = renderCalendar;
+renderCalendar = function() {
+  if (calSubView === 'day')   { renderDayView();  return; }
+  if (calSubView === 'week')  { renderWeekView(); return; }
+  // month — run original + show month view, hide others
+  document.getElementById('cal-month-view').style.display = '';
+  document.getElementById('cal-day-view').style.display   = 'none';
+  document.getElementById('cal-week-view').style.display  = 'none';
+  _origRenderCalendar();
+};
+
+// ── Scroll to now ─────────────────────────────────────────────────────────────
+function scrollToNow() {
+  const now = new Date();
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const top = Math.max(0, (nowMin - HOURS_START * 60) * (CELL_H / 60) - 80);
+  document.querySelector('.timeslot-grid:not([style*="none"])')?.scrollTo({ top, behavior:'smooth' });
+}
+
+// ── Event modal ───────────────────────────────────────────────────────────────
+function openEvModal(item) {
+  document.getElementById('ev-modal-title').textContent = item.task || '—';
+  const parts = [];
+  if (item.scheduled_time) parts.push(
+    new Date(item.scheduled_time).toLocaleString('pt-BR',{
+      weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit',timeZone:TZ
+    })
+  );
+  if (item.location) parts.push('📍 ' + item.location);
+  if (item.participants?.length) parts.push('👥 ' + item.participants.join(', '));
+  if (item.amount) parts.push('💰 R$ ' + Number(item.amount).toFixed(2));
+  if (item.notes) parts.push('📝 ' + item.notes);
+  document.getElementById('ev-modal-meta').innerHTML = parts.join('<br>');
+  document.getElementById('ev-modal').classList.add('show');
+}
+function closeEvModal() {
+  document.getElementById('ev-modal').classList.remove('show');
+}
+
+// ── Auto-switch to Day view on mobile ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth < 768) {
+    // Default to Day view on mobile when user switches to Calendar
+    const _origSetView = setView;
+    const _wrapped = setView;
+    window._calMobileDefault = true;
+  }
+});
+
+// Patch setView to default mobile to Day
+const _origSetViewCal = setView;
+setView = function(v) {
+  _origSetViewCal(v);
+  if (v === 'calendar' && window.innerWidth < 768 && calSubView === 'month') {
+    setCalView('day');
+  } else if (v === 'calendar' && calSubView !== 'month') {
+    setTimeout(scrollToNow, 80);
+  }
+};
+
+// Patch changeMonth to delegate for day/week views
+const _origChangeMonth = changeMonth;
+changeMonth = function(dir) {
+  if (calSubView === 'day')  { calNavPrev(); return; }
+  if (calSubView === 'week') { calNavPrev(); return; }
+  _origChangeMonth(dir);
+};
+</script>
+
 </body>
 </html>
 
