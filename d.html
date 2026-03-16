@@ -339,6 +339,220 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
  .cal-sub-toggle{gap:3px;}
  .cal-sub-btn{padding:6px 12px;font-size:9px;}
 }
+
+/* ═══════════════════════════════════════════════════════════
+   JARVIS DASHBOARD — MOBILE PREMIUM (Amie/Cron/Fantastical)
+   Warm cream bg · terracotta accent · serif titles
+   Target: 375px–430px (iPhone SE to Pro Max)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Mobile design tokens (scoped, no override of desktop) ── */
+.stats-mobile, .week-list-view, .week-list-day, .week-list-event,
+.cal-sub-toggle, .cal-sub-btn { box-sizing: border-box; }
+
+/* Category accent via CSS custom properties */
+.ts-event { --ev-clr: var(--accent); }
+.ts-event[data-cat="familia"]    { --ev-clr: #C07A4A; }
+.ts-event[data-cat="escola"]     { --ev-clr: #4A7FA8; }
+.ts-event[data-cat="trabalho"]   { --ev-clr: #3A7A5A; }
+.ts-event[data-cat="saude"]      { --ev-clr: #8A4A9A; }
+.ts-event[data-cat="financeiro"] { --ev-clr: #A89A4A; }
+.ts-event[data-cat="social"]     { --ev-clr: #C04A6A; }
+.ts-event[data-cat="compras"]    { --ev-clr: #4A6AC0; }
+.ts-event[data-cat="viagem"]     { --ev-clr: #4AAAC0; }
+.ts-event[data-cat] {
+  border-left: 3px solid var(--ev-clr) !important;
+  background: color-mix(in srgb, var(--ev-clr) 12%, white) !important;
+}
+
+/* List view card category accent (border-left via data-cat) */
+.event-card { --ev-clr: var(--accent); }
+.event-card[data-cat="familia"]    { --ev-clr: #C07A4A; }
+.event-card[data-cat="escola"]     { --ev-clr: #4A7FA8; }
+.event-card[data-cat="trabalho"]   { --ev-clr: #3A7A5A; }
+.event-card[data-cat="saude"]      { --ev-clr: #8A4A9A; }
+.event-card[data-cat="financeiro"] { --ev-clr: #A89A4A; }
+.event-card[data-cat="social"]     { --ev-clr: #C04A6A; }
+.event-card[data-cat="compras"]    { --ev-clr: #4A6AC0; }
+.event-card[data-cat="viagem"]     { --ev-clr: #4AAAC0; }
+.event-card[data-cat]              { border-left-color: var(--ev-clr) !important; }
+
+/* ── Mobile compact stats bar ── */
+.stats-mobile { display: none; }
+
+/* ── Week agenda list (mobile only) ── */
+.week-list-view { display: none; }
+.week-list-day  { margin-bottom: 28px; }
+.week-list-day-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 0 12px; margin-bottom: 10px;
+  border-bottom: 1px solid rgba(26,23,20,.08);
+}
+.wl-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 300; color: #1A1A1A;
+  line-height: 1; min-width: 34px; text-align: center;
+}
+.wl-date.today {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #C17B5B; color: white; min-width: unset;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 500;
+}
+.wl-dayname {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  font-weight: 500; color: #8B8680;
+}
+.wl-dayname.today { color: #C17B5B; }
+.week-list-event {
+  display: flex; align-items: stretch;
+  background: #fff; border-radius: 12px; margin-bottom: 8px;
+  border: 1px solid #F0EDE8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.02);
+  cursor: pointer; overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.week-list-event:active { transform: scale(0.98); box-shadow: none; }
+.wle-accent { width: 4px; flex-shrink: 0; background: #C17B5B; }
+.wle-body   { flex: 1; padding: 12px 14px; }
+.wle-title  { font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 1.4; margin-bottom: 2px; }
+.wle-meta   { font-size: 12px; color: #8B8680; }
+.wle-empty  { font-size: 13px; color: #B0A9A3; text-align: center; padding: 16px 0; font-style: italic; }
+
+/* ── Cal sub toggle — pill style ── */
+.cal-sub-toggle {
+  display: flex; gap: 4px; margin-bottom: 16px;
+  background: #F0EDE8; border-radius: 10px; padding: 3px;
+}
+.cal-sub-btn {
+  flex: 1; text-align: center; border: none; border-radius: 8px;
+  padding: 9px 6px; font-size: 11px; font-weight: 500; letter-spacing: .5px;
+  text-transform: uppercase; cursor: pointer;
+  color: #8B8680; background: transparent; transition: all .2s;
+}
+.cal-sub-btn.active {
+  background: #fff; color: #1A1A1A;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* ── Event modal spring ── */
+.ev-modal { transition: opacity .2s; }
+.ev-modal-box {
+  transform: translateY(10px) scale(0.97);
+  transition: transform .28s cubic-bezier(0.34,1.56,0.64,1), opacity .2s;
+  opacity: 0;
+}
+.ev-modal.show .ev-modal-box { transform: none; opacity: 1; }
+
+/* ══════════════════════════════════════════════════
+   MOBILE BREAKPOINT
+   ══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  html, body { overflow: hidden; background: #FAF8F5; }
+  .app { flex-direction: column; }
+  .sidebar { display: none; }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: 64px; }
+
+  /* Topbar */
+  .topbar { padding: 0 20px; height: 56px; background: #fff; border-bottom: 1px solid #F0EDE8; }
+  .topbar-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: -0.02em; color: #1A1A1A; }
+  .topbar-date, .live-badge { display: none !important; }
+  .topbar-right { gap: 8px; }
+  .view-toggle { background: #F0EDE8; border-radius: 8px; padding: 2px; gap: 1px; }
+  .view-btn { padding: 6px 12px; font-size: 11px; letter-spacing: .5px; font-weight: 500; border-radius: 6px; }
+  .view-btn.active { background: #fff; color: #1A1A1A; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+  /* Compact stats */
+  .stats-bar { display: none !important; }
+  .stats-mobile {
+    display: flex; align-items: center; padding: 10px 20px;
+    background: #fff; border-bottom: 1px solid #F0EDE8; flex-shrink: 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .stats-mobile .sm-num { font-size: 15px; font-weight: 600; color: #1A1A1A; }
+  .stats-mobile .sm-label { font-size: 12px; color: #8B8680; margin-left: 4px; }
+  .stats-mobile .sm-sep { font-size: 14px; color: #E0DDD8; margin: 0 10px; }
+
+  /* Content */
+  .content { padding: 16px 20px; overflow-y: auto; flex: 1; }
+
+  /* Filters */
+  .filters {
+    display: flex; gap: 8px; margin-bottom: 18px;
+    overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  body.cal-mode .filters { display: none; }
+  .filter-chip {
+    white-space: nowrap; flex-shrink: 0;
+    padding: 8px 18px; font-size: 12px; font-weight: 500;
+    border-radius: 20px; letter-spacing: .3px; border: 1.5px solid #E8E5E0;
+  }
+  .filter-chip.active { background: #1A1A1A; color: #fff; border-color: #1A1A1A; box-shadow: none; }
+
+  /* List view event cards */
+  .event-card { padding: 14px 16px !important; border-radius: 12px; margin-bottom: 8px; }
+  .event-card:hover { transform: none; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .event-card:active { transform: scale(0.99); }
+  .event-title { font-size: 15px; }
+  .event-date-primary { font-size: 11px; }
+  .event-meta { font-size: 11px; gap: 8px; }
+  .drag-handle { display: none !important; }
+  .card-actions { opacity: 0 !important; pointer-events: none; }
+
+  /* Cal sub toggle */
+  .cal-sub-toggle { background: #F0EDE8; border-radius: 10px; padding: 3px; gap: 2px; margin-bottom: 14px; }
+  .cal-sub-btn { padding: 8px 4px; font-size: 11px; border-radius: 7px; }
+  .cal-sub-btn.active { background: #fff; }
+
+  /* Day view timeslots */
+  .timeslot-grid {
+    max-height: calc(100vh - 240px); border: 1px solid #F0EDE8; border-radius: 12px;
+    background: #fff; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
+  .ts-time-col { width: 46px; background: #FAF8F5; }
+  .ts-time-cell { font-size: 10px; color: #B0A9A3; letter-spacing: .3px; height: 60px; padding: 4px 8px 0 0; border-bottom: 1px solid #F5F2EE; display: flex; align-items: flex-start; justify-content: flex-end; }
+  .ts-hour-line { border-bottom: 1px solid rgba(26,23,20,0.03); }
+  .ts-event { left: 2px !important; right: 2px !important; border-radius: 8px; padding: 6px 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .ts-event .ts-ev-title { font-size: 12px; font-weight: 500; color: #1A1A1A; white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.35; }
+  .ts-event .ts-ev-time  { font-size: 10px; color: #8B8680; margin-top: 2px; }
+  .ts-now-line { background: #C17B5B; height: 2px; }
+  .ts-now-dot  { background: #C17B5B; }
+
+  /* Cal header */
+  .cal-header { margin-bottom: 12px; }
+  .cal-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: -0.02em; color: #1A1A1A; }
+  .cal-nav-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #F0EDE8; background: #fff; font-size: 16px; color: #4A4540; }
+  #cal-today-btn { padding: 0 10px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #C17B5B; border-color: rgba(193,123,91,.3); }
+
+  /* Week: list on mobile, grid on desktop */
+  .week-grid-wrap { display: none !important; }
+  .week-header    { display: none !important; }
+  .week-list-view { display: block; }
+
+  /* Month view compact */
+  .cal-day        { min-height: 52px; padding: 5px 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .cal-day:active { background: rgba(193,123,91,.06); }
+  .cal-day-num    { width: 22px; height: 22px; font-size: 11px; }
+  .cal-event-pill { font-size: 0; width: 5px; height: 5px; border-radius: 50%; padding: 0; margin: 1px 1px 0; display: inline-block; }
+  .cal-more       { font-size: 8px; }
+
+  /* Event modal: bottom sheet */
+  .ev-modal   { align-items: flex-end; }
+  .ev-modal-box { max-width: 100%; width: 100%; border-radius: 20px 20px 0 0; padding: 28px 24px 48px; }
+  .ev-modal-title { font-size: 20px; line-height: 1.3; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
+    background: #fff; border-top: 1px solid #F0EDE8; z-index: 50; align-items: stretch;
+  }
+  .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; color: #B0A9A3; transition: color .2s; border: none; background: transparent; padding: 0; }
+  .bnav-item.active { color: #C17B5B; }
+  .bnav-icon  { font-size: 18px; line-height: 1; }
+  .bnav-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -381,7 +595,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
  <div class="topbar">
   <div class="topbar-title" id="topbar-title">Todos os eventos</div>
   <div class="topbar-right">
-   <div class="live-badge"><span class="live-dot2"></span> Ao vivo</div>
    <div class="topbar-date" id="topbar-date"></div>
    <div class="view-toggle">
     <button class="view-btn active" id="btn-list" onclick="setView('list')">Lista</button>
@@ -394,6 +607,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   <div class="stat-cell"><div class="stat-icon">☀️</div><div class="stat-content"><div class="stat-num accent" id="stat-hoje">0</div><div class="stat-label">Hoje</div></div></div>
   <div class="stat-cell"><div class="stat-icon">📅</div><div class="stat-content"><div class="stat-num" id="stat-semana">0</div><div class="stat-label">Esta semana</div></div></div>
   <div class="stat-cell"><div class="stat-icon">✅</div><div class="stat-content"><div class="stat-num" id="stat-concluido">0</div><div class="stat-label">Concluídos</div></div></div>
+ </div>
+ <!-- Mobile stats: compact 1-line version (hidden on desktop) -->
+ <div class="stats-mobile" id="stats-mobile">
+  <span id="sm-aberto">0</span> <span class="sm-label">abertos</span>
+  <span class="sm-sep">·</span>
+  <span id="sm-hoje">0</span> <span class="sm-label">hoje</span>
+  <span class="sm-sep">·</span>
+  <span id="sm-semana">0</span> <span class="sm-label">semana</span>
  </div>
  <div class="content">
   <div class="filters">
@@ -429,8 +650,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
    </div>
    <!-- Week view -->
    <div id="cal-week-view" style="display:none;">
-    <div class="week-header" id="week-header"></div>
-    <div class="timeslot-grid" id="week-grid"></div>
+    <!-- Mobile: agenda list -->
+    <div class="week-list-view" id="week-list"></div>
+    <!-- Desktop: timeslot grid -->
+    <div class="week-grid-wrap">
+     <div class="week-header" id="week-header"></div>
+     <div class="timeslot-grid week-grid" id="week-grid"></div>
+    </div>
    </div>
   </div>
  </div>
@@ -614,6 +840,7 @@ function renderList() {
       const card = document.createElement('div');
       card.className = `event-card${done ? ' done' : ''}`;
       card.dataset.id = item.id;
+      card.dataset.cat = cat;  // for CSS category accent selectors
       card.dataset.position = item.position || 0;
       card.dataset.originalTask = item.task || item.description || '';
       card.style.borderLeftColor = color;
@@ -1328,6 +1555,179 @@ changeMonth = function(dir) {
   if (calSubView === 'week') { calNavPrev(); return; }
   _origChangeMonth(dir);
 };
+</script>
+
+
+<script>
+// ── MOBILE DASHBOARD ENHANCEMENTS ──────────────────────────────────────────────
+
+// ── Compact stats update ───────────────────────────────────────────────────────
+function updateMobileStats() {
+  const ab = document.getElementById('stat-aberto')?.textContent || '0';
+  const ho = document.getElementById('stat-hoje')?.textContent   || '0';
+  const se = document.getElementById('stat-semana')?.textContent || '0';
+  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  set('sm-aberto', ab); set('sm-hoje', ho); set('sm-semana', se);
+}
+
+// Patch updateStats to also update mobile compact
+if (typeof updateStats === 'function') {
+  const _origStats = updateStats;
+  updateStats = function() { _origStats(); updateMobileStats(); };
+}
+
+// ── cal-mode body class (hides .filters on mobile in calendar view) ────────────
+const _patchedSetView = setView;
+setView = function(v) {
+  _patchedSetView(v);
+  document.body.classList.toggle('cal-mode', v === 'calendar');
+};
+
+// ── Week List View (mobile): agenda list grouped by day ───────────────────────
+function renderWeekList() {
+  const container = document.getElementById('week-list');
+  if (!container) return;
+
+  const weekStart = startOfWeek(calWeekDate);
+  const ptDaysLong = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+
+  container.innerHTML = '';
+
+  let hasAny = false;
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart); d.setDate(d.getDate() + i);
+    const dStr = fmtDateStr(d);
+    const isT  = dStr === todayStr;
+
+    const dayItems = allItems.filter(it =>
+      it.scheduled_time && getLocalDateStr(it.scheduled_time) === dStr && !it.done
+    ).sort((a, b) => new Date(a.scheduled_time) - new Date(b.scheduled_time));
+
+    // Always show today + days with events; skip empty past/future days (keep today always)
+    const isPast = dStr < todayStr;
+    if (!isT && isPast && !dayItems.length) continue;
+
+    const dayWrap = document.createElement('div');
+    dayWrap.className = 'week-list-day';
+
+    // Day header
+    const hdr = document.createElement('div');
+    hdr.className = 'week-list-day-hdr';
+    const numSpan = document.createElement('span');
+    numSpan.className = 'wl-date' + (isT ? ' today' : '');
+    numSpan.textContent = d.getDate();
+    const lblSpan = document.createElement('span');
+    lblSpan.textContent = ptDaysLong[d.getDay()].charAt(0).toUpperCase() + ptDaysLong[d.getDay()].slice(1);
+    hdr.appendChild(numSpan);
+    hdr.appendChild(lblSpan);
+    dayWrap.appendChild(hdr);
+
+    if (!dayItems.length) {
+      const empty = document.createElement('div');
+      empty.className = 'week-list-empty';
+      empty.textContent = isT ? 'Dia livre' : 'Sem eventos';
+      dayWrap.appendChild(empty);
+    } else {
+      hasAny = true;
+      dayItems.forEach(item => {
+        const ev = document.createElement('div');
+        ev.className = 'week-list-event';
+        const cat = item.auto_category || 'outros';
+        const color = (typeof catColors !== 'undefined' ? catColors[cat] : null) || '#A8522A';
+        const time = item.scheduled_time
+          ? new Date(item.scheduled_time).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit',timeZone:TZ})
+          : '';
+        ev.innerHTML =
+          '<span class="wle-time">' + time + '</span>' +
+          '<span class="wle-dot" style="background:' + color + '"></span>' +
+          '<span class="wle-task">' + (item.task || '—') + '</span>';
+        ev.onclick = () => openEvModal(item);
+        dayWrap.appendChild(ev);
+      });
+    }
+
+    container.appendChild(dayWrap);
+  }
+}
+
+// ── Patch renderWeekView to also render week-list ─────────────────────────────
+if (typeof renderWeekView === 'function') {
+  const _origRenderWeekView = renderWeekView;
+  renderWeekView = function() {
+    _origRenderWeekView();
+    renderWeekList();
+  };
+}
+
+// ── Month view: tap day → open Day view ──────────────────────────────────────
+// Patch renderCalendar (month) to add onclick that opens Day view on mobile
+if (typeof _origRenderCalendar !== 'undefined') {
+  // _origRenderCalendar is the original month renderer — patch day click
+  const monthPatcher = () => {
+    if (window.innerWidth > 768) return;
+    document.querySelectorAll('#cal-grid .cal-day:not(.other-month)').forEach(dayEl => {
+      dayEl.style.cursor = 'pointer';
+      if (!dayEl._tapBound) {
+        dayEl._tapBound = true;
+        dayEl.addEventListener('click', () => {
+          const dayNum = dayEl.querySelector('.cal-day-num')?.textContent;
+          if (!dayNum) return;
+          const d = new Date(calMonth.getFullYear(), calMonth.getMonth(), parseInt(dayNum));
+          calDayDate = d;
+          setCalView('day');
+        });
+      }
+    });
+  };
+  // Run after each month render
+  const _latestRenderCal = renderCalendar;
+  renderCalendar = function() {
+    _latestRenderCal();
+    setTimeout(monthPatcher, 50);
+  };
+}
+
+// ── Swipe support for Day view ────────────────────────────────────────────────
+let _touchStartX = null;
+document.addEventListener('touchstart', e => {
+  if (document.getElementById('cal-day-view')?.style.display === '') {
+    _touchStartX = e.touches[0].clientX;
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  if (_touchStartX === null) return;
+  const dx = e.changedTouches[0].clientX - _touchStartX;
+  _touchStartX = null;
+  if (Math.abs(dx) < 50) return; // minimum swipe distance
+  if (dx < 0) { calDayDate.setDate(calDayDate.getDate() + 1); renderCalendar(); } // swipe left = next day
+  else         { calDayDate.setDate(calDayDate.getDate() - 1); renderCalendar(); } // swipe right = prev day
+}, { passive: true });
+
+// ── Category colors on ts-events (data-cat attribute) ────────────────────────
+// Patch buildEventsCol to add data-cat
+if (typeof buildEventsCol === 'function') {
+  const _origBuildEventsCol = buildEventsCol;
+  buildEventsCol = function(dayDateStr, weekColIdx, totalCols) {
+    const col = _origBuildEventsCol(dayDateStr, weekColIdx, totalCols);
+    // Add data-cat to each .ts-event
+    col.querySelectorAll('.ts-event').forEach(el => {
+      // Find matching item by title (approximate match)
+      const title = el.querySelector('.ts-ev-title')?.textContent || '';
+      const item = allItems.find(i => (i.task || '') === title);
+      if (item?.auto_category) el.dataset.cat = item.auto_category;
+    });
+    return col;
+  };
+}
+
+// ── Mobile: Day view as default when switching to calendar ───────────────────
+// Already handled by existing code in earlier script block
+// But ensure it re-renders after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  updateMobileStats();
+});
 </script>
 
 </body>
