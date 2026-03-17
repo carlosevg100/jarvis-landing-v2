@@ -249,6 +249,35 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans
 .date-edit-btns .save{background:var(--ink);color:white;}
 .date-edit-btns .cancel{background:var(--bg);color:var(--ink);}
 
+/* ── Lists view ── */
+#lists-view{display:none;}
+.lists-search{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:12px;background:transparent;color:var(--ink);outline:none;transition:border-color .2s;}
+.lists-search:focus{border-color:var(--accent);}
+.lists-name-filters{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 12px;}
+.lnf-chip{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;white-space:nowrap;letter-spacing:.2px;}
+.lnf-chip.active{background:var(--accent);color:white;border-color:var(--accent);}
+.list-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.list-card-hdr{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.list-card-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--accent);line-height:1.2;}
+.list-prog-txt{font-size:11px;color:var(--muted);flex-shrink:0;}
+.list-prog-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden;}
+.list-prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s;}
+.list-items-wrap{display:flex;flex-direction:column;}
+.list-item-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(240,237,232,.5);}
+.list-item-row:last-child{border-bottom:none;}
+.list-item-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.list-item-cb:hover{border-color:var(--accent);}
+.list-item-cb.checked{background:var(--accent);border-color:var(--accent);color:white;font-size:10px;}
+.list-item-txt{font-size:14px;color:var(--ink);font-weight:500;flex:1;line-height:1.4;}
+.list-item-txt.done{text-decoration:line-through;color:#B8B3AD;font-weight:400;}
+.list-add-trigger{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;cursor:pointer;margin-top:10px;padding-top:8px;border-top:1px dashed rgba(193,123,91,.2);transition:color .2s;}
+.list-add-trigger:hover{color:var(--accent);}
+.list-add-form{display:flex;gap:8px;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid rgba(193,123,91,.25);}
+.list-add-inp{flex:1;border:none;border-bottom:1.5px solid var(--accent);outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:transparent;padding:4px 0;}
+.list-add-inp::placeholder{color:var(--muted);}
+.list-add-save{font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:5px 10px;border-radius:4px;border:none;background:var(--accent);color:white;cursor:pointer;}
+.list-add-cancel{font-size:10px;padding:5px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;}
+
 /* ══════════════════════════
    MOBILE
    ══════════════════════════ */
@@ -325,6 +354,15 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans
   .bnav-icon{font-size:18px;line-height:1;}
   .bnav-label{font-size:9px;letter-spacing:1px;text-transform:uppercase;}
 
+  /* Lists view mobile */
+  .list-card{padding:14px 14px;}
+  .list-card-name{font-size:18px;}
+  .list-item-txt{font-size:13px;}
+  .lists-name-filters{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:8px;}
+  .lists-name-filters::-webkit-scrollbar{display:none;}
+  .lnf-chip{flex-shrink:0;}
+  .lists-search{font-size:12px;}
+
   /* Cat sheet */
   #cat-sheet{position:fixed;bottom:64px;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:40;padding:10px 0 8px;transform:translateY(100%);transition:transform .3s ease;}
   #cat-sheet.open{transform:translateY(0);}
@@ -379,6 +417,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans
       </div>
       <div class="view-toggle">
         <button class="view-btn active" id="btn-list" onclick="setView('list')">Lista</button>
+        <button class="view-btn" id="btn-listas" onclick="setView('lists')">Listas</button>
         <button class="view-btn" id="btn-cal" onclick="setView('calendar')">Calendário</button>
       </div>
     </div>
@@ -413,12 +452,18 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans
         <button class="filter-chip" id="calsub-week" onclick="setCalView('week')">Semana</button>
         <button class="filter-chip active" id="calsub-month" onclick="setCalView('month')">Mês</button>
       </div>
+      <div class="filter-bar" id="lists-filter-bar" style="display:none">
+        <input class="lists-search" type="search" placeholder="Buscar nas listas..." id="lists-search-input">
+      </div>
     </div>
 
     <!-- Content -->
     <div class="content">
       <!-- List view -->
       <div id="list-view"></div>
+
+      <!-- Lists view -->
+      <div id="lists-view"></div>
 
       <!-- Calendar view -->
       <div id="calendar-view" style="display:none">
@@ -453,8 +498,8 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans
 
 <!-- Bottom nav (mobile) -->
 <nav class="bottom-nav">
-  <button class="bnav-item active" id="bnav-list" onclick="setView('list');closeCatSheet()">
-    <span class="bnav-icon">≡</span><span class="bnav-label">Lista</span>
+  <button class="bnav-item active" id="bnav-list" onclick="setView('lists');closeCatSheet()">
+    <span class="bnav-icon">☰</span><span class="bnav-label">Lista</span>
   </button>
   <button class="bnav-item" id="bnav-cal" onclick="setView('calendar');closeCatSheet()">
     <span class="bnav-icon">⊞</span><span class="bnav-label">Calendário</span>
@@ -532,6 +577,7 @@ const todayStr   = fmtDateStr(today);
 // ── State ──────────────────────────────────────────────────────────────────────
 let allItems = [], user = null;
 let currentFilter = 'todos', currentCat = null, currentView = 'list';
+let listsSearchQuery = '', listsActiveList = null;
 let calMonth    = new Date(today.getFullYear(), today.getMonth(), 1);
 let calSubView  = 'month';
 let calDayDate  = new Date(today);
@@ -614,6 +660,7 @@ async function loadItems() {
   allItems = Array.isArray(items) ? items : [];
   updateStats();
   if (currentView === 'list') renderList();
+  else if (currentView === 'lists') renderLists();
   else renderCalendar();
 }
 
@@ -639,7 +686,7 @@ function updateStats() {
 
 // ── Filtered items ─────────────────────────────────────────────────────────────
 function filteredItems() {
-  let items = [...allItems];
+  let items = allItems.filter(i => i.list_name == null);
   if (currentCat) items = items.filter(i=>i.auto_category===currentCat);
   if (currentFilter==='hoje')  items = items.filter(i=>getLocalDateStr(i.scheduled_time)===todayStr);
   else if (currentFilter==='semana') items = items.filter(i=>{const d=getLocalDateStr(i.scheduled_time);return d&&d>=todayStr&&d<=getWeekEndStr();});
@@ -733,18 +780,22 @@ async function toggleDone(id, ev) {
 function setView(v) {
   currentView = v;
   document.getElementById('list-view').style.display      = v==='list' ? '' : 'none';
+  document.getElementById('lists-view').style.display     = v==='lists' ? '' : 'none';
   document.getElementById('calendar-view').style.display  = v==='calendar' ? '' : 'none';
   document.getElementById('btn-list').classList.toggle('active', v==='list');
+  document.getElementById('btn-listas').classList.toggle('active', v==='lists');
   document.getElementById('btn-cal').classList.toggle('active',  v==='calendar');
   document.getElementById('nav-list').classList.toggle('active', v==='list');
   document.getElementById('nav-cal').classList.toggle('active',  v==='calendar');
   // Swap filter bars
-  document.getElementById('list-filter-bar').style.display = v==='list' ? '' : 'none';
-  document.getElementById('cal-filter-bar').style.display  = v==='calendar' ? '' : 'none';
+  document.getElementById('list-filter-bar').style.display  = v==='list' ? '' : 'none';
+  document.getElementById('lists-filter-bar').style.display = v==='lists' ? '' : 'none';
+  document.getElementById('cal-filter-bar').style.display   = v==='calendar' ? '' : 'none';
   // Bottom nav
-  document.getElementById('bnav-list')?.classList.toggle('active', v==='list');
+  document.getElementById('bnav-list')?.classList.toggle('active', v==='lists');
   document.getElementById('bnav-cal')?.classList.toggle('active',  v==='calendar');
   document.getElementById('bnav-cat')?.classList.remove('active');
+  if (v === 'lists') { renderLists(); return; }
 
   if (v === 'calendar') {
     // Auto-navigate to month of next upcoming event if current month empty
@@ -1066,6 +1117,150 @@ function openEvModal(item) {
   document.getElementById('ev-modal').classList.add('show');
 }
 function closeEvModal() { document.getElementById('ev-modal').classList.remove('show'); }
+
+// ── Lists view ─────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function renderLists() {
+  const container = document.getElementById('lists-view');
+  if (!container) return;
+
+  const q = listsSearchQuery.toLowerCase();
+  const listItems = allItems.filter(i => i.list_name != null);
+  const listNames = [...new Set(listItems.map(i => i.list_name))].sort();
+
+  // Name filter chips
+  let html = '<div class="lists-name-filters">';
+  html += `<button class="lnf-chip${!listsActiveList?' active':''}" data-filter="">Todas</button>`;
+  listNames.forEach(name => {
+    html += `<button class="lnf-chip${listsActiveList===name?' active':''}" data-filter="${escHtml(name)}">${escHtml(name)}</button>`;
+  });
+  html += '</div>';
+
+  // Apply filters
+  let filtered = listItems;
+  if (listsActiveList) filtered = filtered.filter(i => i.list_name === listsActiveList);
+  if (q) filtered = filtered.filter(i =>
+    (i.task||i.description||'').toLowerCase().includes(q) ||
+    (i.list_name||'').toLowerCase().includes(q)
+  );
+
+  // Group by list_name
+  const groups = {};
+  filtered.forEach(item => {
+    if (!groups[item.list_name]) groups[item.list_name] = [];
+    groups[item.list_name].push(item);
+  });
+
+  const groupNames = Object.keys(groups).sort();
+  if (!groupNames.length) {
+    container.innerHTML = html + `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Nenhuma lista ainda.</div><div class="empty-sub">Crie listas pelo WhatsApp com o Jarvis — como "lista de compras" ou "lista de tarefas".</div></div>`;
+    attachListsEvents(container);
+    return;
+  }
+
+  groupNames.forEach(listName => {
+    const items = groups[listName];
+    const total = items.length;
+    const done = items.filter(i => i.list_checked).length;
+    const pct = total > 0 ? Math.round(done/total*100) : 0;
+
+    html += `<div class="list-card" data-list-name="${escHtml(listName)}">`;
+    html += `<div class="list-card-hdr"><div class="list-card-name">${escHtml(listName)}</div><div class="list-prog-txt">${done}/${total} feito${done!==1?'s':''}</div></div>`;
+    html += `<div class="list-prog-bar"><div class="list-prog-fill" style="width:${pct}%"></div></div>`;
+    html += `<div class="list-items-wrap">`;
+
+    // Sort: unchecked first
+    const sorted = [...items].sort((a,b) => (a.list_checked?1:0)-(b.list_checked?1:0));
+    sorted.forEach(item => {
+      const checked = item.list_checked === true;
+      const text = escHtml(item.task||item.description||'');
+      html += `<div class="list-item-row">`;
+      html += `<div class="list-item-cb${checked?' checked':''}" data-id="${item.id}" data-checked="${checked}">${checked?'✓':''}</div>`;
+      html += `<span class="list-item-txt${checked?' done':''}">${text}</span>`;
+      html += `</div>`;
+    });
+
+    html += `</div>`;
+    html += `<div class="list-add-trigger"><span style="font-size:15px;line-height:1">+</span> Adicionar item</div>`;
+    html += `</div>`;
+  });
+
+  container.innerHTML = html;
+  attachListsEvents(container);
+}
+
+let _listsClickBound = false;
+function attachListsEvents(container) {
+  // Search input live binding
+  const searchEl = document.getElementById('lists-search-input');
+  if (searchEl && !searchEl._bound) {
+    searchEl._bound = true;
+    searchEl.value = listsSearchQuery;
+    searchEl.addEventListener('input', () => { listsSearchQuery = searchEl.value; renderLists(); });
+  }
+
+  // Bind click delegation once on the container (persists across re-renders since container element stays)
+  if (!_listsClickBound) {
+    _listsClickBound = true;
+    container.addEventListener('click', function(e) {
+      const chip = e.target.closest('.lnf-chip');
+      if (chip) { listsActiveList = chip.dataset.filter || null; renderLists(); return; }
+      const cb = e.target.closest('.list-item-cb');
+      if (cb) { toggleListChecked(cb.dataset.id, cb.dataset.checked !== 'true'); return; }
+      const trigger = e.target.closest('.list-add-trigger');
+      if (trigger) { openListAddForm(trigger.closest('.list-card'), trigger.closest('.list-card').dataset.listName); return; }
+    });
+  }
+}
+
+async function toggleListChecked(id, checked) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  item.list_checked = checked;
+  renderLists();
+  try {
+    await apiPatch('/d/item/' + id, {list_checked: checked});
+  } catch(e) {
+    item.list_checked = !checked;
+    renderLists();
+    showToast('Erro ao atualizar.', true);
+  }
+}
+
+function openListAddForm(card, listName) {
+  const trigger = card.querySelector('.list-add-trigger');
+  if (!trigger) return;
+  trigger.style.display = 'none';
+  const form = document.createElement('div');
+  form.className = 'list-add-form';
+  form.innerHTML = `<input class="list-add-inp" placeholder="Novo item..."><button class="list-add-save">Salvar</button><button class="list-add-cancel">×</button>`;
+  card.appendChild(form);
+  const inp = form.querySelector('.list-add-inp');
+  inp.focus();
+  form.querySelector('.list-add-save').addEventListener('click', () => submitListItem(inp, listName, form, trigger));
+  form.querySelector('.list-add-cancel').addEventListener('click', () => { form.remove(); trigger.style.display = ''; });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitListItem(inp, listName, form, trigger);
+    if (e.key === 'Escape') { form.remove(); trigger.style.display = ''; }
+  });
+}
+
+async function submitListItem(inp, listName, form, trigger) {
+  const task = inp.value.trim();
+  if (!task) { inp.focus(); return; }
+  inp.disabled = true;
+  try {
+    await apiPost('/d/item', {task, list_name: listName, list_checked: false, category: 'list_item'});
+    showToast('Item adicionado.');
+    await loadItems();
+  } catch(e) {
+    inp.disabled = false;
+    showToast('Erro ao adicionar.', true);
+  }
+}
 
 // ── Swipe support for Day view ─────────────────────────────────────────────────
 let _touchStartX=null;
