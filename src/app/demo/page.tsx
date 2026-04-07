@@ -1,0 +1,868 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import {
+  Phone,
+  Calendar,
+  Search,
+  CreditCard,
+  MapPin,
+  FileText,
+  Brain,
+  Shield,
+  Mic,
+  MessageSquare,
+  ChevronRight,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
+import { fadeBlurUp, staggerContainer, viewportConfig } from "@/lib/animations";
+import SectionLabel from "@/components/ui/SectionLabel";
+import RemotionPlayer from "@/components/ui/RemotionPlayer";
+import { ExecutionAnimation } from "@/remotion/compositions/ExecutionAnimation";
+import { IntelligenceAnimation } from "@/remotion/compositions/IntelligenceAnimation";
+
+// ─── Capability Data ─────────────────────────────────────────────────────────
+type Capability = {
+  icon: typeof Phone;
+  title: string;
+  description: string;
+  example: string;
+  maturity: "live" | "beta" | "soon";
+};
+
+const capabilities: Capability[] = [
+  {
+    icon: Calendar,
+    title: "Agenda inteligente",
+    description: "Extrai compromissos de qualquer mensagem. Sync com Google, Apple, Outlook.",
+    example: '"Reuniao de pais amanha 19h" → agendado + lembrete',
+    maturity: "live",
+  },
+  {
+    icon: Phone,
+    title: "Liga por voce",
+    description: "Liga pra consultorio, SAC, cliente. Conversa, navega URA, retorna o resultado.",
+    example: '"Liga pro Dr. Alberto e marca consulta" → feito',
+    maturity: "live",
+  },
+  {
+    icon: Search,
+    title: "Busca perto de voce",
+    description: "Restaurante, farmacia, medico. Filtra por convenio, horario, distancia.",
+    example: '"Farmacia aberta perto de mim" → 3 opcoes + Waze',
+    maturity: "live",
+  },
+  {
+    icon: CreditCard,
+    title: "Controle financeiro",
+    description: "Registra gastos, categoriza, mostra resumo mensal por categoria.",
+    example: '"Quanto gastei esse mes?" → R$4.230 por categoria',
+    maturity: "live",
+  },
+  {
+    icon: FileText,
+    title: "Cofre de documentos",
+    description: "Guarda CPF, RG, convenio, passaporte. Usa automaticamente quando precisa.",
+    example: '"Qual o CPF da minha esposa?" → enviado do cofre',
+    maturity: "live",
+  },
+  {
+    icon: Brain,
+    title: "Memoria contextual",
+    description: "Aprende preferencias, horarios, familia. Melhora com o uso.",
+    example: "Sabe que voce prefere consulta de manha e japones no Itaim",
+    maturity: "live",
+  },
+  {
+    icon: MapPin,
+    title: "Reserva restaurante",
+    description: "Encontra, verifica disponibilidade, confirma a reserva. Voce so aparece.",
+    example: '"Reserva Fasano sexta 20h 4 pessoas" → confirmado',
+    maturity: "beta",
+  },
+  {
+    icon: Mic,
+    title: "Cancela servicos",
+    description: "Liga pro SAC da operadora, navega menu automatico, faz o cancelamento por voce.",
+    example: '"Cancela minha Claro" → ligou, cancelou, confirmou',
+    maturity: "beta",
+  },
+  {
+    icon: MessageSquare,
+    title: "Busca voos",
+    description: "Google Flights + milhas em paralelo. Compara precos, mostra como emitir.",
+    example: '"Voo SP-Miami marco" → 12 opcoes em 30 segundos',
+    maturity: "soon",
+  },
+];
+
+const maturityLabels = {
+  live: { label: "Funcionando", dotColor: "bg-[#4A8C6F]", textColor: "text-[#4A8C6F]" },
+  beta: { label: "Em beta", dotColor: "bg-[#D4A843]", textColor: "text-[#B89530]" },
+  soon: { label: "Em breve", dotColor: "bg-[#8E8C84]", textColor: "text-[#8E8C84]" },
+};
+
+// ─── Rotating command examples ───────────────────────────────────────────────
+const commands = [
+  { cmd: "/faz marcar dermato", result: "Agendado em 47 segundos." },
+  { cmd: "/faz ligar pro Ricardo", result: "Ligou, conversou, retornou." },
+  { cmd: "/faz cancelar Claro", result: "SAC navegado, cancelado." },
+  { cmd: "/faz reservar Fasano", result: "Sexta 20h, 4 pessoas. Confirmado." },
+  { cmd: "/faz buscar voo SP-Miami", result: "12 opcoes. Milhas + dinheiro." },
+];
+
+// ─── How it works steps ──────────────────────────────────────────────────────
+const steps = [
+  { num: "01", title: "Voce manda", desc: "Texto, audio, foto, PDF. Como quiser. No WhatsApp que ja ta no seu bolso." },
+  { num: "02", title: "Jarvis entende", desc: "IA multimodal processa, extrai dados, entende o contexto e decide o que fazer." },
+  { num: "03", title: "Jarvis executa", desc: "Liga, agenda, busca, reserva, cancela. Sem voce precisar fazer nada." },
+  { num: "04", title: "Voce recebe", desc: "Confirmacao no WhatsApp. Consulta agendada. Reserva feita. Voo encontrado." },
+];
+
+// ─── Pain points ─────────────────────────────────────────────────────────────
+const painPoints = [
+  {
+    emoji: "🏥", task: "Marcar consulta",
+    without: ["Abrir Doctoralia", "Filtrar por convenio", "Ligar pra 3 consultorios", "Soletrar nome e CPF", "Negociar horario", "Colocar no calendario"],
+    timeWithout: "47 min",
+    with: '"marca meu dermato"',
+    timeWith: "47 seg",
+  },
+  {
+    emoji: "✈️", task: "Achar voo com milhas",
+    without: ["Entrar no Smiles", "Entrar na Livelo", "Abrir Google Flights", "Comparar 4 abas", "Calcular milhas vs dinheiro", "Desistir"],
+    timeWithout: "2h+ (e desistiu)",
+    with: '"voo SP Miami com milhas"',
+    timeWith: "30 seg",
+  },
+  {
+    emoji: "🍽️", task: "Reservar restaurante",
+    without: ["Pensar onde ir", "Pesquisar no Google", "Ligar ou entrar no site", "Confirmar com a esposa", "Reservar de novo", "Colocar no calendario"],
+    timeWithout: "35 min",
+    with: '"reserva japones pra sexta"',
+    timeWith: "1 min",
+  },
+];
+
+// ─── WhatsApp Mockup ─────────────────────────────────────────────────────────
+function MascotAvatar({ size = 36 }: { size?: number }) {
+  return (
+    <div
+      className="rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
+      style={{ width: size, height: size, background: "linear-gradient(135deg, #C4B8A8 0%, #A89B8C 100%)" }}
+    >
+      <svg width={size * 0.7} height={size * 0.7} viewBox="0 0 28 28" fill="none">
+        <rect x="4" y="2" width="20" height="20" rx="8" fill="#B8AA98" />
+        <path d="M9 14 C11 17, 17 17, 19 14" stroke="#D4A843" strokeWidth="1.8" strokeLinecap="round" fill="none" style={{ filter: "drop-shadow(0 0 2px rgba(212,168,67,0.6))" }} />
+        <rect x="9" y="22" width="10" height="5" rx="3" fill="#A89B8C" />
+      </svg>
+    </div>
+  );
+}
+
+function WhatsAppChat({ chat }: { chat: { sender: string; text: string; isSuccess?: boolean }[] }) {
+  return (
+    <div className="w-full max-w-[380px]">
+      <div className="bg-[#E5DDD5] rounded-[24px] border-[3px] border-[#1A1A1A]/10 overflow-hidden shadow-xl">
+        <div className="bg-[#075E54] px-4 py-3 flex items-center gap-3">
+          <MascotAvatar size={36} />
+          <div>
+            <p className="text-white text-sm font-medium font-outfit">Jarvis</p>
+            <p className="text-white/60 text-[10px] font-outfit">online</p>
+          </div>
+        </div>
+        <div className="px-3 py-4 flex flex-col gap-2 min-h-[280px]">
+          {chat.map((msg, i) => {
+            const isUser = msg.sender === "user";
+            return (
+              <div key={i} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-[155%] whitespace-pre-line font-outfit ${
+                  isUser
+                    ? "bg-[#DCF8C6] text-[#111B21] rounded-tr-sm"
+                    : msg.isSuccess
+                    ? "bg-[#D4EDDA] text-[#111B21] rounded-tl-sm border border-[#4A8C6F]/20"
+                    : "bg-white text-[#111B21] rounded-tl-sm shadow-sm"
+                }`}>
+                  {msg.text}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="bg-[rgba(74,140,111,0.08)] border-t border-[rgba(74,140,111,0.1)] py-2 text-center">
+          <span className="font-outfit text-[9px] font-bold tracking-[0.2em] uppercase text-[var(--success)]">
+            Em producao — Nao eh demo
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Showcase conversations ──────────────────────────────────────────────────
+const showcaseConversation = [
+  { sender: "user", text: "marca dermato pra mim" },
+  { sender: "jarvis", text: "Vi que seu plano eh SulAmerica Executivo. Vou buscar dermatologistas perto de voce que aceitam." },
+  { sender: "jarvis", text: "Encontrei 3 opcoes:\n\n1. Dra. Marina Luz\n   ter 14h · 850m · ⭐ 4.8\n\n2. Clinica Derma Plus\n   qua 10h · 1.2km · ⭐ 4.6\n\n3. Dr. Paulo Mendes\n   qui 16h · 2km · ⭐ 4.9" },
+  { sender: "user", text: "3" },
+  { sender: "jarvis", text: "Preciso do seu CPF pra confirmar. Posso usar o que ta no cofre?" },
+  { sender: "user", text: "sim" },
+  { sender: "jarvis", text: "✓ Agendado!\nDr. Paulo Mendes — qui 16h\nR. Oscar Freire, 1340 — Jardins\n\n📅 Calendario atualizado\n☐ Levar exames recentes\n☐ Carteirinha do convenio\n\nVou te lembrar 1h antes com Waze.", isSuccess: true },
+];
+
+const callConversation = [
+  { sender: "user", text: "liga pro consultorio do Dr. Alberto e marca consulta pra semana que vem de manha" },
+  { sender: "jarvis", text: "Ligando pro consultorio." },
+  { sender: "jarvis", text: "📞 Resultado da ligacao\n\nConsulta agendada. Terca 9h, Dr. Alberto.\nCadu (assistente) pediu pra levar exames recentes.\n\nDuracao: 2min 34s", isSuccess: true },
+  { sender: "user", text: "perfeito. coloca na agenda." },
+  { sender: "jarvis", text: "Feito. Lembrete 1h antes." },
+];
+
+// ─── Phone mask ──────────────────────────────────────────────────────────────
+function phoneMask(value: string): string {
+  let v = value.replace(/\D/g, "").slice(0, 11);
+  if (v.length > 6) v = "(" + v.slice(0, 2) + ") " + v.slice(2, 7) + "-" + v.slice(7);
+  else if (v.length > 2) v = "(" + v.slice(0, 2) + ") " + v.slice(2);
+  else if (v.length > 0) v = "(" + v;
+  return v;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// MAIN PAGE
+// ═════════════════════════════════════════════════════════════════════════════
+export default function DemoPage() {
+  const [cmdIndex, setCmdIndex] = useState(0);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCmdIndex((prev) => (prev + 1) % commands.length);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  const handleSubmit = async () => {
+    setError("");
+    if (!name.trim()) { setError("Informe seu nome."); return; }
+    const phoneRaw = phone.replace(/\D/g, "");
+    if (phoneRaw.length !== 11) { setError("WhatsApp deve ter 11 digitos."); return; }
+    if (!email.trim() || !email.includes("@")) { setError("Informe um email valido."); return; }
+
+    setLoading(true);
+    try {
+      const phoneNum = phoneRaw.startsWith("55") ? phoneRaw : "55" + phoneRaw;
+      const res = await fetch("https://jarvis-backend-six.vercel.app/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          whatsapp_number: phoneNum,
+          email: email.trim(),
+          source: "fakedoor",
+        }),
+      });
+      if (res.ok || res.status === 409) {
+        setDone(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Erro ao cadastrar. Tente novamente.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Erro de conexao. Tente novamente.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[var(--bg-primary)] overflow-hidden">
+      {/* ═══ NAV ═══ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[rgba(250,248,245,0.85)] backdrop-blur-[60px] border-b border-[var(--border-subtle)]">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-10 flex items-center justify-between h-16">
+          <a href="/demo">
+            <span className="font-jetbrains font-bold text-xl tracking-[-0.04em] text-[var(--text-primary)]">jarvis</span>
+          </a>
+          <button
+            onClick={scrollToForm}
+            className="inline-flex items-center px-5 py-2 rounded-button border-2 border-[var(--border-button)] text-[var(--text-primary)] text-sm font-outfit font-medium hover:bg-[rgba(0,0,0,0.04)] transition-colors"
+          >
+            Quero acesso
+          </button>
+        </div>
+      </nav>
+
+      {/* ═══ HERO ═══ */}
+      <section
+        className="relative min-h-screen flex items-center overflow-hidden"
+        style={{ background: "linear-gradient(160deg, #FAF8F5 0%, #EDE8E3 50%, #DDD5CE 100%)" }}
+      >
+        <div className="absolute top-[-200px] right-[-100px] w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%)" }} />
+
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          className="mx-auto max-w-[1200px] px-6 lg:px-10 pt-28 pb-20 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center"
+        >
+          {/* Left — Text */}
+          <motion.div variants={fadeBlurUp} className="flex flex-col gap-6 z-10">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[rgba(74,140,111,0.08)] border border-[rgba(74,140,111,0.15)] text-[13px] font-outfit text-[#4A8C6F]">
+                <span className="w-2 h-2 rounded-full bg-[#4A8C6F] animate-pulse" />
+                Em producao — usuarios reais
+              </span>
+            </div>
+
+            <h1 className="font-outfit font-medium text-[clamp(40px,6.5vw,64px)] leading-[105%] tracking-[-0.03em] text-[var(--text-primary)]">
+              O primeiro assistente
+              <br />
+              <span className="text-[var(--accent-highlight)]">autonomo</span> do Brasil.
+            </h1>
+
+            {/* Rotating commands */}
+            <div className="min-h-[4.5em] relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={cmdIndex}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="font-outfit text-[clamp(16px,2vw,20px)] leading-[150%]"
+                >
+                  <span className="font-jetbrains font-bold text-[var(--text-primary)] bg-[rgba(65,62,62,0.07)] px-2 py-0.5 rounded-md">
+                    {commands[cmdIndex].cmd}
+                  </span>{" "}
+                  <span className="text-[var(--text-body)]">{commands[cmdIndex].result}</span>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <p className="font-outfit text-[16px] leading-[170%] text-[var(--text-body)] max-w-[440px]">
+              Voce manda no WhatsApp. Jarvis agenda, liga, reserva, cancela e resolve.
+              Sem baixar nada. Sem aprender nada.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start gap-4 mt-2">
+              <button
+                onClick={scrollToForm}
+                className="inline-flex items-center justify-center gap-2 rounded-button font-outfit font-medium transition-all duration-200 cursor-pointer bg-[var(--text-primary)] text-white hover:bg-[#2A2724] px-8 py-4 text-base"
+              >
+                Quero ser dos primeiros
+                <ArrowRight size={18} />
+              </button>
+              <a
+                href="#na-pratica"
+                className="inline-flex items-center justify-center rounded-button font-outfit font-medium transition-all duration-200 cursor-pointer border-2 border-[var(--border-button)] bg-transparent text-[var(--text-primary)] hover:bg-[rgba(0,0,0,0.04)] px-8 py-4 text-base"
+              >
+                Ver como funciona
+              </a>
+            </div>
+
+            <p className="font-outfit text-[13px] text-[var(--text-secondary)]">
+              Vagas limitadas no beta. Sem cartao.
+            </p>
+          </motion.div>
+
+          {/* Right — Hero Video */}
+          <motion.div variants={fadeBlurUp} className="flex justify-center lg:justify-end z-10">
+            <div className="relative w-full max-w-[480px]">
+              <div className="overflow-hidden rounded-[32px]" style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.12))" }}>
+                <video
+                  src="/images/jarvis-hero.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-[360px] lg:h-[440px] object-cover object-center"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ═══ STATS BAR ═══ */}
+      <section className="border-y border-[var(--border-subtle)] bg-white/40">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-10 py-8 flex flex-wrap justify-center gap-8 lg:gap-16">
+          {[
+            { value: "100%", label: "WhatsApp" },
+            { value: "47s", label: "pra agendar consulta" },
+            { value: "24/7", label: "disponivel" },
+            { value: "0", label: "apps pra baixar" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <p className="font-jetbrains font-bold text-2xl lg:text-3xl text-[var(--text-primary)]">{stat.value}</p>
+              <p className="font-outfit text-[13px] text-[var(--text-secondary)] mt-1">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ PAIN — Before vs After ═══ */}
+      <section className="mx-auto max-w-[1200px] px-6 lg:px-10 py-section">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={viewportConfig}
+          >
+            <motion.div variants={fadeBlurUp}>
+              <SectionLabel>O problema</SectionLabel>
+              <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,4vw,48px)] leading-[115%] tracking-[-0.02em] text-[var(--text-primary)]">
+                Voce gasta mais tempo
+                <br />
+                <span className="text-[var(--text-secondary)]">organizando</span> sua vida
+                <br />
+                do que <span className="text-[var(--text-secondary)]">vivendo</span> ela.
+              </h2>
+            </motion.div>
+
+            <motion.p variants={fadeBlurUp} className="mt-6 font-outfit text-[clamp(16px,2vw,20px)] leading-[160%] text-[var(--text-body)] max-w-[480px]">
+              Cada tarefa simples vira uma jornada por 3 apps, 2 ligacoes e 40 minutos.
+            </motion.p>
+
+            <motion.div variants={fadeBlurUp} className="mt-8">
+              <Image
+                src="/images/jarvis-sitting.jpg"
+                alt="Jarvis mascot"
+                width={400}
+                height={280}
+                className="rounded-[24px] object-cover"
+                style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08))" }}
+              />
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={viewportConfig}
+            className="flex flex-col gap-5"
+          >
+            {painPoints.map((p) => (
+              <motion.div key={p.task} variants={fadeBlurUp} className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card overflow-hidden">
+                <div className="p-5 border-b border-[var(--border-subtle)]">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span>{p.emoji}</span>
+                      <span className="font-outfit font-medium text-[15px] text-[var(--text-primary)]">{p.task}</span>
+                    </div>
+                    <span className="font-outfit font-bold text-[10px] tracking-[0.15em] uppercase text-[rgba(26,23,20,0.35)]">Sem Jarvis</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mb-2">
+                    {p.without.map((step, i) => (
+                      <span key={i} className="font-outfit text-[11px] text-[var(--text-secondary)] bg-[rgba(26,23,20,0.04)] px-2 py-1 rounded-md">{step}</span>
+                    ))}
+                  </div>
+                  <p className="font-jetbrains text-[12px] text-[var(--accent-highlight)] font-bold text-right">{p.timeWithout}</p>
+                </div>
+                <div className="p-5 bg-[rgba(74,140,111,0.04)]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-outfit font-bold text-[10px] tracking-[0.15em] uppercase text-[var(--success)]">Com Jarvis</span>
+                    <span className="font-jetbrains text-[12px] text-[var(--success)] font-bold">{p.timeWith}</span>
+                  </div>
+                  <p className="font-jetbrains font-bold text-[14px] text-[var(--text-primary)]">{p.with}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ SHOWCASE — Full Conversation ═══ */}
+      <section id="na-pratica" className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
+          <motion.div variants={fadeBlurUp} initial="initial" whileInView="animate" viewport={viewportConfig} className="mb-16 max-w-[600px]">
+            <SectionLabel>Na pratica</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,4vw,48px)] leading-[115%] tracking-[-0.02em] text-[var(--text-primary)]">
+              Uma mensagem.
+              <br />
+              Jarvis faz o resto.
+            </h2>
+            <p className="mt-4 font-outfit text-[clamp(16px,2vw,20px)] leading-[150%] text-[var(--text-body)]">
+              Cada pedido encadeia 5-8 etapas automaticamente.{" "}
+              <span className="font-jetbrains font-bold text-[var(--text-primary)]">Tudo numa conversa de WhatsApp</span>.
+            </p>
+          </motion.div>
+
+          {/* Use case 1: Agendar consulta */}
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={viewportConfig}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start mb-24"
+          >
+            <motion.div variants={fadeBlurUp}>
+              <span className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-3 block">Consulta medica</span>
+              <h3 className="font-outfit font-medium text-[clamp(22px,3vw,32px)] leading-[120%] text-[var(--text-primary)] mb-6">
+                <span className="font-jetbrains font-bold bg-[rgba(65,62,62,0.06)] px-2 py-1 rounded-lg text-[0.9em]">/faz marcar dermato</span>
+              </h3>
+
+              <div className="flex flex-col gap-1 mb-6">
+                {[
+                  { step: "Entende", desc: "Voce quer um dermatologista" },
+                  { step: "Memoria", desc: "Puxa seu plano (SulAmerica) e regiao" },
+                  { step: "Busca", desc: "Acha dermatologistas que aceitam SulAmerica" },
+                  { step: "Opcoes", desc: "Mostra 3 opcoes com distancia e horarios" },
+                  { step: "Agenda", desc: "Voce escolhe, Jarvis confirma" },
+                  { step: "Calendario", desc: "Google Calendar atualizado + endereco" },
+                  { step: "Lembrete", desc: "1h antes: Waze + checklist" },
+                ].map((c, i) => (
+                  <div key={c.step} className="flex items-start gap-3 py-2 border-l-2 border-[var(--border-light)] pl-4">
+                    <span className="w-6 h-6 rounded-full bg-[var(--text-primary)] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                    <div>
+                      <span className="font-outfit font-medium text-[13px] text-[var(--text-primary)]">{c.step}</span>
+                      <span className="font-outfit text-[13px] text-[var(--text-secondary)]"> — {c.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Image src="/images/jarvis-features.jpg" alt="Jarvis execution" width={400} height={240} className="rounded-[20px] object-cover w-full" style={{ filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.06))" }} />
+            </motion.div>
+
+            <motion.div variants={fadeBlurUp} className="flex justify-center">
+              <WhatsAppChat chat={showcaseConversation} />
+            </motion.div>
+          </motion.div>
+
+          {/* Use case 2: Ligacao */}
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={viewportConfig}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start"
+          >
+            <motion.div variants={fadeBlurUp} className="flex justify-center lg:order-1">
+              <WhatsAppChat chat={callConversation} />
+            </motion.div>
+
+            <motion.div variants={fadeBlurUp} className="lg:order-2">
+              <span className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-3 block">Ligacao autonoma</span>
+              <h3 className="font-outfit font-medium text-[clamp(22px,3vw,32px)] leading-[120%] text-[var(--text-primary)] mb-6">
+                <span className="font-jetbrains font-bold bg-[rgba(65,62,62,0.06)] px-2 py-1 rounded-lg text-[0.9em]">/faz ligar pro Dr. Alberto</span>
+              </h3>
+
+              <p className="font-outfit text-[clamp(15px,2vw,18px)] leading-[160%] text-[var(--text-body)] mb-6">
+                Jarvis pega o telefone, liga, conversa com a secretaria, agenda e retorna o resultado.
+                Voce recebe a confirmacao no WhatsApp.
+              </p>
+
+              <div className="flex flex-col gap-1 mb-6">
+                {[
+                  { step: "Liga", desc: "Discagem automatica pro consultorio" },
+                  { step: "Conversa", desc: "Interage com a secretaria naturalmente" },
+                  { step: "Agenda", desc: "Negocia horario e confirma" },
+                  { step: "Retorna", desc: "Envia resultado completo com transcript" },
+                  { step: "Calendario", desc: "Atualiza automaticamente" },
+                ].map((c, i) => (
+                  <div key={c.step} className="flex items-start gap-3 py-2 border-l-2 border-[var(--border-light)] pl-4">
+                    <span className="w-6 h-6 rounded-full bg-[var(--text-primary)] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                    <div>
+                      <span className="font-outfit font-medium text-[13px] text-[var(--text-primary)]">{c.step}</span>
+                      <span className="font-outfit text-[13px] text-[var(--text-secondary)]"> — {c.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Image src="/images/jarvis-voice.jpg" alt="Jarvis voice" width={400} height={240} className="rounded-[20px] object-cover w-full" style={{ filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.06))" }} />
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ EXECUTION — Remotion Animation ═══ */}
+      <section className="mx-auto max-w-[1200px] px-6 lg:px-10 py-section">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-16">
+          <motion.div variants={fadeBlurUp} initial="initial" whileInView="animate" viewport={viewportConfig}>
+            <SectionLabel>Execucao</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(24px,4vw,44px)] leading-[120%] tracking-[-0.02em] text-[var(--text-primary)]">
+              Nenhum assistente no Brasil faz isso.
+              <br />
+              Literalmente.
+            </h2>
+            <p className="mt-4 font-outfit text-[clamp(16px,2vw,20px)] leading-[130%] text-[var(--text-body)]">
+              Siri sugere. Alexa responde. Google mostra links.
+              <br />
+              Jarvis{" "}
+              <span className="font-jetbrains font-bold text-[var(--text-primary)] bg-[rgba(65,62,62,0.07)] px-2 py-0.5 rounded-md">/faz</span>.
+            </p>
+          </motion.div>
+
+          <motion.div variants={fadeBlurUp} initial="initial" whileInView="animate" viewport={viewportConfig}>
+            <RemotionPlayer component={ExecutionAnimation} durationInFrames={300} />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ CAPABILITIES GRID ═══ */}
+      <section className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          whileInView="animate"
+          viewport={viewportConfig}
+          className="mx-auto max-w-[1200px] px-6 lg:px-10"
+        >
+          <motion.div variants={fadeBlurUp} className="text-center mb-16">
+            <SectionLabel>Capacidades</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,5vw,48px)] leading-[110%] tracking-[-0.02em] text-[var(--text-primary)]">
+              O que Jarvis ja faz.
+              <br />
+              <span className="text-[var(--text-secondary)]">E o que esta chegando.</span>
+            </h2>
+          </motion.div>
+
+          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {capabilities.map((cap) => {
+              const mat = maturityLabels[cap.maturity];
+              const Icon = cap.icon;
+              return (
+                <motion.div
+                  key={cap.title}
+                  variants={fadeBlurUp}
+                  className="group relative bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-6 hover:bg-white hover:border-[rgba(0,0,0,0.08)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.04)] transition-all duration-300"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-[rgba(65,62,62,0.04)] flex items-center justify-center">
+                      <Icon size={20} className="text-[var(--text-primary)]/50" />
+                    </div>
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-outfit font-medium ${mat.textColor} bg-[rgba(0,0,0,0.03)]`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${mat.dotColor}`} />
+                      {mat.label}
+                    </span>
+                  </div>
+                  <h3 className="font-outfit font-medium text-lg text-[var(--text-primary)] mb-2">{cap.title}</h3>
+                  <p className="font-outfit text-[14px] leading-[160%] text-[var(--text-secondary)] mb-4">{cap.description}</p>
+                  <div className="bg-[rgba(65,62,62,0.03)] rounded-lg px-3 py-2 border border-[rgba(0,0,0,0.03)]">
+                    <p className="font-jetbrains text-[12px] text-[var(--text-secondary)]/70">{cap.example}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ═══ INTELLIGENCE — Remotion ═══ */}
+      <section className="mx-auto max-w-[1200px] px-6 lg:px-10 py-section">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <motion.div variants={fadeBlurUp} initial="initial" whileInView="animate" viewport={viewportConfig}>
+            <RemotionPlayer component={IntelligenceAnimation} durationInFrames={300} />
+          </motion.div>
+
+          <motion.div variants={fadeBlurUp} initial="initial" whileInView="animate" viewport={viewportConfig}>
+            <SectionLabel>Inteligencia</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(24px,4vw,44px)] leading-[120%] tracking-[-0.02em] text-[var(--text-primary)]">
+              Quanto mais usa,
+              <br />
+              mais ele sabe.
+            </h2>
+            <p className="mt-4 font-outfit text-[clamp(16px,2vw,20px)] leading-[160%] text-[var(--text-body)] max-w-[480px]">
+              Jarvis aprende seus horarios, preferencias, familia e rotina.
+              Na proxima vez, ele ja sabe o que fazer sem perguntar.
+            </p>
+
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { icon: Brain, title: "Memoria", desc: "Sabe que voce prefere consulta de manha" },
+                { icon: FileText, title: "Documentos", desc: "Guarda CPF, RG, convenio no cofre" },
+                { icon: Calendar, title: "Contexto", desc: "Sabe que quinta tem reuniao as 14h" },
+                { icon: Shield, title: "Seguro", desc: "Row Level Security. Dados isolados." },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="flex gap-3 items-start">
+                    <div className="w-8 h-8 rounded-lg bg-[rgba(65,62,62,0.04)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Icon size={16} className="text-[var(--text-primary)]" />
+                    </div>
+                    <div>
+                      <p className="font-outfit font-medium text-[14px] text-[var(--text-primary)]">{item.title}</p>
+                      <p className="font-outfit text-[13px] text-[var(--text-secondary)] leading-[150%]">{item.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ COMO FUNCIONA ═══ */}
+      <section id="como-funciona" className="py-section border-y border-[var(--border-subtle)]" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          whileInView="animate"
+          viewport={viewportConfig}
+          className="mx-auto max-w-[1200px] px-6 lg:px-10"
+        >
+          <motion.div variants={fadeBlurUp} className="text-center mb-16">
+            <SectionLabel>Processo</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,5vw,48px)] leading-[110%] tracking-[-0.02em] text-[var(--text-primary)]">
+              Simples assim.
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {steps.map((step, i) => (
+              <motion.div key={step.num} variants={fadeBlurUp} className="relative">
+                {i < steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-8 left-[calc(100%)] w-6 text-[var(--border-light)]">
+                    <ChevronRight size={24} />
+                  </div>
+                )}
+                <p className="font-jetbrains text-[40px] font-bold text-[rgba(65,62,62,0.06)] mb-2">{step.num}</p>
+                <h3 className="font-outfit font-medium text-xl text-[var(--text-primary)] mb-2">{step.title}</h3>
+                <p className="font-outfit text-[14px] leading-[170%] text-[var(--text-secondary)]">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ═══ LEAD CAPTURE ═══ */}
+      <section className="py-[clamp(80px,14vw,180px)]">
+        <motion.div
+          ref={formRef}
+          variants={staggerContainer}
+          initial="initial"
+          whileInView="animate"
+          viewport={viewportConfig}
+          className="mx-auto max-w-[520px] px-6 text-center"
+        >
+          <motion.div variants={fadeBlurUp}>
+            <Image
+              src="/images/jarvis-sparkle.jpg"
+              alt="Jarvis pronto"
+              width={200}
+              height={200}
+              className="rounded-[24px] object-cover mx-auto mb-6"
+              style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08))" }}
+            />
+          </motion.div>
+
+          <motion.h2
+            variants={fadeBlurUp}
+            className="font-outfit font-medium text-[clamp(28px,5vw,44px)] leading-[115%] tracking-[-0.02em] text-[var(--text-primary)] mb-4"
+          >
+            Quer ser dos primeiros?
+          </motion.h2>
+
+          <motion.p
+            variants={fadeBlurUp}
+            className="font-outfit text-[16px] leading-[160%] text-[var(--text-body)] mb-10 max-w-[400px] mx-auto"
+          >
+            Vagas limitadas no acesso antecipado. Deixe seus dados e entre na fila.
+          </motion.p>
+
+          {done ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-[var(--bg-card)] border border-[rgba(74,140,111,0.2)] rounded-card p-8"
+              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.04)" }}
+            >
+              <CheckCircle2 size={48} className="text-[var(--success)] mx-auto mb-4" />
+              <h3 className="font-outfit font-medium text-2xl text-[var(--text-primary)] mb-2">Voce esta na fila.</h3>
+              <p className="font-outfit text-[15px] text-[var(--text-secondary)] leading-[160%]">
+                Vamos te avisar pelo WhatsApp quando sua vaga abrir.
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              variants={fadeBlurUp}
+              className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-8 text-left"
+              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.04)" }}
+            >
+              <div className="space-y-4">
+                <div>
+                  <label className="font-outfit text-[12px] text-[var(--text-secondary)] uppercase tracking-wider mb-1.5 block">Nome</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Seu nome"
+                    className="w-full bg-[rgba(0,0,0,0.02)] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 font-outfit text-[15px] text-[var(--text-primary)] placeholder:text-[rgba(0,0,0,0.2)] outline-none focus:border-[var(--accent-highlight)]/40 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="font-outfit text-[12px] text-[var(--text-secondary)] uppercase tracking-wider mb-1.5 block">WhatsApp</label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(phoneMask(e.target.value))}
+                    placeholder="(11) 99999-9999"
+                    className="w-full bg-[rgba(0,0,0,0.02)] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 font-outfit text-[15px] text-[var(--text-primary)] placeholder:text-[rgba(0,0,0,0.2)] outline-none focus:border-[var(--accent-highlight)]/40 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="font-outfit text-[12px] text-[var(--text-secondary)] uppercase tracking-wider mb-1.5 block">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="seu@email.com"
+                    className="w-full bg-[rgba(0,0,0,0.02)] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 font-outfit text-[15px] text-[var(--text-primary)] placeholder:text-[rgba(0,0,0,0.2)] outline-none focus:border-[var(--accent-highlight)]/40 transition-colors"
+                  />
+                </div>
+              </div>
+
+              {error && <p className="font-outfit text-[13px] text-red-600 mt-3">{error}</p>}
+
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="w-full mt-6 inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[var(--text-primary)] text-white font-outfit font-medium text-[15px] hover:bg-[#2A2724] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Cadastrando..." : (<>Garantir minha vaga <ArrowRight size={18} /></>)}
+              </button>
+
+              <p className="font-outfit text-[12px] text-[var(--text-secondary)]/60 text-center mt-4">
+                Sem compromisso. Sem cartao. Sem spam.
+              </p>
+            </motion.div>
+          )}
+        </motion.div>
+      </section>
+
+      {/* ═══ FOOTER ═══ */}
+      <footer className="border-t border-[var(--border-subtle)] py-10" style={{ background: "linear-gradient(180deg, #FAF8F5 0%, #F0EBE5 100%)" }}>
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col items-center md:items-start">
+            <span className="font-jetbrains font-bold text-lg tracking-[-0.04em] text-[var(--text-primary)]/60">jarvis</span>
+            <span className="font-outfit text-[10px] text-[var(--text-secondary)] mt-0.5">by OLpi Technologies</span>
+          </div>
+          <p className="font-outfit text-[13px] text-[var(--text-secondary)]">
+            Voce manda. Jarvis{" "}
+            <span className="font-jetbrains font-bold text-[var(--text-primary)]/60">/faz</span>.
+          </p>
+          <div className="flex gap-6">
+            <a href="/termos" className="font-outfit text-[12px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Termos</a>
+            <a href="/privacidade" className="font-outfit text-[12px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Privacidade</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
