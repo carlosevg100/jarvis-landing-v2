@@ -79,22 +79,44 @@ const capabilities: Capability[] = [
   {
     icon: MapPin,
     title: "Reserva restaurante",
-    description: "Encontra, verifica disponibilidade, confirma a reserva. Voce so aparece.",
+    description: "Encontra, verifica disponibilidade, reserva a mesa. Voce so aparece.",
     example: '"Reserva Fasano sexta 20h 4 pessoas" → confirmado',
-    maturity: "beta",
+    maturity: "live",
   },
   {
     icon: Mic,
     title: "Cancela servicos",
     description: "Liga pro SAC da operadora, navega menu automatico, faz o cancelamento por voce.",
     example: '"Cancela minha Claro" → ligou, cancelou, confirmou',
-    maturity: "beta",
+    maturity: "live",
   },
   {
     icon: MessageSquare,
     title: "Busca voos",
     description: "Google Flights + milhas em paralelo. Compara precos, mostra como emitir.",
     example: '"Voo SP-Miami marco" → 12 opcoes em 30 segundos',
+    maturity: "live",
+  },
+  // ── Em breve: visao de futuro ──
+  {
+    icon: CreditCard,
+    title: "Negocia por voce",
+    description: "Renegocia plano de celular, seguro do carro, mensalidade de escola. Busca o melhor preco.",
+    example: '"Renegocia meu plano da Vivo" → economizou R$40/mes',
+    maturity: "soon",
+  },
+  {
+    icon: Brain,
+    title: "Proativo",
+    description: "Antecipa o que voce vai precisar. Avisa antes de voce lembrar. Age sem voce pedir.",
+    example: "Seu exame vence em 12 dias. Ja agendei renovacao.",
+    maturity: "soon",
+  },
+  {
+    icon: Shield,
+    title: "Paga contas",
+    description: "Foto do boleto → pago. Integracao bancaria direta. Sem abrir app de banco.",
+    example: '"Paga esse boleto" → foto → pago → comprovante',
     maturity: "soon",
   },
 ];
@@ -102,12 +124,12 @@ const capabilities: Capability[] = [
 const maturityLabels = {
   live: { label: "Funcionando", dotColor: "bg-[#4A8C6F]", textColor: "text-[#4A8C6F]" },
   beta: { label: "Em beta", dotColor: "bg-[#D4A843]", textColor: "text-[#B89530]" },
-  soon: { label: "Em breve", dotColor: "bg-[#8E8C84]", textColor: "text-[#8E8C84]" },
+  soon: { label: "No roadmap", dotColor: "bg-[#8E8C84]", textColor: "text-[#8E8C84]" },
 };
 
 // ─── Rotating command examples ───────────────────────────────────────────────
 const commands = [
-  { cmd: "/faz marcar dermato", result: "Agendado em 47 segundos." },
+  { cmd: "/faz agendar com o 3", result: "Consulta agendada em 47 segundos." },
   { cmd: "/faz ligar pro Ricardo", result: "Ligou, conversou, retornou." },
   { cmd: "/faz cancelar Claro", result: "SAC navegado, cancelado." },
   { cmd: "/faz reservar Fasano", result: "Sexta 20h, 4 pessoas. Confirmado." },
@@ -128,7 +150,7 @@ const painPoints = [
     emoji: "🏥", task: "Marcar consulta",
     without: ["Abrir Doctoralia", "Filtrar por convenio", "Ligar pra 3 consultorios", "Soletrar nome e CPF", "Negociar horario", "Colocar no calendario"],
     timeWithout: "47 min",
-    with: '"marca meu dermato"',
+    with: '"Dermato com SulAmerica perto de mim" → escolhe → /faz agendar',
     timeWith: "47 seg",
   },
   {
@@ -204,13 +226,11 @@ function WhatsAppChat({ chat }: { chat: { sender: string; text: string; isSucces
 
 // ─── Showcase conversations ──────────────────────────────────────────────────
 const showcaseConversation = [
-  { sender: "user", text: "marca dermato pra mim" },
-  { sender: "jarvis", text: "Vi que seu plano eh SulAmerica Executivo. Vou buscar dermatologistas perto de voce que aceitam." },
-  { sender: "jarvis", text: "Encontrei 3 opcoes:\n\n1. Dra. Marina Luz\n   ter 14h · 850m · ⭐ 4.8\n\n2. Clinica Derma Plus\n   qua 10h · 1.2km · ⭐ 4.6\n\n3. Dr. Paulo Mendes\n   qui 16h · 2km · ⭐ 4.9" },
-  { sender: "user", text: "3" },
-  { sender: "jarvis", text: "Preciso do seu CPF pra confirmar. Posso usar o que ta no cofre?" },
-  { sender: "user", text: "sim" },
-  { sender: "jarvis", text: "✓ Agendado!\nDr. Paulo Mendes — qui 16h\nR. Oscar Freire, 1340 — Jardins\n\n📅 Calendario atualizado\n☐ Levar exames recentes\n☐ Carteirinha do convenio\n\nVou te lembrar 1h antes com Waze.", isSuccess: true },
+  { sender: "user", text: "Dermatologistas que aceitam SulAmerica perto de mim" },
+  { sender: "jarvis", text: "Achei 3 dermatologistas com SulAmerica perto de voce:\n\n1. Dra. Marina Luz\n   850m · ⭐ 4.8 · seg-sex\n\n2. Clinica Derma Plus\n   1.2km · ⭐ 4.6 · seg-sab\n\n3. Dr. Paulo Mendes\n   2km · ⭐ 4.9 · ter-sex" },
+  { sender: "user", text: "/faz agendar com o 3, semana que vem, qualquer horario de manha" },
+  { sender: "jarvis", text: "Agendando com Dr. Paulo Mendes. Puxando seus dados do cofre..." },
+  { sender: "jarvis", text: "✓ Agendado!\nDr. Paulo Mendes — ter 9h30\nR. Oscar Freire, 1340 — Jardins\n\n📅 Calendario atualizado\n☐ Levar exames recentes\n☐ Carteirinha do convenio\n\nLembrete 1h antes com Waze.", isSuccess: true },
 ];
 
 const callConversation = [
@@ -513,18 +533,18 @@ export default function DemoPage() {
             <motion.div variants={fadeBlurUp}>
               <span className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-3 block">Consulta medica</span>
               <h3 className="font-outfit font-medium text-[clamp(22px,3vw,32px)] leading-[120%] text-[var(--text-primary)] mb-6">
-                <span className="font-jetbrains font-bold bg-[rgba(65,62,62,0.06)] px-2 py-1 rounded-lg text-[0.9em]">/faz marcar dermato</span>
+                <span className="font-jetbrains font-bold bg-[rgba(65,62,62,0.06)] px-2 py-1 rounded-lg text-[0.9em]">/faz agendar com o 3</span>
               </h3>
 
               <div className="flex flex-col gap-1 mb-6">
                 {[
-                  { step: "Entende", desc: "Voce quer um dermatologista" },
-                  { step: "Memoria", desc: "Puxa seu plano (SulAmerica) e regiao" },
-                  { step: "Busca", desc: "Acha dermatologistas que aceitam SulAmerica" },
-                  { step: "Opcoes", desc: "Mostra 3 opcoes com distancia e horarios" },
-                  { step: "Agenda", desc: "Voce escolhe, Jarvis confirma" },
-                  { step: "Calendario", desc: "Google Calendar atualizado + endereco" },
-                  { step: "Lembrete", desc: "1h antes: Waze + checklist" },
+                  { step: "Busca", desc: "Voce pede dermatologistas com convenio perto de voce" },
+                  { step: "Recomenda", desc: "Jarvis manda 3 opcoes com distancia e avaliacao" },
+                  { step: "Escolhe", desc: 'Voce manda "/faz agendar com o 3, semana que vem de manha"' },
+                  { step: "Cofre", desc: "Puxa nome, CPF, email, convenio do cofre automaticamente" },
+                  { step: "Agenda", desc: "Faz a reserva da consulta com seus dados" },
+                  { step: "Confirma", desc: "Manda confirmacao com endereco e checklist" },
+                  { step: "Calendario", desc: "Google Calendar atualizado + lembrete com Waze" },
                 ].map((c, i) => (
                   <div key={c.step} className="flex items-start gap-3 py-2 border-l-2 border-[var(--border-light)] pl-4">
                     <span className="w-6 h-6 rounded-full bg-[var(--text-primary)] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
@@ -627,9 +647,9 @@ export default function DemoPage() {
           <motion.div variants={fadeBlurUp} className="text-center mb-16">
             <SectionLabel>Capacidades</SectionLabel>
             <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,5vw,48px)] leading-[110%] tracking-[-0.02em] text-[var(--text-primary)]">
-              O que Jarvis ja faz.
+              9 capacidades funcionando.
               <br />
-              <span className="text-[var(--text-secondary)]">E o que esta chegando.</span>
+              <span className="text-[var(--text-secondary)]">E o que vem por ai.</span>
             </h2>
           </motion.div>
 
