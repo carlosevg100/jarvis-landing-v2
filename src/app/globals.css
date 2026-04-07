@@ -3,25 +3,110 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --bg-primary: #F8F8F8;
+  --bg-secondary: #F7F7F7;
+  --bg-hero-from: #F9F5F2;
+  --bg-hero-to: #DAD2CE;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-nav-scrolled: #FFFFFFEB;
+
+  /* Texts */
+  --text-primary: #413E3E;
+  --text-body: #4F4749;
+  --text-secondary: #8E8C84;
+  --text-secondary-dark: #6F6F67;
+  --text-muted: rgba(65, 62, 62, 0.6);
+
+  /* Borders */
+  --border-light: #DEDCD8;
+  --border-subtle: rgba(79, 71, 73, 0.05);
+  --border-button: rgba(0, 0, 0, 0.72);
+
+  /* Accent */
+  --accent-highlight: #FF5C00;
+
+  /* Success */
+  --success: #4A8C6F;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-[var(--border-subtle)];
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+  ::selection {
+    background: rgba(65, 62, 62, 0.12);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Float animation for phone mockup */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Typing dots animation */
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+/* Modal fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease;
+}
+
+/* Legal prose styles */
+.prose-jarvis h2 {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 32px;
+  margin-bottom: 8px;
+  color: var(--accent-highlight);
+}
+.prose-jarvis p,
+.prose-jarvis li {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 14px;
+  color: #3A3430;
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+.prose-jarvis ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+.prose-jarvis a {
+  color: var(--accent-highlight);
+  text-decoration: underline;
+}
+.prose-jarvis table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+.prose-jarvis td,
+.prose-jarvis th {
+  border: 1px solid rgba(26, 23, 20, 0.1);
+  padding: 8px 12px;
+  font-size: 13px;
+  text-align: left;
+}
+.prose-jarvis th {
+  background: rgba(26, 23, 20, 0.04);
+  font-weight: 500;
 }

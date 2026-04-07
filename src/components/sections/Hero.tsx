@@ -2,10 +2,12 @@
 
 import { motion } from "framer-motion";
 import { fadeBlurUp, staggerContainer } from "@/lib/animations";
-import Button from "@/components/ui/Button";
+import { useRegisterModal } from "@/components/ui/RegisterModalProvider";
 import RotatingHooks from "./RotatingHooks";
 
 export default function Hero() {
+  const { openModal } = useRegisterModal();
+
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
@@ -49,9 +51,12 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-start gap-4 mt-2">
-            <Button href="#planos" size="lg">
+            <button
+              onClick={openModal}
+              className="inline-flex items-center justify-center rounded-button font-outfit font-medium transition-all duration-200 cursor-pointer border-2 border-[var(--border-button)] bg-transparent text-[var(--text-primary)] hover:bg-[rgba(0,0,0,0.04)] px-8 py-4 text-base"
+            >
               Teste gratis por 7 dias
-            </Button>
+            </button>
           </div>
 
           <p className="font-outfit text-[13px] text-[var(--text-secondary)]">

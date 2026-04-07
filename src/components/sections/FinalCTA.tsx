@@ -2,10 +2,12 @@
 
 import { motion } from "framer-motion";
 import { fadeBlurUp, staggerContainer, viewportConfig } from "@/lib/animations";
-import Button from "@/components/ui/Button";
+import { useRegisterModal } from "@/components/ui/RegisterModalProvider";
 import Image from "next/image";
 
 export default function FinalCTA() {
+  const { openModal } = useRegisterModal();
+
   return (
     <section className="py-[clamp(80px,14vw,180px)] relative overflow-hidden">
       {/* Subtle warm glow */}
@@ -57,9 +59,12 @@ export default function FinalCTA() {
         </motion.p>
 
         <motion.div variants={fadeBlurUp}>
-          <Button href="#planos" size="lg">
+          <button
+            onClick={openModal}
+            className="inline-flex items-center justify-center rounded-button font-outfit font-medium transition-all duration-200 cursor-pointer border-2 border-[var(--border-button)] bg-transparent text-[var(--text-primary)] hover:bg-[rgba(0,0,0,0.04)] px-8 py-4 text-base"
+          >
             Teste gratis por 7 dias
-          </Button>
+          </button>
         </motion.div>
 
         <motion.p
