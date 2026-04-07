@@ -23,6 +23,7 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import RemotionPlayer from "@/components/ui/RemotionPlayer";
 import { ExecutionAnimation } from "@/remotion/compositions/ExecutionAnimation";
 import { IntelligenceAnimation } from "@/remotion/compositions/IntelligenceAnimation";
+import FAQ from "@/components/sections/FAQ";
 
 // ─── Capability Data ─────────────────────────────────────────────────────────
 type Capability = {
@@ -317,6 +318,16 @@ export default function DemoPage() {
             <span className="font-jetbrains font-bold text-xl tracking-[-0.04em] text-[var(--text-primary)] leading-none">jarvis</span>
             <span className="font-outfit text-[9px] tracking-[0.08em] text-[var(--text-secondary)] mt-0.5 leading-none">by <span className="font-medium">OL</span>pi Technologies</span>
           </a>
+
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8">
+            <a href="#na-pratica" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">Na pratica</a>
+            <a href="#capacidades" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">Capacidades</a>
+            <a href="#sobre" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">Sobre</a>
+            <a href="#planos" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">Planos</a>
+            <a href="#faq" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">FAQ</a>
+          </div>
+
           <button
             onClick={scrollToForm}
             className="inline-flex items-center px-5 py-2 rounded-button border-2 border-[var(--border-button)] text-[var(--text-primary)] text-sm font-outfit font-medium hover:bg-[rgba(0,0,0,0.04)] transition-colors"
@@ -645,7 +656,7 @@ export default function DemoPage() {
       </section>
 
       {/* ═══ CAPABILITIES GRID ═══ */}
-      <section className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
+      <section id="capacidades" className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
         <motion.div
           variants={staggerContainer}
           initial="initial"
@@ -771,7 +782,7 @@ export default function DemoPage() {
       </section>
 
       {/* ═══ ABOUT US ═══ */}
-      <section className="py-section">
+      <section id="sobre" className="py-section">
         <motion.div
           variants={staggerContainer}
           initial="initial"
@@ -841,7 +852,7 @@ export default function DemoPage() {
       </section>
 
       {/* ═══ PRICING / LAUNCH ═══ */}
-      <section className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
+      <section id="planos" className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
         <motion.div
           variants={staggerContainer}
           initial="initial"
@@ -948,6 +959,9 @@ export default function DemoPage() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* ═══ FAQ ═══ */}
+      <FAQ />
 
       {/* ═══ LEAD CAPTURE ═══ */}
       <section className="py-[clamp(80px,14vw,180px)]">
