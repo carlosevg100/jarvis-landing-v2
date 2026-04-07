@@ -347,14 +347,21 @@ export default function DemoPage() {
               </span>
             </div>
 
-            <h1 className="font-outfit font-medium text-[clamp(40px,6.5vw,64px)] leading-[105%] tracking-[-0.03em] text-[var(--text-primary)]">
-              O primeiro assistente
+            <p className="font-outfit text-[13px] tracking-[0.15em] uppercase text-[var(--text-secondary)]">
+              O primeiro assistente autonomo do Brasil
+            </p>
+
+            <h1 className="font-outfit font-medium text-[clamp(44px,7vw,72px)] leading-[100%] tracking-[-0.03em] text-[var(--text-primary)]">
+              Voce manda.
               <br />
-              <span className="text-[var(--accent-highlight)]">autonomo</span> do Brasil.
+              Jarvis{" "}
+              <span className="font-jetbrains font-bold bg-[rgba(65,62,62,0.06)] px-3 py-1 rounded-xl text-[var(--accent-highlight)]">
+                /faz.
+              </span>
             </h1>
 
             {/* Rotating commands */}
-            <div className="min-h-[4.5em] relative">
+            <div className="min-h-[3em] relative">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={cmdIndex}
@@ -373,8 +380,9 @@ export default function DemoPage() {
             </div>
 
             <p className="font-outfit text-[16px] leading-[170%] text-[var(--text-body)] max-w-[440px]">
-              Voce manda no WhatsApp. Jarvis agenda, liga, reserva, cancela e resolve.
-              Sem baixar nada. Sem aprender nada.
+              Agenda consultas, faz ligacoes, reserva restaurantes, busca voos,
+              cancela servicos e organiza sua vida.
+              Tudo pelo WhatsApp. Sem baixar nada.
             </p>
 
             <div className="flex flex-col sm:flex-row items-start gap-4 mt-2">
