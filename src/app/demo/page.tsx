@@ -1002,6 +1002,10 @@ export default function DemoPage() {
             </div>
           </motion.div>
 
+          <motion.p variants={fadeBlurUp} className="text-center font-outfit text-[12px] text-[var(--text-secondary)]/60 mb-8">
+            * Precos sujeitos a alteracao antes do lancamento oficial.
+          </motion.p>
+
           {/* Launch timeline */}
           <motion.div variants={fadeBlurUp} className="text-center">
             <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-8 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card px-8 py-5">
