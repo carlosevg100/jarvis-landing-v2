@@ -313,8 +313,9 @@ export default function DemoPage() {
       {/* ═══ NAV ═══ */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[rgba(250,248,245,0.85)] backdrop-blur-[60px] border-b border-[var(--border-subtle)]">
         <div className="mx-auto max-w-[1200px] px-6 lg:px-10 flex items-center justify-between h-16">
-          <a href="/demo">
-            <span className="font-jetbrains font-bold text-xl tracking-[-0.04em] text-[var(--text-primary)]">jarvis</span>
+          <a href="/demo" className="flex flex-col">
+            <span className="font-jetbrains font-bold text-xl tracking-[-0.04em] text-[var(--text-primary)] leading-none">jarvis</span>
+            <span className="font-outfit text-[9px] tracking-[0.08em] text-[var(--text-secondary)] mt-0.5 leading-none">by <span className="font-medium">OL</span>pi Technologies</span>
           </a>
           <button
             onClick={scrollToForm}
@@ -769,6 +770,185 @@ export default function DemoPage() {
         </motion.div>
       </section>
 
+      {/* ═══ ABOUT US ═══ */}
+      <section className="py-section">
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          whileInView="animate"
+          viewport={viewportConfig}
+          className="mx-auto max-w-[900px] px-6 lg:px-10"
+        >
+          <motion.div variants={fadeBlurUp} className="text-center mb-12">
+            <SectionLabel>Sobre</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,5vw,48px)] leading-[110%] tracking-[-0.02em] text-[var(--text-primary)]">
+              A proxima geracao de assistente pessoal.
+              <br />
+              <span className="text-[var(--text-secondary)]">No WhatsApp.</span>
+            </h2>
+          </motion.div>
+
+          <motion.p variants={fadeBlurUp} className="font-outfit text-[clamp(16px,2vw,20px)] leading-[180%] text-[var(--text-body)] text-center max-w-[700px] mx-auto mb-12">
+            A America Latina conversa pelo WhatsApp. Sao 4 horas por dia, todos os dias.
+            Em vez de criar mais um app que ninguem vai baixar, construimos um assistente
+            que vive onde voce ja esta. Sem downloads. Sem cadastros complexos. Sem curva de aprendizado.
+            Voce manda uma mensagem como mandaria pra qualquer pessoa — e Jarvis executa.
+          </motion.p>
+
+          <motion.div variants={fadeBlurUp} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div>
+              <h3 className="font-outfit font-medium text-xl text-[var(--text-primary)] mb-3">Como funciona</h3>
+              <div className="space-y-3">
+                <p className="font-outfit text-[15px] leading-[170%] text-[var(--text-body)]">
+                  — Voce manda texto, audio, foto ou PDF no WhatsApp. Como faria com qualquer contato.
+                </p>
+                <p className="font-outfit text-[15px] leading-[170%] text-[var(--text-body)]">
+                  — Jarvis processa com IA multimodal, entende o contexto e executa a acao: liga, agenda, busca, reserva, cancela.
+                </p>
+                <p className="font-outfit text-[15px] leading-[170%] text-[var(--text-body)]">
+                  — Voce recebe a confirmacao. Sem sair do WhatsApp.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-outfit font-medium text-xl text-[var(--text-primary)] mb-3">Nossa visao</h3>
+              <div className="space-y-3">
+                <p className="font-outfit text-[15px] leading-[170%] text-[var(--text-body)]">
+                  — Nao queremos organizar sua vida. Queremos resolve-la. A diferenca entre um assistente e um agente eh que o agente age.
+                </p>
+                <p className="font-outfit text-[15px] leading-[170%] text-[var(--text-body)]">
+                  — Hoje Jarvis agenda, liga e reserva. Amanha vai negociar seu plano, pagar suas contas e antecipar o que voce precisa antes de voce pedir.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Statement quote */}
+          <motion.div variants={fadeBlurUp} className="text-center py-8 border-t border-b border-[var(--border-subtle)]">
+            <p className="font-outfit italic text-[clamp(20px,3.5vw,32px)] leading-[140%] tracking-[-0.01em] text-[var(--text-primary)] max-w-[700px] mx-auto">
+              &ldquo;O futuro nao eh um app novo.
+              <br />
+              Eh alguem que resolve sua vida
+              <br />
+              numa conversa de WhatsApp.&rdquo;
+            </p>
+            <p className="font-outfit text-[13px] text-[var(--text-secondary)] mt-4">
+              — OLpi Technologies
+            </p>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ═══ PRICING / LAUNCH ═══ */}
+      <section className="py-section" style={{ background: "linear-gradient(180deg, #F5F0EB 0%, #FAF8F5 100%)" }}>
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          whileInView="animate"
+          viewport={viewportConfig}
+          className="mx-auto max-w-[1000px] px-6 lg:px-10"
+        >
+          <motion.div variants={fadeBlurUp} className="text-center mb-12">
+            <SectionLabel>Lancamento</SectionLabel>
+            <h2 className="mt-4 font-outfit font-medium text-[clamp(28px,5vw,48px)] leading-[110%] tracking-[-0.02em] text-[var(--text-primary)]">
+              Acesso antecipado.
+              <br />
+              <span className="text-[var(--accent-highlight)]">30 dias gratis.</span>
+            </h2>
+            <p className="mt-4 font-outfit text-[clamp(16px,2vw,20px)] leading-[150%] text-[var(--text-body)] max-w-[500px] mx-auto">
+              Quem se cadastrar agora ganha 30 dias gratis na versao completa Autopilot.
+              Sem cartao. Sem compromisso.
+            </p>
+          </motion.div>
+
+          {/* Plans */}
+          <motion.div variants={fadeBlurUp} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto mb-12">
+            {/* Essencial */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-8">
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Essencial</p>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="font-outfit font-medium text-[40px] tracking-[-0.02em] text-[var(--text-primary)]">R$19</span>
+                <span className="font-outfit text-[15px] text-[var(--text-secondary)]">,90/mes</span>
+              </div>
+              <ul className="space-y-2.5">
+                {[
+                  "Agenda inteligente com sync",
+                  "Busca perto de voce",
+                  "Controle financeiro",
+                  "Cofre de documentos",
+                  "Memoria contextual",
+                  "Listas e notas",
+                  "500 mensagens/mes",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
+                    <span className="font-outfit text-[14px] text-[var(--text-body)]">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Autopilot */}
+            <div className="bg-[var(--text-primary)] border border-[var(--text-primary)] rounded-card p-8 relative overflow-hidden">
+              <div className="absolute top-4 right-4">
+                <span className="font-outfit font-bold text-[9px] tracking-[0.15em] uppercase bg-[var(--accent-highlight)] text-white px-2.5 py-1 rounded-full">
+                  30 dias gratis
+                </span>
+              </div>
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">Autopilot</p>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="font-outfit font-medium text-[40px] tracking-[-0.02em] text-white">R$69</span>
+                <span className="font-outfit text-[15px] text-white/50">,90/mes</span>
+              </div>
+              <ul className="space-y-2.5">
+                {[
+                  "Tudo do Essencial +",
+                  "Liga por voce (consultorios, SAC, contatos)",
+                  "Reserva restaurantes",
+                  "Busca e compara voos",
+                  "Cancela servicos",
+                  "Execucao autonoma ilimitada",
+                  "Mensagens ilimitadas",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <CheckCircle2 size={16} className="text-[var(--accent-highlight)] mt-0.5 flex-shrink-0" />
+                    <span className="font-outfit text-[14px] text-white/80">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+
+          {/* Launch timeline */}
+          <motion.div variants={fadeBlurUp} className="text-center">
+            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-8 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card px-8 py-5">
+              <div className="text-center">
+                <p className="font-outfit font-bold text-[11px] tracking-[0.15em] uppercase text-[var(--accent-highlight)] mb-1">Fase 1</p>
+                <p className="font-outfit text-[14px] text-[var(--text-primary)] font-medium">Beta privado</p>
+                <p className="font-outfit text-[12px] text-[var(--text-secondary)]">Primeiros usuarios</p>
+              </div>
+              <ChevronRight size={20} className="text-[var(--border-light)] hidden sm:block" />
+              <div className="text-center">
+                <p className="font-outfit font-bold text-[11px] tracking-[0.15em] uppercase text-[var(--text-secondary)] mb-1">Fase 2</p>
+                <p className="font-outfit text-[14px] text-[var(--text-primary)] font-medium">Beta aberto</p>
+                <p className="font-outfit text-[12px] text-[var(--text-secondary)]">Convites expandidos</p>
+              </div>
+              <ChevronRight size={20} className="text-[var(--border-light)] hidden sm:block" />
+              <div className="text-center">
+                <p className="font-outfit font-bold text-[11px] tracking-[0.15em] uppercase text-[var(--text-secondary)] mb-1">Fase 3</p>
+                <p className="font-outfit text-[14px] text-[var(--text-primary)] font-medium">Lancamento</p>
+                <p className="font-outfit text-[12px] text-[var(--text-secondary)]">Acesso publico</p>
+              </div>
+            </div>
+            <p className="font-outfit text-[14px] text-[var(--text-body)] mt-6">
+              Estamos iniciando o beta privado.{" "}
+              <span className="font-medium text-[var(--text-primary)]">Muito em breve.</span>
+            </p>
+          </motion.div>
+        </motion.div>
+      </section>
+
       {/* ═══ LEAD CAPTURE ═══ */}
       <section className="py-[clamp(80px,14vw,180px)]">
         <motion.div
@@ -799,9 +979,15 @@ export default function DemoPage() {
 
           <motion.p
             variants={fadeBlurUp}
-            className="font-outfit text-[16px] leading-[160%] text-[var(--text-body)] mb-10 max-w-[400px] mx-auto"
+            className="font-outfit text-[16px] leading-[160%] text-[var(--text-body)] mb-3 max-w-[420px] mx-auto"
           >
-            Vagas limitadas no acesso antecipado. Deixe seus dados e entre na fila.
+            Cadastre-se e ganhe <span className="font-medium text-[var(--text-primary)]">30 dias gratis</span> na versao completa Autopilot.
+          </motion.p>
+          <motion.p
+            variants={fadeBlurUp}
+            className="font-outfit text-[13px] text-[var(--text-secondary)] mb-10"
+          >
+            Vagas limitadas. Sem cartao.
           </motion.p>
 
           {done ? (
