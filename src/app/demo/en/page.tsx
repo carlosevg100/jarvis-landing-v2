@@ -258,7 +258,7 @@ function WhatsAppChat({ chat }: { chat: { sender: string; text: string; isSucces
         </div>
         <div className="bg-[rgba(74,140,111,0.08)] border-t border-[rgba(74,140,111,0.1)] py-2 text-center">
           <span className="font-outfit text-[9px] font-bold tracking-[0.2em] uppercase text-[var(--success)]">
-            In production — Not a demo
+            Private beta — Real product
           </span>
         </div>
       </div>
@@ -463,7 +463,7 @@ export default function DemoPageEn() {
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[rgba(74,140,111,0.08)] border border-[rgba(74,140,111,0.15)] text-[13px] font-outfit text-[#4A8C6F]">
                 <span className="w-2 h-2 rounded-full bg-[#4A8C6F] animate-pulse" />
-                In production — real users
+                Private beta — limited spots
               </span>
             </div>
 
