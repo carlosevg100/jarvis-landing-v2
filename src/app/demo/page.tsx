@@ -383,15 +383,28 @@ export default function DemoPage() {
             <a href="#sobre" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">Sobre</a>
             <a href="#planos" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">Planos</a>
             <a href="#faq" className="font-outfit text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">FAQ</a>
-            <a href="/demo/en" className="font-outfit text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">EN</a>
           </div>
 
-          <button
-            onClick={scrollToForm}
-            className="inline-flex items-center px-5 py-2 rounded-button border-2 border-[var(--border-button)] text-[var(--text-primary)] text-sm font-outfit font-medium hover:bg-[rgba(0,0,0,0.04)] transition-colors"
-          >
-            Quero acesso
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Language selector */}
+            <div className="flex items-center border border-[var(--border-subtle)] rounded-full overflow-hidden">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[rgba(0,0,0,0.04)] text-[13px] font-outfit font-medium text-[var(--text-primary)]">
+                <svg width="18" height="13" viewBox="0 0 640 480" className="rounded-[2px]"><rect width="640" height="480" fill="#009b3a"/><polygon points="320,40 600,240 320,440 40,240" fill="#fedf00"/><circle cx="320" cy="240" r="100" fill="#002776"/><path d="M195,240 Q320,180 445,240" stroke="#fff" strokeWidth="12" fill="none"/></svg>
+                PT
+              </span>
+              <a href="/demo/en" className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-[rgba(0,0,0,0.03)] text-[13px] font-outfit text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                <svg width="18" height="13" viewBox="0 0 640 480" className="rounded-[2px]"><rect width="640" height="480" fill="#fff"/><rect width="640" height="37" y="0" fill="#b22234"/><rect width="640" height="37" y="74" fill="#b22234"/><rect width="640" height="37" y="148" fill="#b22234"/><rect width="640" height="37" y="222" fill="#b22234"/><rect width="640" height="37" y="296" fill="#b22234"/><rect width="640" height="37" y="370" fill="#b22234"/><rect width="640" height="37" y="444" fill="#b22234"/><rect width="260" height="260" fill="#3c3b6e"/></svg>
+                EN
+              </a>
+            </div>
+
+            <button
+              onClick={scrollToForm}
+              className="inline-flex items-center px-5 py-2 rounded-button border-2 border-[var(--border-button)] text-[var(--text-primary)] text-sm font-outfit font-medium hover:bg-[rgba(0,0,0,0.04)] transition-colors"
+            >
+              Quero acesso
+            </button>
+          </div>
         </div>
       </nav>
 
