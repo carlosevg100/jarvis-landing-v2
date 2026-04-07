@@ -254,6 +254,22 @@ function phoneMask(value: string): string {
 // ═════════════════════════════════════════════════════════════════════════════
 // MAIN PAGE
 // ═════════════════════════════════════════════════════════════════════════════
+// ─── Referral helpers ────────────────────────────────────────────────────────
+const QUEUE_OFFSET = 247; // Start queue at realistic number
+const BACKEND = "https://jarvis-backend-six.vercel.app";
+
+function generateRefCode(name: string): string {
+  const clean = name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 6);
+  const rand = Math.random().toString(36).slice(2, 6);
+  return `${clean}${rand}`;
+}
+
+function getRefFromUrl(): string | null {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  return params.get("ref");
+}
+
 export default function DemoPage() {
   const [cmdIndex, setCmdIndex] = useState(0);
   const formRef = useRef<HTMLDivElement>(null);
@@ -264,6 +280,16 @@ export default function DemoPage() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+
+  // Referral state
+  const [queuePosition, setQueuePosition] = useState(0);
+  const [refCode, setRefCode] = useState("");
+  const [copied, setCopied] = useState(false);
+  const referredBy = useRef<string | null>(null);
+
+  useEffect(() => {
+    referredBy.current = getRefFromUrl();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -276,6 +302,28 @@ export default function DemoPage() {
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
+  const refLink = typeof window !== "undefined" && refCode
+    ? `${window.location.origin}/demo?ref=${refCode}`
+    : "";
+
+  const copyRefLink = () => {
+    if (refLink) {
+      navigator.clipboard.writeText(refLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const shareWhatsApp = () => {
+    const text = `Conhece o Jarvis? Assistente no WhatsApp que liga, agenda e resolve por voce. Se cadastra: ${refLink}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
+  const shareTwitter = () => {
+    const text = `Acabei de entrar na fila do Jarvis — primeiro assistente autonomo do Brasil. Ele liga, agenda e resolve tudo pelo WhatsApp. ${refLink}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
   const handleSubmit = async () => {
     setError("");
     if (!name.trim()) { setError("Informe seu nome."); return; }
@@ -286,7 +334,8 @@ export default function DemoPage() {
     setLoading(true);
     try {
       const phoneNum = phoneRaw.startsWith("55") ? phoneRaw : "55" + phoneRaw;
-      const res = await fetch("https://jarvis-backend-six.vercel.app/api/users/register", {
+      const code = generateRefCode(name);
+      const res = await fetch(`${BACKEND}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -294,12 +343,20 @@ export default function DemoPage() {
           whatsapp_number: phoneNum,
           email: email.trim(),
           source: "fakedoor",
+          referral_code: code,
+          referred_by: referredBy.current || undefined,
         }),
       });
+
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok || res.status === 409) {
+        setRefCode(data.referral_code || code);
+        // Queue position: offset + user count from backend, or fallback
+        const pos = data.queue_position || (QUEUE_OFFSET + Math.floor(Math.random() * 30) + 1);
+        setQueuePosition(pos);
         setDone(true);
       } else {
-        const data = await res.json().catch(() => ({}));
         setError(data.error || "Erro ao cadastrar. Tente novamente.");
         setLoading(false);
       }
@@ -1012,8 +1069,71 @@ export default function DemoPage() {
               style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.04)" }}
             >
               <CheckCircle2 size={48} className="text-[var(--success)] mx-auto mb-4" />
-              <h3 className="font-outfit font-medium text-2xl text-[var(--text-primary)] mb-2">Voce esta na fila.</h3>
-              <p className="font-outfit text-[15px] text-[var(--text-secondary)] leading-[160%]">
+              <h3 className="font-outfit font-medium text-2xl text-[var(--text-primary)] mb-2">Voce esta na fila!</h3>
+
+              {/* Queue position */}
+              <div className="bg-[rgba(0,0,0,0.03)] rounded-xl px-6 py-4 mb-6">
+                <p className="font-outfit text-[13px] text-[var(--text-secondary)] mb-1">Sua posicao</p>
+                <p className="font-jetbrains font-bold text-[36px] text-[var(--text-primary)] leading-none">#{queuePosition}</p>
+              </div>
+
+              {/* Referral CTA */}
+              <div className="text-left mb-6">
+                <h4 className="font-outfit font-medium text-[16px] text-[var(--text-primary)] mb-3 text-center">
+                  Indique amigos e suba na fila
+                </h4>
+
+                <div className="space-y-2 mb-5">
+                  <div className="flex items-center gap-3 bg-[rgba(74,140,111,0.05)] rounded-lg px-4 py-2.5 border border-[rgba(74,140,111,0.1)]">
+                    <span className="font-jetbrains font-bold text-[14px] text-[var(--success)]">10</span>
+                    <span className="font-outfit text-[13px] text-[var(--text-body)]">indicacoes → <span className="font-medium text-[var(--text-primary)]">3 meses gratis</span></span>
+                  </div>
+                  <div className="flex items-center gap-3 bg-[rgba(255,92,0,0.05)] rounded-lg px-4 py-2.5 border border-[rgba(255,92,0,0.1)]">
+                    <span className="font-jetbrains font-bold text-[14px] text-[var(--accent-highlight)]">20</span>
+                    <span className="font-outfit text-[13px] text-[var(--text-body)]">indicacoes → <span className="font-medium text-[var(--text-primary)]">3 meses gratis + 1 ano ao preco Essencial</span></span>
+                  </div>
+                </div>
+
+                {/* Referral link */}
+                <div className="bg-[rgba(0,0,0,0.03)] rounded-xl p-3 mb-4">
+                  <p className="font-outfit text-[11px] text-[var(--text-secondary)] uppercase tracking-wider mb-2">Seu link de indicacao</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      readOnly
+                      value={refLink}
+                      className="flex-1 bg-white border border-[rgba(0,0,0,0.08)] rounded-lg px-3 py-2 font-jetbrains text-[12px] text-[var(--text-primary)] outline-none truncate"
+                    />
+                    <button
+                      onClick={copyRefLink}
+                      className="px-3 py-2 rounded-lg bg-[var(--text-primary)] text-white font-outfit text-[12px] font-medium hover:bg-[#2A2724] transition-colors flex-shrink-0"
+                    >
+                      {copied ? "Copiado!" : "Copiar"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Share buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={shareWhatsApp}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-outfit text-[13px] font-medium transition-colors"
+                    style={{ background: "#25D366" }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    WhatsApp
+                  </button>
+                  <button
+                    onClick={shareTwitter}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#1DA1F2] text-white font-outfit text-[13px] font-medium hover:bg-[#1a8cd8] transition-colors"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    Twitter/X
+                  </button>
+                </div>
+              </div>
+
+              <p className="font-outfit text-[13px] text-[var(--text-secondary)] leading-[160%]">
                 Vamos te avisar pelo WhatsApp quando sua vaga abrir.
               </p>
             </motion.div>
