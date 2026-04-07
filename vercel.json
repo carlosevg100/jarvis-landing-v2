@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "destination": "/demo",
+      "statusCode": 307
+    },
+    {
       "source": "/d/:token",
       "destination": "https://jarvis-dashboard-sand.vercel.app/d/:token",
       "statusCode": 307
