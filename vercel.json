@@ -1,8 +1,9 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/d/:token",
-      "destination": "/d.html"
+      "destination": "https://jarvis-dashboard-sand.vercel.app/d/:token",
+      "statusCode": 307
     }
   ]
 }
