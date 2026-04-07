@@ -106,15 +106,23 @@ export default function RegisterModal({
         }
       );
 
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok) {
         setDone(true);
-        setTimeout(onClose, 2500);
+        if (data.whatsapp_url) {
+          setTimeout(() => {
+            window.open(data.whatsapp_url, "_blank");
+          }, 1500);
+        }
       } else if (res.status === 409) {
-        setMsg("Esse numero ja tem uma conta.");
-        setMsgType("error");
-        setLoading(false);
+        setDone(true);
+        if (data.whatsapp_url) {
+          setTimeout(() => {
+            window.open(data.whatsapp_url, "_blank");
+          }, 1500);
+        }
       } else {
-        const data = await res.json().catch(() => ({}));
         setMsg(data.error || "Erro ao criar conta. Tente novamente.");
         setMsgType("error");
         setLoading(false);
