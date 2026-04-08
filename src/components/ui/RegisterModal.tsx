@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const BACKEND = "https://jarvis-backend-six.vercel.app";
-const FALLBACK_WA = "https://wa.me/15822633975?text=Quero%20organizar%20minha%20vida";
+const FALLBACK_WA = "https://wa.me/551150288221?text=Quero%20organizar%20minha%20vida";
 
 function generateCaptcha() {
   const a = Math.floor(Math.random() * 9) + 1;
