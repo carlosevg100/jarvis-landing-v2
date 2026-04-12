@@ -22,7 +22,7 @@ export const faqItems = [
   {
     question: "As ligações são com voz real?",
     answer:
-      "Sim. A voz é natural e fluente. Jarvis liga, conversa, coleta informações e te retorna o resultado por mensagem no WhatsApp.",
+      "Sim. A voz é natural e fluente. Jarvis liga, conversa, coleta informações e te retorna o resultado por mensagem no WhatsApp. Disponível no plano Full Jarvis.",
   },
   {
     question: "Meus dados estão seguros?",
@@ -32,7 +32,7 @@ export const faqItems = [
   {
     question: "Qual a diferença entre os planos?",
     answer:
-      "O plano Jarvis (R$19,90) organiza sua vida: chat, agenda, lembretes, cofre e financeiro. O plano Jarvis /faz (R$69,90) executa por você: /faz ilimitado, ligações por voz, navegação autônoma, resumo matinal completo e follow-ups proativos.",
+      "O Jarvis (R$19,90) organiza sua vida: chat, agenda, lembretes, cofre e financeiro. O Jarvis /Faz (R$69,90) executa por você: /faz ilimitado, agendamentos, buscas, reservas. O Full Jarvis (R$119,90) é seu assistente executivo: ligações por voz, rascunhos no seu tom, CRM relacional, follow-ups proativos e lembretes inteligentes com trânsito.",
   },
   {
     question: "Posso cancelar a qualquer momento?",
@@ -40,8 +40,8 @@ export const faqItems = [
       "Sim. Sem fidelidade, sem multa. Cancela quando quiser direto pelo WhatsApp. Os primeiros 7 dias são grátis, sem cartão.",
   },
   {
-    question: "Quais calendários e bancos integram?",
+    question: "Quais calendários integram?",
     answer:
-      "Calendários: Google Calendar, Apple Calendar, Outlook. Bancos: Nubank, Itaú, Bradesco, Inter, C6. Mais integrações chegando a cada mês.",
+      "Google Calendar, Apple Calendar e Outlook. Sync bidirecional — o que você muda no calendário aparece no Jarvis, e vice-versa.",
   },
 ];

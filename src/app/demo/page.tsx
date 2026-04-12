@@ -945,13 +945,13 @@ export default function DemoPage() {
           </motion.div>
 
           {/* Plans */}
-          <motion.div variants={fadeBlurUp} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto mb-12">
+          <motion.div variants={fadeBlurUp} className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[1050px] mx-auto mb-12">
             {/* Essencial */}
-            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-8">
-              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Essencial</p>
+            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-7">
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Jarvis</p>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-outfit font-medium text-[40px] tracking-[-0.02em] text-[var(--text-primary)]">R$19</span>
-                <span className="font-outfit text-[15px] text-[var(--text-secondary)]">,90/mes</span>
+                <span className="font-outfit font-medium text-[36px] tracking-[-0.02em] text-[var(--text-primary)]">R$19</span>
+                <span className="font-outfit text-[14px] text-[var(--text-secondary)]">,90/mes</span>
               </div>
               <ul className="space-y-2.5">
                 {[
@@ -959,43 +959,65 @@ export default function DemoPage() {
                   "Busca perto de voce",
                   "Controle financeiro",
                   "Cofre de documentos",
-                  "Memoria contextual",
                   "Listas e notas",
-                  "500 mensagens/mes",
+                  "3 /faz por mes",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
-                    <span className="font-outfit text-[14px] text-[var(--text-body)]">{f}</span>
+                    <span className="font-outfit text-[13px] text-[var(--text-body)]">{f}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Autopilot */}
-            <div className="bg-[var(--text-primary)] border border-[var(--text-primary)] rounded-card p-8 relative overflow-hidden">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-7">
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Jarvis /Faz</p>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="font-outfit font-medium text-[36px] tracking-[-0.02em] text-[var(--text-primary)]">R$69</span>
+                <span className="font-outfit text-[14px] text-[var(--text-secondary)]">,90/mes</span>
+              </div>
+              <ul className="space-y-2.5">
+                {[
+                  "Tudo do Jarvis +",
+                  "/faz ilimitado",
+                  "Agendamentos autonomos",
+                  "Reserva restaurantes",
+                  "Busca e compara voos",
+                  "Cancela servicos",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
+                    <span className="font-outfit text-[13px] text-[var(--text-body)]">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Full Jarvis */}
+            <div className="bg-[var(--text-primary)] border border-[var(--text-primary)] rounded-card p-7 relative overflow-hidden">
               <div className="absolute top-4 right-4">
                 <span className="font-outfit font-bold text-[9px] tracking-[0.15em] uppercase bg-[var(--accent-highlight)] text-white px-2.5 py-1 rounded-full">
                   30 dias gratis
                 </span>
               </div>
-              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">Autopilot</p>
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">Full Jarvis</p>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-outfit font-medium text-[40px] tracking-[-0.02em] text-white">R$69</span>
-                <span className="font-outfit text-[15px] text-white/50">,90/mes</span>
+                <span className="font-outfit font-medium text-[36px] tracking-[-0.02em] text-white">R$119</span>
+                <span className="font-outfit text-[14px] text-white/50">,90/mes</span>
               </div>
               <ul className="space-y-2.5">
                 {[
-                  "Tudo do Essencial +",
-                  "Liga por voce (consultorios, SAC, contatos)",
-                  "Reserva restaurantes",
-                  "Busca e compara voos",
-                  "Cancela servicos",
-                  "Execucao autonoma ilimitada",
-                  "Mensagens ilimitadas",
+                  "Tudo do /Faz +",
+                  "Ligacoes por voz",
+                  "Rascunhos no seu tom",
+                  "CRM relacional",
+                  "Follow-ups proativos",
+                  "Lembretes com transito",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <CheckCircle2 size={16} className="text-[var(--accent-highlight)] mt-0.5 flex-shrink-0" />
-                    <span className="font-outfit text-[14px] text-white/80">{f}</span>
+                    <span className="font-outfit text-[13px] text-white/80">{f}</span>
                   </li>
                 ))}
               </ul>

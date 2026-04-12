@@ -35,7 +35,7 @@ export default function Pricing() {
         initial="initial"
         whileInView="animate"
         viewport={viewportConfig}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto"
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1100px] mx-auto"
       >
         {plans.map((plan) => (
           <motion.div

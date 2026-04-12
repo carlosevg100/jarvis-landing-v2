@@ -199,7 +199,7 @@ const faqItemsEn = [
   },
   {
     question: "What's the difference between plans?",
-    answer: "The Essentials plan ($4.99) organizes your life: chat, calendar, reminders, vault and finances. The Autopilot plan ($14.99) executes for you: unlimited /do, voice calls, autonomous browsing, full morning digest and proactive follow-ups.",
+    answer: "Jarvis ($4.99) organizes your life: chat, calendar, reminders, vault and finances. Jarvis /Do ($14.99) executes for you: unlimited /do, autonomous bookings, flights, reservations. Full Jarvis ($24.99) is your executive assistant: voice calls, drafts in your tone, relationship CRM, proactive follow-ups, and traffic-aware reminders.",
   },
   {
     question: "Can I cancel anytime?",
@@ -207,7 +207,7 @@ const faqItemsEn = [
   },
   {
     question: "Which calendars and banks integrate?",
-    answer: "Calendars: Google Calendar, Apple Calendar, Outlook. Banks: coming soon for the US market. More integrations every month.",
+    answer: "Calendars: Google Calendar, Apple Calendar, Outlook. Bidirectional sync — changes in your calendar appear in Jarvis, and vice versa.",
   },
 ];
 
@@ -981,13 +981,13 @@ export default function DemoPageEn() {
           </motion.div>
 
           {/* Plans */}
-          <motion.div variants={fadeBlurUp} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto mb-12">
+          <motion.div variants={fadeBlurUp} className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[1050px] mx-auto mb-12">
             {/* Essentials */}
-            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-8">
-              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Essentials</p>
+            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-7">
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Jarvis</p>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-outfit font-medium text-[40px] tracking-[-0.02em] text-[var(--text-primary)]">$4</span>
-                <span className="font-outfit text-[15px] text-[var(--text-secondary)]">.99/mo</span>
+                <span className="font-outfit font-medium text-[36px] tracking-[-0.02em] text-[var(--text-primary)]">$4</span>
+                <span className="font-outfit text-[14px] text-[var(--text-secondary)]">.99/mo</span>
               </div>
               <ul className="space-y-2.5">
                 {[
@@ -995,43 +995,65 @@ export default function DemoPageEn() {
                   "Search near you",
                   "Financial tracking",
                   "Document vault",
-                  "Contextual memory",
                   "Lists and notes",
-                  "500 messages/month",
+                  "3 /do per month",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
-                    <span className="font-outfit text-[14px] text-[var(--text-body)]">{f}</span>
+                    <span className="font-outfit text-[13px] text-[var(--text-body)]">{f}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Autopilot */}
-            <div className="bg-[var(--text-primary)] border border-[var(--text-primary)] rounded-card p-8 relative overflow-hidden">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-card p-7">
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">Jarvis /Do</p>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="font-outfit font-medium text-[36px] tracking-[-0.02em] text-[var(--text-primary)]">$14</span>
+                <span className="font-outfit text-[14px] text-[var(--text-secondary)]">.99/mo</span>
+              </div>
+              <ul className="space-y-2.5">
+                {[
+                  "Everything in Jarvis +",
+                  "Unlimited /do",
+                  "Autonomous bookings",
+                  "Restaurant reservations",
+                  "Flight search & comparison",
+                  "Service cancellations",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
+                    <span className="font-outfit text-[13px] text-[var(--text-body)]">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Full Jarvis */}
+            <div className="bg-[var(--text-primary)] border border-[var(--text-primary)] rounded-card p-7 relative overflow-hidden">
               <div className="absolute top-4 right-4">
                 <span className="font-outfit font-bold text-[9px] tracking-[0.15em] uppercase bg-[var(--accent-highlight)] text-white px-2.5 py-1 rounded-full">
                   30 days free
                 </span>
               </div>
-              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">Autopilot</p>
+              <p className="font-outfit font-bold text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">Full Jarvis</p>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-outfit font-medium text-[40px] tracking-[-0.02em] text-white">$14</span>
-                <span className="font-outfit text-[15px] text-white/50">.99/mo</span>
+                <span className="font-outfit font-medium text-[36px] tracking-[-0.02em] text-white">$24</span>
+                <span className="font-outfit text-[14px] text-white/50">.99/mo</span>
               </div>
               <ul className="space-y-2.5">
                 {[
-                  "Everything in Essentials +",
-                  "Calls for you (offices, support, contacts)",
-                  "Restaurant reservations",
-                  "Flight search & comparison",
-                  "Service cancellations",
-                  "Unlimited autonomous execution",
-                  "Unlimited messages",
+                  "Everything in /Do +",
+                  "Voice calls on your behalf",
+                  "Drafts in your tone",
+                  "Relationship CRM",
+                  "Proactive follow-ups",
+                  "Traffic-aware reminders",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <CheckCircle2 size={16} className="text-[var(--accent-highlight)] mt-0.5 flex-shrink-0" />
-                    <span className="font-outfit text-[14px] text-white/80">{f}</span>
+                    <span className="font-outfit text-[13px] text-white/80">{f}</span>
                   </li>
                 ))}
               </ul>
